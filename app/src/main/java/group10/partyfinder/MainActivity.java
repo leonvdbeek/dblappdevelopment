@@ -8,6 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        getParties();
     }
 
     @Override
@@ -48,5 +61,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getParties(){
+        //retrofit code for in the api method
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.build();
+        RestApiHandler client = retrofit.create(RestApiHandler.class);
+        Call<ArrayList<Party>> call = client.getParties();
+
+        //running call.enqueue as this will cause the request to be made asynchronously
+        call.enqueue(new Callback<ArrayList<Party>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response){
+                ArrayList<Party> parties = response.body();
+                //ToDo implement your desired action with the response here
+
+                //e.g. print all parties to the debugger
+                for (Party party : parties){
+                    party.printParty();
+                }
+                //ToDo end
+            }
+
+            @Override
+            public void onFailure (Call < ArrayList < Party >> call, Throwable t){
+            }
+        });
     }
 }
