@@ -35,5 +35,8 @@ public interface RestApiHandler {
     Call<ArrayList<Party>> futureParties();
 
     @POST("/parties")
-    Call<Void> checkUser(@Body Party party);
+    Call<Void> hostParty(@Body Party party);
+
+    @POST("https://jsonplaceholder.typicode.com/posts")
+    Call<Post> testPost(@Body Post post);
 }
