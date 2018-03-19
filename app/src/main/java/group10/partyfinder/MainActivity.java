@@ -35,10 +35,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Todo remove the testing fab after server communication testing is complete
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //this is printing from the local database, it is purely for testing
                 int counter = 0;
                 ArrayList<Party> todayParties = DB.getAllParties();
                 if (todayParties == null) {
@@ -49,7 +52,21 @@ public class MainActivity extends AppCompatActivity {
                         party.printParty();
                         counter++;
                     }
-                    Snackbar.make(view, counter + " Parties are stored in the snapshot", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, counter + " Parties are stored in the snapshot.", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                    counter = 0;
+                }
+
+                ArrayList<Party> myParties = DB.getMyParties();
+                if (myParties == null) {
+                    Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    for (Party party : myParties) {
+                        party.printParty();
+                        counter++;
+                    }
+                    Snackbar.make(view, "You have created " + counter + " party.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     counter = 0;
                 }
