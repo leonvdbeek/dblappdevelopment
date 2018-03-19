@@ -9,6 +9,7 @@ public class Post {
     private String title;
     private String body;
     private int userId;
+    private int userId2;
 
     public Post(String title, String body, int userId) {
         this.title = title;

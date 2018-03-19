@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<Post> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "posting failed"
                         , Toast.LENGTH_LONG).show();
             }
