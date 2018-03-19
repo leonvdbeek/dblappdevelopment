@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
+    private DBSnapshot DB = DBSnapshot.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +37,28 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                int counter = 0;
+                ArrayList<Party> allParties = DB.getAllParties();
+                if (allParties == null) {
+                    Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    for (Party party : allParties) {
+                        party.printParty();
+                        counter++;
+                    }
+                    Snackbar.make(view, counter + " Parties are stored in the snapshot", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
         //Todo remove test calls
-        //this call is to test fetching parties
+        //this call is to test fetching all parties
         fetchParties();
+
+        //Todo uncomment updateSnapshot once the server supports all calls
+        //call the updateSnapshot method to "sync" the local snapshot with the server
+        //updateSnapshot();
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -124,9 +140,69 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
-                for ( Party party : response.body()){
-                    party.printParty();
-                }
+                DB.setAllParties(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+
+            }
+        });
+    }
+    private void updateSnapshot(){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+
+        ApiClient client = retrofit.create(ApiClient.class);
+        Call<ArrayList<Party>> call;
+
+        call = client.usersMyParties(DB.getUserId());
+        call.enqueue(new Callback<ArrayList<Party>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                DB.setMyParties(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+
+            }
+        });
+
+        call = client.usersSavedParties(DB.getUserId());
+        call.enqueue(new Callback<ArrayList<Party>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                DB.setSavedParties(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+
+            }
+        });
+
+        call = client.todayParties();
+        call.enqueue(new Callback<ArrayList<Party>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                DB.setTodayParties(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+
+            }
+        });
+
+        call = client.futureParties();
+        call.enqueue(new Callback<ArrayList<Party>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                DB.setFutureParties(response.body());
             }
 
             @Override
