@@ -15,7 +15,8 @@ public class DBSnapshot {
 
     private DBSnapshot() {}
 
-    private String userId;
+    //Todo remove the hardcode userId
+    private String userId = "114987278191137298218";
     private ArrayList<Party> allParties;
     private ArrayList<Party> myParties;
     private ArrayList<Party> savedParties;
