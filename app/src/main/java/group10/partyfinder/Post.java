@@ -7,7 +7,7 @@ package group10.partyfinder;
 public class Post {
     private int id;
     private String title;
-    private String title1;
+    private String tite1;
     private String body;
     private int userId;
     private int userId2;
