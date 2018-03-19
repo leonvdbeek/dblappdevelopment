@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
+
+    //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
     @Override
