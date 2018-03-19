@@ -12,7 +12,7 @@ import retrofit2.http.Path;
  * Created by Roy on 12/03/2018.
  */
 
-public interface RestApiHandler {
+public interface ApiClient {
 
     //url is lenin.pythonanywhere.com/parties
 
@@ -34,8 +34,8 @@ public interface RestApiHandler {
     Call<ArrayList<Party>> futureParties();
 
     @POST("/parties")
-    Call<Void> hostParty(@Body Party party);
+    Call<Party> hostParty(@Body Party party);
 
-    @POST("https://jsonplaceholder.typicode.com/posts")
-    Call<Post> testPost(@Body Post post);
+    //@POST("https://jsonplaceholder.typicode.com/posts")
+    //Call<Post> testPost(@Body Post post);
 }
