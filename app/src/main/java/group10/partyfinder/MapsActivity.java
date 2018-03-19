@@ -1,6 +1,7 @@
 package group10.partyfinder;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -8,15 +9,17 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private DBSnapshot DB = DBSnapshot.getInstance();
@@ -38,17 +41,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
+        } else {
+            mLocationManager.requestLocationUpdates("gps" , 3000,
+                    100, mLocationListener);
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
-                100, mLocationListener);
     }
 
     private LocationListener mLocationListener = new LocationListener() {
@@ -79,14 +76,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
+        googleMap.setOnMarkerClickListener(this);
+        mMap = googleMap;
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
+        //Todo customize which list to show all parties of instead of allparties
         for (Party party : DB.getAllParties()){
             LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+            marker.setTag(party.getId());
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
     }
+
+    /** Called when the user clicks a marker. */
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        int targetPartyId = (int) marker.getTag();
+        // Create a test party object for the PartyView activity.
+        Party party = DBSnapshot.getInstance().getParty(targetPartyId);
+
+        Intent i = new Intent("android.intent.action.PartyView");
+        i.putExtra("partyName", party.getName());
+        i.putExtra("partyDate", party.getDate());
+        i.putExtra("partyAddress", party.getAddress());
+        i.putExtra("partyTheme", party.getTheme());
+        i.putExtra("partyInfo", party.getInfo());
+        i.putExtra("partyCreator", party.getCreator());
+        this.startActivity(i);
+
+
+        // Return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return false;
+    }
+
 }
