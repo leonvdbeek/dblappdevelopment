@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("partyAddress", party1.getAddress());
         i.putExtra("partyTheme", party1.getTheme());
         i.putExtra("partyInfo", party1.getInfo());
-        i.putExtra("partyOrganizer", party1.getOrganizer());
+        i.putExtra("partyCreator", party1.getCreator());
         this.startActivity(i);
     }
 
