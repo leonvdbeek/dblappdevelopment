@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public class Party implements java.io.Serializable{
-    private String id;
+    private int id;
     private String creator;
     private String name;
     private String info;
@@ -45,7 +45,7 @@ public class Party implements java.io.Serializable{
         Log.d("my tag", "=======================================");
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

@@ -7,10 +7,10 @@ import java.util.ArrayList;
  */
 
 public class DBSnapshot {
-    private static final DBSnapshot ourInstance = new DBSnapshot();
+    private static final DBSnapshot Instance = new DBSnapshot();
 
     public static DBSnapshot getInstance() {
-        return ourInstance;
+        return Instance;
     }
 
     private DBSnapshot() {}
@@ -69,5 +69,14 @@ public class DBSnapshot {
 
     public void setFutureParties(ArrayList<Party> futureParties) {
         this.futureParties = futureParties;
+    }
+
+    public Party getParty(int id){
+        for (Party party : allParties){
+            if (party.getId() == id){
+                return party;
+            }
+        }
+        return null;
     }
 }
