@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     public void hostParty(Party party) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://lenin.pythonanywhere.com")
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void testPost(Post post) {
         Retrofit.Builder builder = new Retrofit.Builder()
