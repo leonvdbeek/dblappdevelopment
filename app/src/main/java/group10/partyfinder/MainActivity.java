@@ -40,27 +40,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int counter = 0;
-                ArrayList<Party> allParties = DB.getAllParties();
-                if (allParties == null) {
+                ArrayList<Party> todayParties = DB.getAllParties();
+                if (todayParties == null) {
                     Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    for (Party party : allParties) {
+                    for (Party party : todayParties) {
                         party.printParty();
                         counter++;
                     }
                     Snackbar.make(view, counter + " Parties are stored in the snapshot", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    counter = 0;
                 }
             }
         });
         //Todo remove test calls
         //this call is to test fetching all parties
-        fetchParties();
+        //fetchParties();
 
         //Todo uncomment updateSnapshot once the server supports all calls
         //call the updateSnapshot method to "sync" the local snapshot with the server
-        //updateSnapshot();
+        updateSnapshot();
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //updateData();
+        //updateSnapshot();
     }
 
 
@@ -161,6 +162,21 @@ public class MainActivity extends AppCompatActivity {
         ApiClient client = retrofit.create(ApiClient.class);
         Call<ArrayList<Party>> call;
 
+        //call for all parties
+        call = client.getParties();
+        call.enqueue(new Callback<ArrayList<Party>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                DB.setAllParties(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+
+            }
+        });
+
+        //call for users my parties
         call = client.usersMyParties(DB.getUserId());
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
@@ -174,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //call for users saved parties
         call = client.usersSavedParties(DB.getUserId());
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
@@ -187,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //call for todays parties
         call = client.todayParties();
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
@@ -200,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ////call for future parties
         call = client.futureParties();
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
