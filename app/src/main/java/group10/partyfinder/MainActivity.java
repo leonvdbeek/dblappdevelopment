@@ -14,13 +14,14 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import group10.partyfinder.dummy.DummyContent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PartyListFragment.OnListFragmentInteractionListener{
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -251,5 +252,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
+    }
+
 }
 

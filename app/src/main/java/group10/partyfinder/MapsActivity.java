@@ -3,13 +3,18 @@ package group10.partyfinder;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,23 +24,26 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
+    //private SensorManager sensorManager;
     private GoogleMap mMap;
     private DBSnapshot DB = DBSnapshot.getInstance();
     LocationManager mLocationManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_maps,container,false);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // THIS CHUNK OF CODE GIVES ERROR         u need to getActivity() but still some problemts left
+        // u cant call system service from this fragment or something, maybe call it in MainActivity ?
+        /* mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -45,7 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             mLocationManager.requestLocationUpdates("gps" , 3000,
                     100, mLocationListener);
-        }
+        }*/
+        return view;
     }
 
     private LocationListener mLocationListener = new LocationListener() {
