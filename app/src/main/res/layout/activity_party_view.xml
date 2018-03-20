@@ -7,6 +7,15 @@
     android:orientation="vertical"
     tools:context="group10.partyfinder.PartyView">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -122,9 +131,9 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/Back"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="goBack"
-        android:text="Go back to home screen" />
+        android:text="Text" />
+
 </LinearLayout>
