@@ -53,6 +53,9 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
 
     @Override
     public int getItemCount() {
+        if (mValues == null) {
+            return 0;
+        }
         return mValues.size();
     }
 
