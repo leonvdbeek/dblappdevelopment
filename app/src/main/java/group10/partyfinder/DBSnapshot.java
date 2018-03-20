@@ -13,10 +13,16 @@ public class DBSnapshot {
         return Instance;
     }
 
-    private DBSnapshot() {}
+    private ArrayList<Party> placeHolder;
+
+    private DBSnapshot() {
+        placeHolder = new ArrayList<Party>();
+        Party p = new Party();
+        placeHolder.add(p);
+    }
 
     //Todo remove the hardcode userId
-    private String userId = "114987278191137298218";
+    private String userId;
     private ArrayList<Party> allParties;
     private ArrayList<Party> myParties;
     private ArrayList<Party> savedParties;
@@ -24,27 +30,52 @@ public class DBSnapshot {
     private ArrayList<Party> futureParties;
 
     public String getUserId() {
-        return userId;
+        if (userId == null){
+            return "114987278191137298218";
+        } else {
+            return userId;
+        }
     }
 
     public ArrayList<Party> getAllParties() {
-        return allParties;
+        if (allParties == null){
+            return getPlaceHolder();
+        } else {
+            return allParties;
+        }
     }
 
+
     public ArrayList<Party> getMyParties() {
-        return myParties;
+        if (allParties == null){
+            return getPlaceHolder();
+        } else {
+            return myParties;
+        }
     }
 
     public ArrayList<Party> getSavedParties() {
-        return savedParties;
+        if (allParties == null){
+            return getPlaceHolder();
+        } else {
+            return savedParties;
+        }
     }
 
     public ArrayList<Party> getTodayParties() {
-        return todayParties;
+        if (allParties == null){
+            return getPlaceHolder();
+        } else {
+            return todayParties;
+        }
     }
 
     public ArrayList<Party> getFutureParties() {
-        return futureParties;
+        if (allParties == null){
+            return getPlaceHolder();
+        } else {
+            return futureParties;
+        }
     }
 
     public void setUserId(String userId) {
@@ -78,5 +109,10 @@ public class DBSnapshot {
             }
         }
         return null;
+    }
+
+    private ArrayList<Party> getPlaceHolder() {
+
+        return placeHolder;
     }
 }

@@ -20,6 +20,17 @@ public class Party implements java.io.Serializable{
     private String longitude;
     private String lattitude;
 
+    public Party(){
+        this.name = "None";
+        this.info = "None";
+        this.date = "None";
+        this.theme = "None";
+        this.creator = "None";
+        this.address = "None";
+        this.longitude = "0";
+        this.lattitude = "0";
+    }
+
     public Party(String name, String info, String date, String theme, String creator, String address, String longitude, String lattitude) {
         this.name = name;
         this.info = info;
