@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         //Todo remove the testing fab after server communication testing is complete
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Party item) {
 
     }
 

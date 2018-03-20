@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import group10.partyfinder.dummy.DummyContent;
-import group10.partyfinder.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -28,6 +26,9 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    //get the instance of our database
+    private DBSnapshot DB = DBSnapshot.getInstance();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,7 +70,7 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(DB.getAllParties(), mListener));
         }
         return view;
     }
@@ -104,6 +105,6 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Party item);
     }
 }
