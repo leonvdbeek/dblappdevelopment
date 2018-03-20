@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,8 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     private OnListFragmentInteractionListener mListener;
 
     //get the instance of our database
-    private DBSnapshot DB = DBSnapshot.getInstance();
+   // private DBSnapshot DB = DBSnapshot.getInstance();
+    private ArrayList<Party> parties;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,6 +53,14 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Party p1 = new Party("name", "info", "date", "theme", "creator", "address", "0.500000", "0.200000");
+
+        Party p2 = new Party("name2", "info2", "date2", "theme2", "creator2", "address2", "0.5000002", "0.2000002");
+
+        parties = new ArrayList<>();
+        parties.add(p1);
+        parties.add(p2);
+
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -70,7 +80,7 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(DB.getAllParties(), mListener));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(parties, mListener));
         }
         return view;
     }
