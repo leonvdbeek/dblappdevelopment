@@ -1,5 +1,6 @@
 package group10.partyfinder;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,9 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         @Override
         public void onClick(View view) {
 
+            Intent i = new Intent("android.intent.action.PartyView");
+           // i.putExtra("ID", 1);
+            view.getContext().startActivity(i);
         }
     }
 }
