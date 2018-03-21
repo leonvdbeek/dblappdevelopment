@@ -58,7 +58,7 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
@@ -74,6 +74,11 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
+        }
+
+        @Override
+        public void onClick(View view) {
+
         }
     }
 }
