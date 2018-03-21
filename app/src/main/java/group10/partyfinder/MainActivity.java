@@ -90,20 +90,10 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         return true;
     }
 
-    // Create a test party object for the PartyView activity.
-    Party party1 = new Party("Mark's birthday party", "Bring pie", "01-01-2019",
-                            "House", "Mark", "Homestreet 1", "Long",
-                            "Lat");
-
     // A method to open the PartyView activity
     public void openPartyViewActivity(View v) {
         Intent i = new Intent("android.intent.action.PartyView");
-        i.putExtra("partyName", party1.getName());
-        i.putExtra("partyDate", party1.getDate());
-        i.putExtra("partyAddress", party1.getAddress());
-        i.putExtra("partyTheme", party1.getTheme());
-        i.putExtra("partyInfo", party1.getInfo());
-        i.putExtra("partyCreator", party1.getCreator());
+        i.putExtra("ID", 2);
         this.startActivity(i);
     }
 

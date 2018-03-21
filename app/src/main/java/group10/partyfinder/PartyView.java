@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 public class PartyView extends AppCompatActivity {
 
+    // Get the database
+    private DBSnapshot DB = DBSnapshot.getInstance();
+    private int partyID;
+    private Party partyObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,42 +32,31 @@ public class PartyView extends AppCompatActivity {
         // Create back button in toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Get party details
-        String pName = getIntent().getStringExtra("partyName");
-        String pDate = getIntent().getStringExtra("partyDate");
-        String pAddress = getIntent().getStringExtra("partyAddress");
-        String pTheme = getIntent().getStringExtra("partyTheme");
-        String pInfo = getIntent().getStringExtra("partyInfo");
-        String pOrganizer = getIntent().getStringExtra("partyOrganizer");
+        // Make references to text views
+        TextView TVdate = (TextView) findViewById(R.id.TVdate);
+        TextView TVaddress = (TextView) findViewById(R.id.TVaddress);
+        TextView TVtheme = (TextView) findViewById(R.id.TVtheme);
+        TextView TVinfo = (TextView) findViewById(R.id.TVdescription);
+
+        // Get party object
+        partyID = getIntent().getIntExtra("ID", 0);
+        partyObject = DB.getParty(partyID);
 
         // Set title with the name of the party
-        setTitle(pName);
-
-        // Make references to text views
-        TextView textViewName = (TextView) findViewById(R.id.PartyName);
-        TextView textViewDate = (TextView) findViewById(R.id.PartyDate);
-        TextView textViewAddress = (TextView) findViewById(R.id.PartyAddress);
-        TextView textViewTheme = (TextView) findViewById(R.id.PartyTheme);
-        TextView textViewInfo = (TextView) findViewById(R.id.PartyDescription);
+        setTitle(partyObject.getName());
 
         // Set text in text views
-        textViewName.setText(pName);
-        textViewDate.setText(pDate);
-        textViewAddress.setText(pAddress);
-        textViewTheme.setText(pTheme);
-        textViewInfo.setText(pInfo);
+        TVdate.setText(partyObject.getDate());
+        TVaddress.setText(partyObject.getAddress());
+        TVtheme.setText(partyObject.getTheme());
+        TVinfo.setText(partyObject.getInfo());
     }
 
-    // Method is called when on the go back arrow (in the left top) is pressed.
-    // Close activity and go back to the previous activity.
+    // Called when go back arrow (in the left top) is pressed.
+    // Go back to previous activity.
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
-    }
-
-    // Go back to previous activity
-    public void goBack(View v) {
-        finish();
     }
 }
