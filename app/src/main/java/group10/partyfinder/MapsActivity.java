@@ -109,7 +109,6 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         Party party = DBSnapshot.getInstance().getParty(targetPartyId);
 
         // Open partyView activity
-        //TODO: change value 2 to x.getID(); when this function works. replace x with the party object
         Intent i = new Intent("android.intent.action.PartyView");
         i.putExtra("ID", party.getId());
         this.startActivity(i);
