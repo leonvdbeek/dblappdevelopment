@@ -22,6 +22,7 @@ public class DBSnapshot {
     }
 
     //Todo remove the hardcode userId
+    private String defaultId = "114987278191137298218";
     private String userId;
     private ArrayList<Party> allParties;
     private ArrayList<Party> myParties;
@@ -31,7 +32,7 @@ public class DBSnapshot {
 
     public String getUserId() {
         if (userId == null){
-            return "114987278191137298218";
+            return defaultId;
         } else {
             return userId;
         }

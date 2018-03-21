@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
 
+    //testing counter
+    int counter = 2;
+
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
@@ -43,21 +46,24 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             public void onClick(View view) {
 
                 //this is printing from the local database, it is purely for testing
-                int counter = 0;
 
-                ArrayList<Party> myParties = DB.getMyParties();
-                if (myParties == null) {
-                    Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    for (Party party : myParties) {
-                        party.printParty();
-                        counter++;
-                    }
-                    Snackbar.make(view, "You have created " + counter + " party.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    counter = 0;
-                }
+
+                openPartyViewActivity(counter);
+                counter++;
+
+                //ArrayList<Party> myParties = DB.getMyParties();
+                //if (myParties == null) {
+                //    Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
+                //            .setAction("Action", null).show();
+                //} else {
+                //    for (Party party : myParties) {
+                //        party.printParty();
+                //        counter++;
+                //    }
+                //    Snackbar.make(view, "You have created " + counter + " party.", Snackbar.LENGTH_LONG)
+                //            .setAction("Action", null).show();
+                //    counter = 0;
+                //}
             }
         });
 
@@ -97,14 +103,19 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         this.startActivity(i);
     }
 
+    // A method to open a specified PartyView activity
+    public void openPartyViewActivity(int n) {
+        Intent i = new Intent("android.intent.action.PartyView");
+        i.putExtra("ID", n);
+        this.startActivity(i);
+    }
+
+    //code that will run when and option from the drop down menu is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //moving to mapview no longer works as it has been rebuild into an raction instead of an activity
         if (id == R.id.action_map) {
             Intent intent = new Intent(MainActivity.this,
                     MapsActivity.class);
@@ -114,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         return super.onOptionsItemSelected(item);
     }
 
+    //for the tabs
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new CrashNowPage(), "Crash Now");
@@ -121,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         viewPager.setAdapter(adapter);
     }
 
+    //updates the DBSnapshot overwriting all current data with fresh data from the server
     private void updateSnapshot(){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://lenin.pythonanywhere.com")
@@ -202,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
     }
 
+    //Todo add comments
     @Override
     public void onListFragmentInteraction(Party item) {
 

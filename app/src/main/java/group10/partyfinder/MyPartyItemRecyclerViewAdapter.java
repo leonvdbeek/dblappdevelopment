@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Party} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyPartyItemRecyclerViewAdapter.ViewHolder> {
 

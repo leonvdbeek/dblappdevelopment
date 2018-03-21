@@ -53,13 +53,16 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Party p1 = new Party("name", "info", "date", "theme", "creator", "address", "0.500000", "0.200000");
+        Party p1 = new Party(0, "name", "info", "date", "theme", "creator", "address", "0.500000", "0.200000");
 
-        Party p2 = new Party("name2", "info2", "date2", "theme2", "creator2", "address2", "0.5000002", "0.2000002");
+        Party p2 = new Party(0, "name2", "info2", "date2", "theme2", "creator2", "address2", "0.5000002", "0.2000002");
 
         parties = new ArrayList<>();
         parties.add(p1);
         parties.add(p2);
+
+        //Todo find a way to reset the list content after the DB is loaded
+        //parties = DBSnapshot.getInstance().getAllParties();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);

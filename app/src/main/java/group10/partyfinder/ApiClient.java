@@ -16,8 +16,7 @@ public interface ApiClient {
 
     //url is lenin.pythonanywhere.com/parties
 
-    //ToDo remove the test endpoint
-    //test endpoint, not to be used in final product
+
     @GET("/parties")
     Call<ArrayList<Party>> getParties();
 

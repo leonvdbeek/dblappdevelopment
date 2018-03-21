@@ -21,6 +21,7 @@ public class Party implements java.io.Serializable{
     private String lattitude;
 
     public Party(){
+        this.id = 0;
         this.name = "None";
         this.info = "None";
         this.date = "None";
@@ -31,7 +32,8 @@ public class Party implements java.io.Serializable{
         this.lattitude = "0";
     }
 
-    public Party(String name, String info, String date, String theme, String creator, String address, String longitude, String lattitude) {
+    public Party(int id, String name, String info, String date, String theme, String creator, String address, String longitude, String lattitude) {
+        this.id = id;
         this.name = name;
         this.info = info;
         this.date = date;
@@ -90,6 +92,10 @@ public class Party implements java.io.Serializable{
 
     public double getLattitude() {
         return Double.parseDouble(lattitude);
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setInfo(String info) {
