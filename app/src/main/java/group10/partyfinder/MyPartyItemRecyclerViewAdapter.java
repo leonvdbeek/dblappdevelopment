@@ -47,6 +47,9 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
+                Intent i = new Intent("android.intent.action.PartyView");
+                i.putExtra("ID", 2);
+                v.getContext().startActivity(i);
             }
         });
     }
@@ -59,7 +62,7 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
@@ -77,12 +80,5 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
             return super.toString() + " '" + mContentView.getText() + "'";
         }
 
-        @Override
-        public void onClick(View view) {
-
-            Intent i = new Intent("android.intent.action.PartyView");
-           // i.putExtra("ID", 1);
-            view.getContext().startActivity(i);
-        }
     }
 }
