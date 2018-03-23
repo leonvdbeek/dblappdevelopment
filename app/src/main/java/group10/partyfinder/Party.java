@@ -97,6 +97,11 @@ public class Party implements java.io.Serializable{
         return Double.parseDouble(lattitude);
     }
 
+    public String getPartyViewDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy' 'HH:mm");
+
+        return dateFormat.format(date).toString();
+    }
     public void setId(int id) {
         this.id = id;
     }
