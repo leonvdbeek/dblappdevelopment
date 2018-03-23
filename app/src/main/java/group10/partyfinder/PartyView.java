@@ -26,7 +26,11 @@ public class PartyView extends AppCompatActivity {
 
     private int partyID;
     private Party partyObject;
-    private Button bSave;
+    private Button Bsave;
+    private Button Bremove;
+    private Button Bedit;
+    private Button Bdelete;
+    private View view;
 
     final Context context = this;
 
@@ -56,54 +60,170 @@ public class PartyView extends AppCompatActivity {
         setTitle(partyObject.getName());
 
         // Set text in text views
-        TVdate.setText(partyObject.getDate());
+        TVdate.setText(partyObject.getPartyViewDate());
         TVaddress.setText(partyObject.getAddress());
         TVtheme.setText(partyObject.getTheme());
         TVinfo.setText(partyObject.getInfo());
 
-        View view = findViewById(R.id.mainLayout);
-        Snackbar.make(view, "Test snackbar!", Snackbar.LENGTH_LONG).show();
+        // Make variable for snackbar
+        view = findViewById(R.id.mainLayout);
 
+        // Show save or remove button
+        Bsave = findViewById(R.id.Bsave);
+        Bremove = findViewById(R.id.Bremove);
 
-        bSave = findViewById(R.id.Bsave);
+        //TODO add: if(isOwner() == true) then don't show the save and remove button
+        if(isSaved() == true) {
+            // Show remove button
+            Bsave.setVisibility(View.GONE);
+            Bremove.setVisibility(View.VISIBLE);
+        } else {
+            // Show save button
+            Bsave.setVisibility(View.VISIBLE);
+            Bremove.setVisibility(View.GONE);
+        }
 
-        // add button listener
-        bSave.setOnClickListener(new View.OnClickListener() {
+        // Show or hide edit and delete button
+        Bedit = findViewById(R.id.Bedit);
+        Bdelete = findViewById(R.id.Bdelete);
 
-            @Override
-            public void onClick(View arg0) {
+        if(isOwner() == true) {
+            // Show edit and delete button
+            Bedit.setVisibility(View.VISIBLE);
+            Bdelete.setVisibility(View.VISIBLE);
+        } else {
+            // Hide edit and delete button
+            Bedit.setVisibility(View.GONE);
+            Bdelete.setVisibility(View.GONE);
+        }
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    }
 
-                // set title
-                alertDialogBuilder.setTitle("Remove party");
+    // On click method for save button
+    public void clickOnSave(View v) {
+        Snackbar.make(view, "Party is saved!", Snackbar.LENGTH_LONG).show();
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Do you really want to remove the party from your saved parties list?")
-                        .setCancelable(true)
-                        .setPositiveButton("Remove",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // if this button is clicked, close
-                                // current activity
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                dialog.cancel();
-                            }
-                        });
+        saveParty();
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+        // Show remove button
+        Bsave.setVisibility(View.GONE);
+        Bremove.setVisibility(View.VISIBLE);
+    }
 
-                // show it
-                alertDialog.show();
+    // On click method for remove button
+    public void clickOnRemove(View v) {
+
+        AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(context);
+
+        // Set up dialog
+        ADbuilderR.setTitle("Remove party");
+        ADbuilderR.setMessage("Do you really want to remove the party from your saved parties list?");
+        ADbuilderR.setCancelable(true);
+        ADbuilderR.setPositiveButton("Remove",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Accept button (right)
+                // Remove the party from the saved list
+                startRemoveParty();
             }
         });
+        ADbuilderR.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Decline button (left)
+                // Cancel action
+                dialog.cancel();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogRemove = ADbuilderR.create();
+        alertDialogRemove.show();
+    }
+
+    // Start the actions to remove a party from the saved list
+    public void startRemoveParty() {
+        Snackbar.make(view, "Party is removed!", Snackbar.LENGTH_LONG).show();
+
+        removeParty();
+
+        // Show remove button
+        Bremove.setVisibility(View.GONE);
+        Bsave.setVisibility(View.VISIBLE);
+    }
+
+    // On click method for edit button
+    public void clickOnEdit(View v) {
+        Snackbar.make(view, "This button should open the edit activity.", Snackbar.LENGTH_LONG).show();
+    }
+
+    // On click method for delete button
+    public void clickOnDelete(View v) {
+        AlertDialog.Builder ADbuilderD = new AlertDialog.Builder(context);
+
+        // Set up dialog
+        ADbuilderD.setTitle("Delete party");
+        ADbuilderD.setMessage("Do you really want to delete the party?");
+        ADbuilderD.setCancelable(true);
+        ADbuilderD.setPositiveButton("Delete",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Accept button (right)
+                // Remove the party from the saved list
+                startDeleteParty();
+            }
+        });
+        ADbuilderD.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Decline button (left)
+                // Cancel action
+                dialog.cancel();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogDelete = ADbuilderD.create();
+        alertDialogDelete.show();
+    }
+
+    // Start the actions to delete a party
+    public void startDeleteParty() {
+        //Snackbar.make(view, "Party is deleted!", Snackbar.LENGTH_LONG).show();
+        deleteParty();
+
+        AlertDialog ADdelete = new AlertDialog.Builder(context).create();
+        ADdelete.setTitle("Party deleted");
+        ADdelete.setMessage("The party is deleted.");
+        ADdelete.setCancelable(false);
+        ADdelete.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        ADdelete.show();
+    }
+
+    // Save the party to the saved list
+    public void saveParty() {
+
+    }
+
+    // Remove the party from the saved list
+    public void removeParty() {
+
+    }
+
+    // Delete the party
+    public void deleteParty() {
+
+    }
+
+    // Check if the user has saved the party
+    public boolean isSaved() {
+        return false;
+    }
+
+    // Check if the user is the owner of the party
+    public boolean isOwner() {
+        return true;
     }
 
     // Called when go back arrow (in the left top) is pressed.

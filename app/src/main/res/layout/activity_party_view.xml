@@ -115,12 +115,28 @@
         android:orientation="horizontal"
         android:paddingTop="20sp">
 
-        <Button
-            android:id="@+id/Bsave"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save" />
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/Bsave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="clickOnSave"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/Bremove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="clickOnRemove"
+                android:text="Remove" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,12 +148,14 @@
                 android:id="@+id/Bedit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="clickOnEdit"
                 android:text="Edit" />
 
             <Button
                 android:id="@+id/Bdelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="clickOnDelete"
                 android:text="Delete" />
         </LinearLayout>
     </LinearLayout>
