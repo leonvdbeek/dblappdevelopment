@@ -8,20 +8,22 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import group10.partyfinder.dummy.DummyContent;
+import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements PartyListFragment.OnListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements PartyListFragment.OnListFragmentInteractionListener {
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -46,10 +48,11 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             public void onClick(View view) {
 
                 //this is printing from the local database, it is purely for testing
-
-
-                openPartyViewActivity(counter);
-                counter++;
+                Party party = new Party();
+                party.setId(99);
+                postParty(party);
+                //openPartyViewActivity(counter);
+                //counter++;
 
                 //ArrayList<Party> myParties = DB.getMyParties();
                 //if (myParties == null) {
@@ -133,11 +136,52 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         viewPager.setAdapter(adapter);
     }
 
+    private void postParty(Party party){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //call for all parties
+        Call<Party> call = client2.hostParty(party);
+        Log.d("my tag", "Post request body: " + party.getDate());
+        call.enqueue(new Callback<Party>() {
+            @Override
+            public void onResponse(Call<Party> call, Response<Party> response){
+                Log.d("my tag", "Post response code: " + response.code());
+                Party party = response.body();
+                Log.d("my tag", "Posted party id: " + party.getId());
+                Log.d("my tag", "Contents" + DB.getAllParties().size()
+                        + DB.getMyParties().size()
+                        + DB.getSavedParties().size());
+
+                DB.addHostedParty(party);
+                openPartyViewActivity(party.getId());
+            }
+
+            @Override
+            public void onFailure (Call<Party> call, Throwable t){
+
+            }
+        });
+    }
+
     //updates the DBSnapshot overwriting all current data with fresh data from the server
     private void updateSnapshot(){
+        Log.d("my tag", "Updating local DB");
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssz")
+                .create();
+
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://lenin.pythonanywhere.com")
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(GsonConverterFactory.create(gson));
 
         Retrofit retrofit = builder.build();
 

@@ -17,7 +17,7 @@ public interface ApiClient {
     //url is lenin.pythonanywhere.com/parties
 
 
-    @GET("/parties")
+    @GET("/parties/")
     Call<ArrayList<Party>> getParties();
 
     @GET("/organized/{user}")
@@ -26,13 +26,13 @@ public interface ApiClient {
     @GET("/saved/{user}")
     Call<ArrayList<Party>> usersSavedParties(@Path("user") String user);
 
-    @GET("/todayParty")
+    @GET("/todayParty/")
     Call<ArrayList<Party>> todayParties();
 
-    @GET("/futureParty")
+    @GET("/futureParty/")
     Call<ArrayList<Party>> futureParties();
 
-    @POST("/parties")
+    @POST("/parties/")
     Call<Party> hostParty(@Body Party party);
 
     //@POST("https://jsonplaceholder.typicode.com/posts")

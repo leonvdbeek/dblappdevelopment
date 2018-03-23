@@ -116,4 +116,11 @@ public class DBSnapshot {
 
         return placeHolder;
     }
+
+    public void addHostedParty(Party party){
+        this.allParties.add(party);
+        //this.myParties.add(party2);
+        //this.savedParties.add(party3);
+    }
+
 }

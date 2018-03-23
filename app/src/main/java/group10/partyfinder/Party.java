@@ -2,6 +2,7 @@ package group10.partyfinder;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ public class Party implements java.io.Serializable{
     private String creator;
     private String name;
     private String info;
-    private String date;
+    private Date date;
     private String theme;
     private String address;
     private String longitude;
@@ -24,15 +25,15 @@ public class Party implements java.io.Serializable{
         this.id = 0;
         this.name = "None";
         this.info = "None";
-        this.date = "None";
+        this.date = new Date();
         this.theme = "None";
-        this.creator = "None";
+        this.creator = "114987278191137298218";
         this.address = "None";
         this.longitude = "0";
         this.lattitude = "0";
     }
 
-    public Party(int id, String name, String info, String date, String theme, String creator, String address, String longitude, String lattitude) {
+    public Party(int id, String name, String info, Date date, String theme, String creator, String address, String longitude, String lattitude) {
         this.id = id;
         this.name = name;
         this.info = info;
@@ -71,7 +72,9 @@ public class Party implements java.io.Serializable{
     }
 
     public String getDate() {
-        return date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
+
+        return dateFormat.format(date).toString();
     }
 
     public String getTheme() {
@@ -106,7 +109,7 @@ public class Party implements java.io.Serializable{
         this.name = name;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -128,5 +131,19 @@ public class Party implements java.io.Serializable{
 
     public void setLattitude(String lattitude) {
         this.lattitude = lattitude;
+    }
+
+    public Party clone(){
+        Party party = new Party();
+        party.setId(this.id);
+        party.setInfo(this.info);
+        party.setName(this.name);
+        party.setDate(this.date);
+        party.setTheme(this.theme);
+        party.setCreator(this.creator);
+        party.setAddress(this.address);
+        party.setLongitude(this.longitude);
+        party.setLattitude(this.lattitude);
+        return party;
     }
 }

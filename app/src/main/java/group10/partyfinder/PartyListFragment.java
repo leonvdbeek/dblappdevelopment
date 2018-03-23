@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,9 +54,9 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Party p1 = new Party(0, "name", "info", "date", "theme", "creator", "address", "0.500000", "0.200000");
+        Party p1 = new Party(0, "name", "info", new Date(), "theme", "creator", "address", "0.500000", "0.200000");
 
-        Party p2 = new Party(0, "name2", "info2", "date2", "theme2", "creator2", "address2", "0.5000002", "0.2000002");
+        Party p2 = new Party(0, "name2", "info2", new Date(), "theme2", "creator2", "address2", "0.5000002", "0.2000002");
 
         parties = new ArrayList<>();
         parties.add(p1);
