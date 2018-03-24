@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         // add drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        // drawer items on click listeners
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                     MapsActivity.class);
             startActivity(intent); // startActivity allow you to move
         }
+        // menu 
         if (item.getItemId() == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
