@@ -18,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/openPVA"
+        android:id="@+id/openHPA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="openPartyViewActivity"
-        android:text="Open PartyView Activity"
+        android:onClick="openHostPartyActivity"
+        android:text="Open HostParty Activity"
         tools:layout_editor_absoluteX="6dp"
         tools:layout_editor_absoluteY="72dp" />
 

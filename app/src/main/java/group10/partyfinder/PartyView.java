@@ -201,16 +201,19 @@ public class PartyView extends AppCompatActivity {
         ADdelete.show();
     }
 
+    //TODO create saveParty function
     // Save the party to the saved list
     public void saveParty() {
 
     }
 
+    //TODO create removeParty function
     // Remove the party from the saved list
     public void removeParty() {
 
     }
 
+    //TODO create deleteParty function
     // Delete the party
     public void deleteParty() {
 
