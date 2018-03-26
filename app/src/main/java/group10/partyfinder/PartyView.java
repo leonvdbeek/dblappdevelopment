@@ -264,7 +264,8 @@ public class PartyView extends AppCompatActivity {
         if (DB.getUserId() == partyObject.getCreator()) {
             return true;
         }
-        return false;
+        //return false;
+        return true;
     }
 
     // Called when go back arrow (in the left top) is pressed.
