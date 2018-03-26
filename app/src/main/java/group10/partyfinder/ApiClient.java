@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -35,7 +36,7 @@ public interface ApiClient {
     @POST("/parties/")
     Call<Party> hostParty(@Body Party party);
 
-    @POST("/parties/{id}/")
+    @DELETE("/parties/{id}/")
     Call<Party> deleteParty(@Path("id") String id);
 
 

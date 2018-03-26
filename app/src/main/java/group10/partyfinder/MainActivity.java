@@ -306,25 +306,17 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         ApiClient client2 = retrofit.create(ApiClient.class);
 
         //call for all parties
-        Call<Party> call = client2.hostParty(party);
-        Log.d("my tag", "Post request body: " + party.getDate());
+        Call<Party> call = client2.deleteParty(Integer.toString(party.getId()));
+        Log.d("my tag", "Delete request body: " + party.getDate());
         call.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
                 Log.d("my tag", "Post response code: " + response.code());
-                Party party = response.body();
-                Log.d("my tag", "Posted party id: " + party.getId());
-                Log.d("my tag", "Contents" + DB.getAllParties().size()
-                        + DB.getMyParties().size()
-                        + DB.getSavedParties().size());
-
-                DB.addHostedParty(party);
-                openPartyViewActivity(party.getId());
-            }
+                            }
 
             @Override
             public void onFailure (Call<Party> call, Throwable t){
-                showDbLoadError();
+                Log.d("my tag", "party delete request failed");
             }
         });
     }
