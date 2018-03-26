@@ -255,35 +255,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
     }
 
-    //method to remove a party
-    private void deleteParty(Integer id){
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://lenin.pythonanywhere.com")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        ApiClient client2 = retrofit.create(ApiClient.class);
-
-        //call for all parties
-        Call<Party> call = client2.deleteParty(Integer.toString(id));
-        Log.d("my tag", "Delete request body: " + id);
-        call.enqueue(new Callback<Party>() {
-            @Override
-            public void onResponse(Call<Party> call, Response<Party> response){
-                Log.d("my tag", "Post response code: " + response.code());
-                            }
-
-            @Override
-            public void onFailure (Call<Party> call, Throwable t){
-                Log.d("my tag", "party delete request failed");
-            }
-        });
-    }
-
     //Todo add comments
     @Override
     public void onListFragmentInteraction(Party item) {
