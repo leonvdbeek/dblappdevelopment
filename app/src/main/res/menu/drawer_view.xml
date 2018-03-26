@@ -13,6 +13,12 @@
             android:id="@+id/my_parties"
             android:icon="@drawable/ic_my_parties"
             android:title="My Parties" />
+        <item
+            android:id="@+id/HostParty"
+            android:checkable="true"
+            android:enabled="true"
+            android:title="Open HostParties"
+            android:visible="true" />
     </group>
 </menu>
 
