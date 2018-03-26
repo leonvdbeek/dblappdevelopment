@@ -14,6 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Created by Mark.
  *
@@ -47,7 +56,8 @@ public class PartyView extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Make references to text views
-        TextView TVdate = (TextView) findViewById(R.id.TVdate);
+        TextView TVstartTime = (TextView) findViewById(R.id.TVstartTime);
+        TextView TVendTime = (TextView) findViewById(R.id.TVendTime);
         TextView TVaddress = (TextView) findViewById(R.id.TVaddress);
         TextView TVtheme = (TextView) findViewById(R.id.TVtheme);
         TextView TVinfo = (TextView) findViewById(R.id.TVdescription);
@@ -60,7 +70,8 @@ public class PartyView extends AppCompatActivity {
         setTitle(partyObject.getName());
 
         // Set text in text views
-        TVdate.setText(partyObject.getPartyViewDate());
+        TVstartTime.setText(partyObject.getPartyViewDate());
+        TVendTime.setText(partyObject.getPartyViewEndDate());
         TVaddress.setText(partyObject.getAddress());
         TVtheme.setText(partyObject.getTheme());
         TVinfo.setText(partyObject.getInfo());
@@ -216,7 +227,31 @@ public class PartyView extends AppCompatActivity {
     //TODO create deleteParty function
     // Delete the party
     public void deleteParty() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //call for all parties
+        Call<Party> call = client2.deleteParty(Integer.toString(partyID));
+        Log.d("my tag", "Delete request body: " + partyID);
+        call.enqueue(new Callback<Party>() {
+            @Override
+            public void onResponse(Call<Party> call, Response<Party> response){
+                Log.d("my tag", "Post response code: " + response.code());
+            }
+
+            @Override
+            public void onFailure (Call<Party> call, Throwable t){
+                Log.d("my tag", "party delete request failed");
+            }
+        });
     }
 
     // Check if the user has saved the party
