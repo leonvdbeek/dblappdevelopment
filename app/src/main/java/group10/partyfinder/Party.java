@@ -15,7 +15,8 @@ public class Party implements java.io.Serializable{
     private String creator;
     private String name;
     private String info;
-    private Date date;
+    private Date start;
+    private Date end;
     private String theme;
     private String address;
     private String longitude;
@@ -25,7 +26,8 @@ public class Party implements java.io.Serializable{
         this.id = 0;
         this.name = "None";
         this.info = "None";
-        this.date = new Date();
+        this.start = new Date();
+        this.end = new Date();
         this.theme = "None";
         this.creator = "114987278191137298218";
         this.address = "None";
@@ -37,7 +39,8 @@ public class Party implements java.io.Serializable{
         this.id = id;
         this.name = name;
         this.info = info;
-        this.date = date;
+        this.start = date;
+        this.end = date;
         this.theme = theme;
         this.creator = creator;
         this.address = address;
@@ -47,15 +50,16 @@ public class Party implements java.io.Serializable{
 
     public void printParty(){
         Log.d("my tag", "=========================================");
-        Log.d("my tag", " party id: "+id);
-        Log.d("my tag", "  creator: "+creator);
-        Log.d("my tag", "     name: "+name);
-        Log.d("my tag", "     info: "+info);
-        Log.d("my tag", "     date: "+date);
-        Log.d("my tag", "    theme: "+theme);
-        Log.d("my tag", "  address: "+address);
-        Log.d("my tag", "longitude: "+longitude);
-        Log.d("my tag", "lattitude: "+lattitude);
+        Log.d("my tag", "  party id: "+id);
+        Log.d("my tag", "   creator: "+creator);
+        Log.d("my tag", "      name: "+name);
+        Log.d("my tag", "      info: "+info);
+        Log.d("my tag", "start date: "+start);
+        Log.d("my tag", "  end date: "+end);
+        Log.d("my tag", "     theme: "+theme);
+        Log.d("my tag", "   address: "+address);
+        Log.d("my tag", " longitude: "+longitude);
+        Log.d("my tag", " lattitude: "+lattitude);
         Log.d("my tag", "=======================================");
     }
 
@@ -74,7 +78,13 @@ public class Party implements java.io.Serializable{
     public String getDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
-        return dateFormat.format(date).toString();
+        return dateFormat.format(start);
+    }
+
+    public String getPartyViewEndDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy' 'HH:mm");
+
+        return dateFormat.format(end);
     }
 
     public String getTheme() {
@@ -100,7 +110,7 @@ public class Party implements java.io.Serializable{
     public String getPartyViewDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy' 'HH:mm");
 
-        return dateFormat.format(date).toString();
+        return dateFormat.format(start);
     }
     public void setId(int id) {
         this.id = id;
@@ -115,7 +125,15 @@ public class Party implements java.io.Serializable{
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.start = start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public void setTheme(String theme) {
@@ -143,7 +161,7 @@ public class Party implements java.io.Serializable{
         party.setId(this.id);
         party.setInfo(this.info);
         party.setName(this.name);
-        party.setDate(this.date);
+        party.setDate(this.start);
         party.setTheme(this.theme);
         party.setCreator(this.creator);
         party.setAddress(this.address);
