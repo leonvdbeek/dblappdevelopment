@@ -1,5 +1,6 @@
 package group10.partyfinder;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     }
 
+    //update the database everytime the
     @Override
     protected void onResume() {
         super.onResume();
@@ -125,19 +128,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    // A method to open the PartyView activity
-    public void openPartyViewActivity(View v) {
-        Intent i = new Intent("android.intent.action.PartyView");
-        i.putExtra("ID", 2);
-        this.startActivity(i);
-    }
 
     // A method to open a specified PartyView activity
     public void openPartyViewActivity(int n) {
@@ -176,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         viewPager.setAdapter(adapter);
     }
 
+    //method to post a party to the server
     private void postParty(Party party){
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -248,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
                 DB.setMyParties(response.body());
+
             }
 
             @Override
@@ -349,9 +341,31 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         this.startActivity(i);
     }
 
+    //method will open a error dialog to show
     public void showDbLoadError(){
-        Snackbar.make(view, "Party is saved!", Snackbar.LENGTH_LONG).show();
+        AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
 
-    }
+        // Set up dialog
+        ADbuilderR.setTitle("Update failed");
+        ADbuilderR.setMessage("Could not connect to server. Would you like to retry?");
+        ADbuilderR.setCancelable(true);
+        ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Accept button (right)
+                // Retry updating the snapshot
+                updateSnapshot();
+            }
+        });
+        ADbuilderR.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Decline button (left)
+                // Cancel action
+                dialog.cancel();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogRemove = ADbuilderR.create();
+        alertDialogRemove.show();}
 }
 

@@ -90,6 +90,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
         LatLng eindhoven = new LatLng(51.44, 5.48);
+
         //Todo customize which list to show all parties of instead of allparties
         for (Party party : DB.getAllParties()){
             LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
