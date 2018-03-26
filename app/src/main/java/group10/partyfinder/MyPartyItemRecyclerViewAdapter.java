@@ -48,8 +48,8 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
                 Intent i = new Intent("android.intent.action.PartyView");
-                //i.putExtra("ID", holder.mItem.getId());
-                i.putExtra("ID", 2);
+                i.putExtra("ID", holder.mItem.getId());
+                //i.putExtra("ID", 2);
                 v.getContext().startActivity(i);
             }
         });
