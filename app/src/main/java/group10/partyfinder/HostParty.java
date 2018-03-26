@@ -64,7 +64,7 @@ public class HostParty extends AppCompatActivity {
 
         //call for all parties
         Call<Party> call = client2.hostParty(party);
-        Log.d("my tag", "Post request body: " + party.getDate());
+        Log.d("my tag", "Post request body: " + party.getId());
         call.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
@@ -82,6 +82,39 @@ public class HostParty extends AppCompatActivity {
             @Override
             public void onFailure (Call<Party> call, Throwable t){
 
+            }
+        });
+    }
+
+    //method to post a party to the server
+    private void editParty(Party party){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //call for all parties
+        Call<Party> call = client2.editParty(Integer.toString(party.getId()), party);
+        Log.d("my tag", "Put request body: " + party.getId());
+        call.enqueue(new Callback<Party>() {
+            @Override
+            public void onResponse(Call<Party> call, Response<Party> response){
+                Log.d("my tag", "Put response code: " + response.code());
+                Party party = response.body();
+                Log.d("my tag", "Put party id: " + party.getId());
+
+                DB.addHostedParty(party);
+            }
+
+            @Override
+            public void onFailure (Call<Party> call, Throwable t){
+                Log.d("my tag", "Put party request has failed");
             }
         });
     }

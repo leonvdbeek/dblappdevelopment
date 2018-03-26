@@ -34,10 +34,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
     private DrawerLayout mDrawerLayout;
-    private View view;
-
-    //testing counter
-    int counter = 2;
 
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
@@ -82,11 +78,15 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onClick(View view) {
 
+                Log.d("my tag", " amount of today parties in DB: " + DB.getTodayParties().size());
+                Log.d("my tag", "amount of future parties in DB: " + DB.getFutureParties().size());
+                Log.d("my tag", "    amount of my parties in DB: " + DB.getMyParties().size());
+                Log.d("my tag", " amount of saved parties in DB: " + DB.getSavedParties().size());
 
-                Log.d("my tag", "party delete request failed" + DB.getSavedParties().size());
                 //this is printing from the local database, it is purely for testing
                 //Party party = new Party();
-                //party.setId(99);
+                //party.setId(9);
+                //editParty(party);
                 //postParty(party);
 
                 //openPartyViewActivity(counter);
@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             }
         });
 
-        //Todo uncomment updateSnapshot once the server supports all calls
         //call the updateSnapshot method to "sync" the local snapshot with the server
         updateSnapshot();
 
@@ -123,18 +122,13 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     }
 
+
     //update the database everytime the
     @Override
     protected void onResume() {
         super.onResume();
         updateSnapshot();
     }
-
-
-
-
-
-
 
     //code that will run when and option from the drop down menu is pressed
     @Override
@@ -163,9 +157,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         adapter.addFragment(new DiscoverPage(), "Discover");
         viewPager.setAdapter(adapter);
     }
-
-
-
+    
     //updates the DBSnapshot overwriting all current data with fresh data from the server
     private void updateSnapshot(){
         Log.d("my tag", "Updating local DB");

@@ -7,6 +7,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -39,6 +40,8 @@ public interface ApiClient {
     @DELETE("/parties/{id}")
     Call<Party> deleteParty(@Path("id") String id);
 
+    @PUT("/parties/{id}")
+    Call<Party> editParty(@Path("id") String id, @Body Party party);
 
     //@POST("https://jsonplaceholder.typicode.com/posts")
     //Call<Post> testPost(@Body Post post);

@@ -224,7 +224,6 @@ public class PartyView extends AppCompatActivity {
 
     }
 
-    //TODO create deleteParty function
     // Delete the party
     public void deleteParty() {
         Gson gson = new GsonBuilder()
