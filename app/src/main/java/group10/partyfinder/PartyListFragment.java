@@ -6,12 +6,15 @@ import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -58,12 +61,14 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
 
         Party p2 = new Party(0, "name2", "info2", new Date(), "theme2", "creator2", "address2", "0.5000002", "0.2000002");
 
-       // parties = new ArrayList<>();
+        //parties = new ArrayList<>();
        // parties.add(p1);
       //  parties.add(p2);
 
         //Todo find a way to reset the list content after the DB is loaded
-        parties = DBSnapshot.getInstance().getAllParties();
+        parties = new ArrayList<>(DBSnapshot.getInstance().getAllParties());
+
+        Collections.sort(parties, (a, b) -> a.getDistance() < b.getDistance() ? -1 : a.getDistance() == b.getDistance() ? 0 : 1);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);

@@ -1,8 +1,10 @@
 package group10.partyfinder;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -148,13 +150,14 @@ public class Party implements java.io.Serializable{
         this.address = address;
     }
 
+    public void setLattitude(String lattitude) {
+        this.lattitude = lattitude;
+    }
+
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
-    public void setLattitude(String lattitude) {
-        this.lattitude = lattitude;
-    }
 
     public Party clone(){
         Party party = new Party();
@@ -168,5 +171,12 @@ public class Party implements java.io.Serializable{
         party.setLongitude(this.longitude);
         party.setLattitude(this.lattitude);
         return party;
+    }
+
+    public double getDistance() {
+        // user location
+        double userLat = 51.44;
+        double userLon = 5.48;
+        return Math.round((Math.sqrt(Math.pow((userLat - Double.parseDouble(this.lattitude)) ,2) + Math.pow((userLon - Double.parseDouble(this.longitude)) ,2))) * 10.0) / 10.0;
     }
 }
