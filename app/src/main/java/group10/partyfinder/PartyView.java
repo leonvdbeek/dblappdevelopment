@@ -261,10 +261,10 @@ public class PartyView extends AppCompatActivity {
 
     // Check if the user is the owner of the party
     public boolean isOwner() {
-        if (DB.getUserId() == partyObject.getCreator()) {
+        //if (DB.getUserId() == partyObject.getCreator()) {
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 
     // Called when go back arrow (in the left top) is pressed.

@@ -83,9 +83,10 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             public void onClick(View view) {
 
                 //this is printing from the local database, it is purely for testing
-                Party party = new Party();
-                party.setId(99);
-                postParty(party);
+                //Party party = new Party();
+                //party.setId(99);
+                //postParty(party);
+
                 //openPartyViewActivity(counter);
                 //counter++;
 

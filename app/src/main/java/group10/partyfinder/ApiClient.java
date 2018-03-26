@@ -36,7 +36,7 @@ public interface ApiClient {
     @POST("/parties/")
     Call<Party> hostParty(@Body Party party);
 
-    @DELETE("/parties/{id}/")
+    @DELETE("/parties/{id}")
     Call<Party> deleteParty(@Path("id") String id);
 
 
