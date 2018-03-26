@@ -35,6 +35,10 @@ public interface ApiClient {
     @POST("/parties/")
     Call<Party> hostParty(@Body Party party);
 
+    @POST("/parties/{id}/")
+    Call<Party> deleteParty(@Path("id") String id);
+
+
     //@POST("https://jsonplaceholder.typicode.com/posts")
     //Call<Post> testPost(@Body Post post);
 }

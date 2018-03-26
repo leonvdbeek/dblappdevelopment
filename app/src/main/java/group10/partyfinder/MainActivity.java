@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
     private DrawerLayout mDrawerLayout;
+    private View view;
 
     //testing counter
     int counter = 2;
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                showDbLoadError();
             }
         });
 
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                showDbLoadError();
             }
         });
 
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                showDbLoadError();
             }
         });
 
@@ -279,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                showDbLoadError();
             }
         });
 
@@ -293,7 +294,44 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+                showDbLoadError();
+            }
+        });
+    }
 
+    //method to remove a party
+    private void deleteParty(Party party){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //call for all parties
+        Call<Party> call = client2.hostParty(party);
+        Log.d("my tag", "Post request body: " + party.getDate());
+        call.enqueue(new Callback<Party>() {
+            @Override
+            public void onResponse(Call<Party> call, Response<Party> response){
+                Log.d("my tag", "Post response code: " + response.code());
+                Party party = response.body();
+                Log.d("my tag", "Posted party id: " + party.getId());
+                Log.d("my tag", "Contents" + DB.getAllParties().size()
+                        + DB.getMyParties().size()
+                        + DB.getSavedParties().size());
+
+                DB.addHostedParty(party);
+                openPartyViewActivity(party.getId());
+            }
+
+            @Override
+            public void onFailure (Call<Party> call, Throwable t){
+                showDbLoadError();
             }
         });
     }
@@ -309,6 +347,11 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         Intent i = new Intent("android.intent.action.HostParty");
         //i.putExtra("ID", 2);
         this.startActivity(i);
+    }
+
+    public void showDbLoadError(){
+        Snackbar.make(view, "Party is saved!", Snackbar.LENGTH_LONG).show();
+
     }
 }
 

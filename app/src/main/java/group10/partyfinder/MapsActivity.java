@@ -89,15 +89,15 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         googleMap.setOnMarkerClickListener(this);
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        LatLng eindhoven = new LatLng(51.44, 5.48);
         //Todo customize which list to show all parties of instead of allparties
         for (Party party : DB.getAllParties()){
             LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
             marker.setTag(party.getId());
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(eindhoven));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
 
     }
 
