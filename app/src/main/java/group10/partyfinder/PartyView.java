@@ -256,6 +256,9 @@ public class PartyView extends AppCompatActivity {
 
     // Check if the user has saved the party
     public boolean isSaved() {
+        if (DB.getSavedParties().contains(partyObject)){
+            return true;
+        }
         return false;
     }
 
