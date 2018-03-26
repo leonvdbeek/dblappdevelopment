@@ -87,7 +87,7 @@ public class PartyView extends AppCompatActivity {
         Bedit = findViewById(R.id.Bedit);
         Bdelete = findViewById(R.id.Bdelete);
 
-        if(isOwner() == true) {
+        if(isOwner()) {
             // Show edit and delete button
             Bedit.setVisibility(View.VISIBLE);
             Bdelete.setVisibility(View.VISIBLE);
@@ -226,7 +226,10 @@ public class PartyView extends AppCompatActivity {
 
     // Check if the user is the owner of the party
     public boolean isOwner() {
-        return true;
+        if (DB.getUserId() == partyObject.getCreator()) {
+            return true;
+        }
+        return false;
     }
 
     // Called when go back arrow (in the left top) is pressed.
