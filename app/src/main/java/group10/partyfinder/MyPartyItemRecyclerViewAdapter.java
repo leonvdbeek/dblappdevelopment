@@ -37,7 +37,7 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getName());
-        holder.mContentView.setText(mValues.get(position).getDate());
+        holder.mContentView.setText(mValues.get(position).getPartyViewDate());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
