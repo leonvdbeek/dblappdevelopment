@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        setupViewPager(mViewPager);
+        //setupViewPager(mViewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
                 DB.setAllParties(response.body());
+                setupViewPager(mViewPager);
             }
 
             @Override
