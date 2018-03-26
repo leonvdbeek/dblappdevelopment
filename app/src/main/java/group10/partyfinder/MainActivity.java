@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     }
 
     //method to remove a party
-    private void deleteParty(Party party){
+    private void deleteParty(Integer id){
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -306,8 +306,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         ApiClient client2 = retrofit.create(ApiClient.class);
 
         //call for all parties
-        Call<Party> call = client2.deleteParty(Integer.toString(party.getId()));
-        Log.d("my tag", "Delete request body: " + party.getDate());
+        Call<Party> call = client2.deleteParty(Integer.toString(id));
+        Log.d("my tag", "Delete request body: " + id);
         call.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
