@@ -1,7 +1,9 @@
 package group10.partyfinder;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -40,6 +42,35 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        //todo login logic starts here
+        //this initializes the preference object
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.example.app", Context.MODE_PRIVATE);
+
+
+        if (prefs.getInt("userId", 0) == 0){
+            //call to login
+            //after login call this in the login activity
+            //and replace {@code id} with the userId retrieved from google
+            //SharedPreferences prefs = this.getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
+            //prefs.edit().putInt("userId", {@code id});
+            //prefs.edit().apply();
+        } else {
+            Integer userId = prefs.getInt("userId", 0);
+            DB.setUserId(Integer.toString(userId));
+        }
+
+//this is the logic for logging out
+        //logout(){
+        //    SharedPreferences prefs = this.getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
+        //    prefs.edit().putInt("userId", 0);
+        //    prefs.edit().apply();
+        //}
+        //todo login logic ends here
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -157,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         adapter.addFragment(new DiscoverPage(), "Discover");
         viewPager.setAdapter(adapter);
     }
-    
+
     //updates the DBSnapshot overwriting all current data with fresh data from the server
     private void updateSnapshot(){
         Log.d("my tag", "Updating local DB");
