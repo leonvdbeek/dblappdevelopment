@@ -175,8 +175,32 @@ public class Party implements java.io.Serializable{
 
     public double getDistance() {
         // user location
-        double userLat = 51.44;
-        double userLon = 5.48;
-        return Math.round((Math.sqrt(Math.pow((userLat - Double.parseDouble(this.lattitude)) ,2) + Math.pow((userLon - Double.parseDouble(this.longitude)) ,2))) * 10.0) / 10.0;
+        double lat1 = 51.447573;
+        double lon1 = 5.487507;
+
+        double lat2 = Double.parseDouble(this.lattitude);
+        double lon2 = Double.parseDouble(this.longitude);
+
+        //return Math.round((Math.sqrt(Math.pow((userLat - Double.parseDouble(this.lattitude)) ,2) + Math.pow((userLon - Double.parseDouble(this.longitude)) ,2))) * 10.0) / 10.0;
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344;
+        dist = Math.round(dist * 10.0) / 10.0;
+
+        return (dist);
+    }
+
+    // converts decimal degrees to radians
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    // converts radians to decimal degrees
+    private double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 }
