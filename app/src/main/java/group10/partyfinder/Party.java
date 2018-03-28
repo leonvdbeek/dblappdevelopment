@@ -3,6 +3,7 @@ package group10.partyfinder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,12 +38,12 @@ public class Party implements java.io.Serializable{
         this.lattitude = "0";
     }
 
-    public Party(int id, String name, String info, Date date, String theme, String creator, String address, String longitude, String lattitude) {
+    public Party(int id, String name, String info, String start, String end, String theme, String creator, String address, String longitude, String lattitude) {
         this.id = id;
         this.name = name;
         this.info = info;
-        this.start = date;
-        this.end = date;
+        this.start = convertStringToDate(start);
+        this.end = convertStringToDate(end);
         this.theme = theme;
         this.creator = creator;
         this.address = address;
@@ -138,6 +139,14 @@ public class Party implements java.io.Serializable{
         this.end = end;
     }
 
+    public void setString(String start) {
+        this.start = convertStringToDate(start);
+    }
+
+    public void setEnd(String end) {
+        this.end = convertStringToDate(end);
+    }
+
     public void setTheme(String theme) {
         this.theme = theme;
     }
@@ -202,5 +211,16 @@ public class Party implements java.io.Serializable{
     // converts radians to decimal degrees
     private double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    private Date convertStringToDate(String dateString){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
+        Date date = null;
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            Log.d("my tag", "The input date string is invalid");
+        }
+        return date;
     }
 }
