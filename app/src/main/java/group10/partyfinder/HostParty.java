@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -74,15 +75,19 @@ public class HostParty extends AppCompatActivity {
         ETlongitude = findViewById(R.id.ETlongitude);
         ETlattitude = findViewById(R.id.ETlattitude);
 
-
     }
 
     public void createParty(View v) {
+        startTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
+        endTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
+        //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
+
         partyObject = new Party(
                 0,
                 ETname.getText().toString(),
                 ETdescription.getText().toString(),
-                new Date(),
+                startTime,
+                endTime,
                 ETtheme.getText().toString(),
                 "114987278191137298218",
                 ETaddress.getText().toString(),
