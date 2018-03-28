@@ -285,8 +285,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     }
 
     // A method to open the hostParty activity
-    public void openHostPartyActivity(View v) {
-        Intent i = new Intent("android.intent.action.HostParty");
+    public void openCreatePartyActivity(View v) {
+        Intent i = new Intent("android.intent.action.CreateParty");
         //i.putExtra("ID", 2);
         this.startActivity(i);
     }

@@ -12,9 +12,6 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  */
 
-public class HostParty extends AppCompatActivity {
+public class CreateParty extends AppCompatActivity {
 
     // Get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
@@ -49,7 +46,7 @@ public class HostParty extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_host_party);
+        setContentView(R.layout.activity_create_party);
 
         // Create toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -82,6 +79,19 @@ public class HostParty extends AppCompatActivity {
         endTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
         //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
 
+/*        // Get longitude and latitude from address
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocationName(ETaddress.getText().toString(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address = addresses.get(0);
+        double longitude = address.getLongitude();
+        double latitude = address.getLatitude();
+        //Snackbar.make(view, "Long: " + longitude + " and Lat:" + latitude, Snackbar.LENGTH_LONG).show();*/
+
         partyObject = new Party(
                 0,
                 ETname.getText().toString(),
@@ -93,6 +103,8 @@ public class HostParty extends AppCompatActivity {
                 ETaddress.getText().toString(),
                 ETlongitude.getText().toString(),
                 ETlattitude.getText().toString()
+                //String.valueOf(longitude),
+                //String.valueOf(latitude)
         );
         partyObject.printParty();
         postParty(partyObject);
