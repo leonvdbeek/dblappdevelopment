@@ -93,6 +93,13 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
+
+                        // CreateParty menu button
+                        if(menuItem.getItemId() == R.id.createParty) {
+                            Intent i = new Intent("android.intent.action.CreateParty");
+                            startActivity(i);
+                        }
+
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
