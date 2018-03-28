@@ -46,6 +46,9 @@ public class DBSnapshot {
         }
     }
 
+    public Boolean isAllPartiesReady(){
+        return (!(this.allParties == null));
+    }
 
     public ArrayList<Party> getMyParties() {
         if (allParties == null){

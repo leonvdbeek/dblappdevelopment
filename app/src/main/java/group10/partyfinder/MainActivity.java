@@ -50,17 +50,17 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                 "com.example.app", Context.MODE_PRIVATE);
 
 
-        if (prefs.getInt("userId", 0) == 0){
+        //if (prefs.getInt("userId", 0) == 0){
             //call to login
             //after login call this in the login activity
             //and replace {@code id} with the userId retrieved from google
             //SharedPreferences prefs = this.getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
             //prefs.edit().putInt("userId", {@code id});
             //prefs.edit().apply();
-        } else {
-            Integer userId = prefs.getInt("userId", 0);
-            DB.setUserId(Integer.toString(userId));
-        }
+        //} else {
+        //    Integer userId = prefs.getInt("userId", 0);
+        //    DB.setUserId(Integer.toString(userId));
+        //}
 
 //this is the logic for logging out
         //logout(){
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     }
 
 
-    //update the database everytime the
+    //update the database everytime the activity resumes
     @Override
     protected void onResume() {
         super.onResume();
@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                Log.d("my tag", "my parties responce body " + response.body() + " and code: " + response.code());
                 DB.setMyParties(response.body());
 
             }
@@ -236,15 +237,37 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
 
         //call for users saved parties
-        call = client.usersSavedParties(DB.getUserId());
-        call.enqueue(new Callback<ArrayList<Party>>() {
+        Call<ArrayList<Saved>> call2;
+        Log.d("my tag", "DB userId: " + DB.getUserId());
+        call2 = client.usersSavedParties(DB.getUserId());
+        call2.enqueue(new Callback<ArrayList<Saved>>() {
             @Override
-            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
-                DB.setSavedParties(response.body());
+            public void onResponse(Call<ArrayList<Saved>> call, Response<ArrayList<Saved>> response) {
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        ArrayList<Party> parties = new ArrayList<Party>();
+                        Log.d("my tag", "saved responce body " + response.body() + " and code: " + response.code());
+
+                        while (!DB.isAllPartiesReady()){
+                            try {
+                                Log.d("my tag", "DB.allParties() is not available yet");
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                Log.d("my tag", "waiting failed apearantly ? :c");
+                            }
+                        }
+
+                        for (Saved save : response.body()){
+                            parties.add(DB.getParty(save.getId_party()));
+                        }
+                        DB.setSavedParties(parties);
+                    }
+                }).start();
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<Saved>> call, Throwable t) {
                 showDbLoadError();
             }
         });
@@ -278,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
     }
 
-    //Todo add comments
+    //Todo add comment
     @Override
     public void onListFragmentInteraction(Party item) {
 

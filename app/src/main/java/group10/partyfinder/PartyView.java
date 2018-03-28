@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -110,11 +112,12 @@ public class PartyView extends AppCompatActivity {
 
     }
 
+
     // On click method for save button
     public void clickOnSave(View v) {
         Snackbar.make(view, "Party is saved!", Snackbar.LENGTH_LONG).show();
 
-        saveParty();
+        saveParty(partyID);
 
         // Show remove button
         Bsave.setVisibility(View.GONE);
@@ -154,7 +157,7 @@ public class PartyView extends AppCompatActivity {
     public void startRemoveParty() {
         Snackbar.make(view, "Party is removed!", Snackbar.LENGTH_LONG).show();
 
-        removeParty();
+        removeParty(partyID);
 
         // Show remove button
         Bremove.setVisibility(View.GONE);
@@ -214,14 +217,70 @@ public class PartyView extends AppCompatActivity {
 
     //TODO create saveParty function
     // Save the party to the saved list
-    public void saveParty() {
+    public void saveParty(int id_party) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        Saved save = new Saved(DB.getUserId(), id_party);
+
+        //call
+        Call<Saved> call = client2.saveParty(save);
+        call.enqueue(new Callback<Saved>() {
+            @Override
+            public void onResponse(Call<Saved> call, Response<Saved> response){
+                Log.d("my tag", "save Post response code: " + response.code());
+                ArrayList<Party> saved = DB.getSavedParties();
+                Party party = DB.getParty(id_party);
+                if (!saved.contains(party)){
+                    saved.add(party);
+                    DB.setSavedParties(saved);
+                }
+            }
+
+            @Override
+            public void onFailure (Call<Saved> call, Throwable t){
+                Log.d("my tag", "Post save has failed: ");
+            }
+        });
     }
 
     //TODO create removeParty function
     // Remove the party from the saved list
-    public void removeParty() {
+    public void removeParty(int id_party) {
+// Method to post a party to the server
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        Log.d("my tag", "delete Post userid: " + DB.getUserId()
+                + " and partyid: " + Integer.toString(id_party));
+        //call
+        Call<Saved> call = client2.deleteSavedParty(DB.getUserId(), Integer.toString(id_party));
+        call.enqueue(new Callback<Saved>() {
+            @Override
+            public void onResponse(Call<Saved> call, Response<Saved> response){
+                Log.d("my tag", "delete Post response code: " + response.code());
+                ArrayList<Party> saved = DB.getSavedParties();
+                Party party = DB.getParty(id_party);
+                if (saved.contains(party)){
+                    saved.remove(party);
+                    DB.setSavedParties(saved);
+                }
+            }
+
+            @Override
+            public void onFailure (Call<Saved> call, Throwable t){
+
+                Log.d("my tag", "delete Post has failed: ");
+            }
+        });
     }
 
     // Delete the party
@@ -244,6 +303,7 @@ public class PartyView extends AppCompatActivity {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
                 Log.d("my tag", "Post response code: " + response.code());
+
             }
 
             @Override
