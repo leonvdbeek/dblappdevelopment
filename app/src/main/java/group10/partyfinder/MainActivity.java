@@ -100,6 +100,12 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                             startActivity(i);
                         }
 
+                        //Login activity menu item
+                        if(menuItem.getItemId() == R.id.Login) {
+                            Intent i = new Intent("android.intent.action.Login");
+                            startActivity(i);
+                        }
+
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
