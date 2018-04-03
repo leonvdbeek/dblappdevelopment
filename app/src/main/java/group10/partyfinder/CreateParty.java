@@ -1,7 +1,12 @@
 package group10.partyfinder;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +16,10 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,8 +49,11 @@ public class CreateParty extends AppCompatActivity {
     private String endTime;
     private EditText ETtheme;
     private EditText ETaddress;
-    private EditText ETlongitude;
-    private EditText ETlattitude;
+
+    double longitude;
+    double latitude;
+
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +81,6 @@ public class CreateParty extends AppCompatActivity {
         ETendTime = findViewById(R.id.ETendTime);
         ETtheme = findViewById(R.id.ETtheme);
         ETaddress = findViewById(R.id.ETaddress);
-        ETlongitude = findViewById(R.id.ETlongitude);
-        ETlattitude = findViewById(R.id.ETlattitude);
 
     }
 
@@ -79,7 +89,7 @@ public class CreateParty extends AppCompatActivity {
         endTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
         //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
 
-/*        // Get longitude and latitude from address
+        // Get longitude and latitude from address
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addresses = null;
         try {
@@ -87,28 +97,48 @@ public class CreateParty extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Address address = addresses.get(0);
-        double longitude = address.getLongitude();
-        double latitude = address.getLatitude();
-        //Snackbar.make(view, "Long: " + longitude + " and Lat:" + latitude, Snackbar.LENGTH_LONG).show();*/
 
-        partyObject = new Party(
-                0,
-                ETname.getText().toString(),
-                ETdescription.getText().toString(),
-                startTime,
-                endTime,
-                ETtheme.getText().toString(),
-                "114987278191137298218",
-                ETaddress.getText().toString(),
-                ETlongitude.getText().toString(),
-                ETlattitude.getText().toString()
-                //String.valueOf(longitude),
-                //String.valueOf(latitude)
-        );
-        partyObject.printParty();
-        postParty(partyObject);
-        Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
+
+        // If address is empty
+        if (addresses.isEmpty()) {
+
+            AlertDialog ADFalseAdress = new AlertDialog.Builder(context).create();
+            ADFalseAdress.setTitle("Address not recognized");
+            ADFalseAdress.setMessage("The address is not recognized. Change the address and try again.");
+            ADFalseAdress.setCancelable(false);
+            ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                           ADFalseAdress.cancel();
+                        }
+                    });
+            ADFalseAdress.show();
+
+        } else {
+            // Create party
+            Address address = addresses.get(0);
+
+            longitude = address.getLongitude();
+            latitude = address.getLatitude();
+            //Snackbar.make(view, "Long: " + String.valueOf(longitude) + " and Lat: " + String.valueOf(latitude), Snackbar.LENGTH_LONG).show();
+
+            partyObject = new Party(
+                    0,
+                    ETname.getText().toString(),
+                    ETdescription.getText().toString(),
+                    startTime,
+                    endTime,
+                    ETtheme.getText().toString(),
+                    "114987278191137298218",
+                    ETaddress.getText().toString(),
+                    String.valueOf(longitude),
+                    String.valueOf(latitude)
+            );
+
+            partyObject.printParty();
+            postParty(partyObject);
+            Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
+        }
     }
 
 
