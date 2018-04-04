@@ -15,14 +15,12 @@
             android:title="My Parties" />
         <item
             android:id="@+id/createParty"
-            android:checkable="true"
-            android:enabled="true"
-            android:title="Open CreateParties"
-            android:visible="true" />
+            android:icon="@drawable/ic_my_parties"
+            android:title="Open CreateParties" />
         <item
             android:id="@+id/Login"
             android:icon="@drawable/ic_my_parties"
-            android:title="Login screen" />
+            android:title="Sign out" />
     </group>
 </menu>
 

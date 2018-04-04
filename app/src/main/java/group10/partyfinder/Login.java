@@ -19,7 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 /**
- * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
+ * Activity to retrieve of the Google user's ID, email address, and basic
  * profile.
  */
 public class Login extends AppCompatActivity implements
@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity implements
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -117,8 +117,7 @@ public class Login extends AppCompatActivity implements
 
     // [START signOut]
     private void signOut() {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // [START_EXCLUDE]
@@ -145,10 +144,16 @@ public class Login extends AppCompatActivity implements
 
     private void updateUI(@Nullable GoogleSignInAccount account) {
         if (account != null) {
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, account.getDisplayName()));
+            //mStatusTextView.setText(getString(R.string.signed_in_fmt, account.getDisplayName()));
 
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            //findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+
+            //if the user is logged in now, go to the main activity
+            Intent i = new Intent();
+            i.putExtra("GAccount", account.getId());
+            setResult(RESULT_OK , i);
+            finish();
         } else {
             mStatusTextView.setText(R.string.signed_out);
 
@@ -165,9 +170,6 @@ public class Login extends AppCompatActivity implements
                 break;
             case R.id.sign_out_button:
                 signOut();
-                break;
-            case R.id.disconnect_button:
-                revokeAccess();
                 break;
         }
     }
