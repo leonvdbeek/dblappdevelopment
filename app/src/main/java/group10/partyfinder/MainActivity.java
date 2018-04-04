@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,7 +21,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -40,14 +48,30 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
+<<<<<<< HEAD
     boolean todaySet = false;
     boolean futureSet = false;
+=======
+    //Google User ID which will be filled in after logging in
+    public String GUSERID;
+
+    //Header TextView
+    private TextView header;
+
+    private GoogleSignInClient mGoogleSignInClient;
+>>>>>>> origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        //creating google sigin, so we can logout from the mainactivity
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        //todo login logic starts her
+        //todo login logic starts here
+
 //this initializes the preference object
         //SharedPreferences prefs = this.getSharedPreferences(
         //        "com.example.app", Context.MODE_PRIVATE);
@@ -89,7 +113,12 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // drawer items on click listeners
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        //Creating NavView here already so i can load the login
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        header = (TextView)hView.findViewById(R.id.header);
+        header.setText("User not logged in");
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -105,8 +134,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
                         //Login activity menu item
                         if(menuItem.getItemId() == R.id.Login) {
-                            Intent i = new Intent("android.intent.action.Login");
-                            startActivity(i);
+                            signOut();
                         }
 
                         //Saved Parties
@@ -124,6 +152,20 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                         return true;
                     }
                 });
+
+
+        //Login functionality
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account == null) {
+            Intent i = new Intent("android.intent.action.Login");
+            startActivityForResult(i, 1);
+        } else {
+            //Update header to show GUSERID, for the case the user was already logged in
+            String GID = account.getDisplayName();
+            header.setText("Signed in as: "+GID);
+        }
+
+
 
         //Todo remove the testing fab after server communication testing is complete
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -176,12 +218,50 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     }
 
+    //Signout function to sign out from the mainactivity
+    private void signOut() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Intent i = new Intent("android.intent.action.Login");
+                startActivityForResult(i, 1);
+            }
+        });
+    }
 
     //update the database everytime the activity resumes
     @Override
     protected void onResume() {
         super.onResume();
         updateSnapshot();
+
+        //Check if the user is still logged in, if not redirect to login page
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account == null) {
+            Intent i = new Intent("android.intent.action.Login");
+            startActivityForResult(i, 1);
+        } else {
+        //Update header to show GUSERID, for the case the user was already logged in
+        String GID = account.getDisplayName();
+        header.setText("Signed in as: "+GID);
+    }
+    }
+
+    //Method to get data from login screen to the mainactivity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check that it is the SecondActivity with an OK result
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                // get GUSERID data from Intent
+                GUSERID = data.getStringExtra("GAccount");
+                // = findViewById(R.id.header);
+                //Header.setText(GUSERID);
+            }
+        }
     }
 
     //code that will run when and option from the drop down menu is pressed
