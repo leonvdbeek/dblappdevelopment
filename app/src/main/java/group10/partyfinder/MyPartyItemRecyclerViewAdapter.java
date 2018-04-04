@@ -23,6 +23,7 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
     private final List<Party> mValues;
     private final OnListFragmentInteractionListener mListener;
     private int list;
+    private boolean empty = false;
 
     public MyPartyItemRecyclerViewAdapter(List<Party> items, OnListFragmentInteractionListener listener, int list) {
         mValues = items;
@@ -39,7 +40,7 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (getItemCount() == 1) {
+        if (getItemCount() == 1 && empty) {
             holder.mContentView.setText("no parties");
         } else {
             holder.mItem = mValues.get(position);
@@ -84,8 +85,10 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
     @Override
     public int getItemCount() {
         if (mValues == null) {
+            empty = true;
             return 1;
         }
+        empty = false;
         return mValues.size();
     }
 
