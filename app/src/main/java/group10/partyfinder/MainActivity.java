@@ -48,10 +48,9 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
-<<<<<<< HEAD
     boolean todaySet = false;
     boolean futureSet = false;
-=======
+
     //Google User ID which will be filled in after logging in
     public String GUSERID;
 
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     private TextView header;
 
     private GoogleSignInClient mGoogleSignInClient;
->>>>>>> origin/master
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
