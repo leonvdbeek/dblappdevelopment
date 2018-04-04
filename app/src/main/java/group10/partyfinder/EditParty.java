@@ -166,7 +166,6 @@ public class EditParty extends AppCompatActivity {
 
     // Method to post the edited party to the server
     private void editParty(Party party){
-        party.printParty();
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -184,12 +183,17 @@ public class EditParty extends AppCompatActivity {
         call.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
-                Log.d("my tag", "Put response code: " + response.code());
-                Party party = response.body();
-                Log.d("my tag", "Put party id: " + party.getId());
-                party.printParty();
-                DB.editHostedParty(party);
-                Snackbar.make(view, "Server response: OK!", Snackbar.LENGTH_LONG).show();
+                if (response.body() != null) {
+                    Log.d("my tag", "Put response code: " + response.code());
+                    Party party = response.body();
+                    Log.d("my tag", "Put party id: " + party.getId());
+                    party.printParty();
+                    DB.editHostedParty(party);
+                    Snackbar.make(view, "Server response: OK!", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Log.d("my tag", "Put response code: " + response.code());
+                    Snackbar.make(view, "Something failed, please retry later", Snackbar.LENGTH_LONG).show();
+                }
             }
 
             @Override
