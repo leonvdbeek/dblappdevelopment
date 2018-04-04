@@ -30,8 +30,7 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListenerT;
-    private OnListFragmentInteractionListener mListenerF;
+    private OnListFragmentInteractionListener mListener;
 
     //get the instance of our database
     //private DBSnapshot DB = DBSnapshot.getInstance();
@@ -60,15 +59,6 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Party p1 = new Party(0, "name", "info", new Date(), "theme", "creator", "address", "0.500000", "0.200000");
-
-        //Party p2 = new Party(0, "name2", "info2", new Date(), "theme2", "creator2", "address2", "0.5000002", "0.2000002");
-
-        //parties = new ArrayList<>();
-        //parties.add(p1);
-        //parties.add(p2);
-
 
         getArgument = getArguments().getInt("list");//Get pass data with its key value
 
@@ -104,10 +94,10 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             if (getArgument == 1) {
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesT, mListenerT));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesT, mListener, 1));
             }
             if (getArgument == 2) {
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesF, mListenerF));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesF, mListener, 2));
             }
         }
         return view;
@@ -118,12 +108,7 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            if (getArgument == 1) {
-            mListenerT = (OnListFragmentInteractionListener) context;
-            }
-            if (getArgument == 2) {
-            mListenerF = (OnListFragmentInteractionListener) context;
-            }
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -133,12 +118,7 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if (getArgument == 1) {
-            mListenerT = null;
-        }
-        if (getArgument == 2) {
-            mListenerF = null;
-        }
+        mListener = null;
     }
 
     /**

@@ -1,12 +1,15 @@
 package group10.partyfinder;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.api.client.util.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Roy on 28/02/2018.
@@ -88,6 +91,25 @@ public class Party implements java.io.Serializable{
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy' 'HH:mm");
 
         return dateFormat.format(end);
+    }
+
+    public String getPartyViewStartDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(start);
+    }
+
+    public String getPartyDayDiff() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+
+        String today = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        Date firstDate = sdf.parse(today);
+
+        Date secondDate = sdf.parse(getPartyViewStartDate());
+
+        long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        return String.valueOf(diff);
     }
 
     public long getPartyTimeMs(){

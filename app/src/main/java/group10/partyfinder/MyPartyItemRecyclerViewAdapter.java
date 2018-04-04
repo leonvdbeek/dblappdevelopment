@@ -10,6 +10,7 @@ import android.widget.TextView;
 import group10.partyfinder.PartyListFragment.OnListFragmentInteractionListener;
 
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -20,10 +21,12 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
 
     private final List<Party> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private int list;
 
-    public MyPartyItemRecyclerViewAdapter(List<Party> items, OnListFragmentInteractionListener listener) {
+    public MyPartyItemRecyclerViewAdapter(List<Party> items, OnListFragmentInteractionListener listener, int list) {
         mValues = items;
         mListener = listener;
+        this.list = list;
     }
 
     @Override
@@ -37,8 +40,17 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getName());
-        //holder.mContentView.setText(mValues.get(position).getPartyViewDate());
-        holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()));
+
+        if (list == 1) {
+            holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()) + " km");
+        }
+        if (list == 2) {
+            try {
+                holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
