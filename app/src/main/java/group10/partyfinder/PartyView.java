@@ -43,6 +43,12 @@ public class PartyView extends AppCompatActivity {
     private Button Bdelete;
     private View view;
 
+    TextView TVstartTime;
+    TextView TVendTime;
+    TextView TVaddress;
+    TextView TVtheme;
+    TextView TVinfo;
+
     final Context context = this;
 
     @Override
@@ -58,11 +64,11 @@ public class PartyView extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Make references to text views
-        TextView TVstartTime = (TextView) findViewById(R.id.TVstartTime);
-        TextView TVendTime = (TextView) findViewById(R.id.TVendTime);
-        TextView TVaddress = (TextView) findViewById(R.id.TVaddress);
-        TextView TVtheme = (TextView) findViewById(R.id.TVtheme);
-        TextView TVinfo = (TextView) findViewById(R.id.TVdescription);
+        TVstartTime = findViewById(R.id.TVstartTime);
+        TVendTime = findViewById(R.id.TVendTime);
+        TVaddress = findViewById(R.id.TVaddress);
+        TVtheme = findViewById(R.id.TVtheme);
+        TVinfo = findViewById(R.id.TVdescription);
 
         // Get party object
         partyID = getIntent().getIntExtra("ID", 0);
@@ -109,6 +115,26 @@ public class PartyView extends AppCompatActivity {
             Bedit.setVisibility(View.GONE);
             Bdelete.setVisibility(View.GONE);
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        // Get party object
+        partyID = getIntent().getIntExtra("ID", 0);
+        partyObject = DB.getParty(partyID);
+
+        // Set title with the name of the party
+        setTitle(partyObject.getName());
+
+        // Set text in text views
+        TVstartTime.setText(partyObject.getPartyViewDate());
+        TVendTime.setText(partyObject.getPartyViewEndDate());
+        TVaddress.setText(partyObject.getAddress());
+        TVtheme.setText(partyObject.getTheme());
+        TVinfo.setText(partyObject.getInfo());
 
     }
 
