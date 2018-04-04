@@ -54,6 +54,8 @@ public class EditParty extends AppCompatActivity {
     private EditText ETaddress;
     private String saveStartTime;
     private String saveEndTime;
+    private String[] ETSD;
+    private String[] ETED;
 
     double longitude;
     double latitude;
@@ -99,15 +101,20 @@ public class EditParty extends AppCompatActivity {
         ETdescription.setText(partyObject.getInfo(), TextView.BufferType.EDITABLE);
 
         startTime = partyObject.getPartyViewDate().split(" ");
-        ETstartDate.setText(startTime[0], TextView.BufferType.EDITABLE);
+        // Split start date
+        ETSD = startTime[0].split("-");
+        ETstartDate.setText(ETSD[2] + "-" + ETSD[1] + "-" + ETSD[0], TextView.BufferType.EDITABLE);
         ETstartTime.setText(startTime[1], TextView.BufferType.EDITABLE);
 
         endTime= partyObject.getPartyViewEndDate().split(" ");
-        ETendDate.setText(endTime[0], TextView.BufferType.EDITABLE);
+        // Split end date
+        ETED = endTime[0].split("-");
+        ETendDate.setText(ETED[2] + "-" + ETED[1] + "-" + ETED[0], TextView.BufferType.EDITABLE);
         ETendTime.setText(endTime[1], TextView.BufferType.EDITABLE);
     }
 
     public void startEditParty(View v) {
+
         saveStartTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
         saveEndTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
         //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
