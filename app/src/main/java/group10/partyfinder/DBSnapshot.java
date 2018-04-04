@@ -46,8 +46,9 @@ public class DBSnapshot {
             return allParties;
         }
     }
+    
 
-    public Boolean isAllPartiesReady(){
+    public Boolean isDBReady(){
         return (!(this.allParties == null));
     }
 

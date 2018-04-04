@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                         ArrayList<Party> parties = new ArrayList<Party>();
                         Log.d("my tag", "saved responce body " + response.body() + " and code: " + response.code());
 
-                        while (!DB.isAllPartiesReady()){
+                        while (!DB.isDBReady()){
                             try {
                                 Log.d("my tag", "DB.allParties() is not available yet");
                                 Thread.sleep(50);
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
         // Set up dialog
         ADbuilderR.setTitle("Update failed");
-        ADbuilderR.setMessage("Could not connect to server. Would you like to retry?");
+        ADbuilderR.setMessage("Could not connect to server. Check your internet connection and then retry.");
         ADbuilderR.setCancelable(true);
         ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
