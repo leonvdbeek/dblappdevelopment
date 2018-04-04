@@ -36,6 +36,8 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     //private DBSnapshot DB = DBSnapshot.getInstance();
     private ArrayList<Party> partiesT;
     private ArrayList<Party> partiesF;
+    private ArrayList<Party> partiesS;
+    private ArrayList<Party> partiesM;
     int getArgument;
 
 
@@ -70,6 +72,14 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             partiesF = new ArrayList<>(DBSnapshot.getInstance().getFutureParties());
             Collections.sort(partiesF, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
         }
+        if (getArgument == 3) {
+            partiesS = new ArrayList<>(DBSnapshot.getInstance().getSavedParties());
+            Collections.sort(partiesS, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+        }
+        if (getArgument == 4) {
+            partiesM = new ArrayList<>(DBSnapshot.getInstance().getMyParties());
+            Collections.sort(partiesM, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+        }
 
         //Todo find a way to reset the list content after the DB is loaded
 
@@ -98,6 +108,12 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             }
             if (getArgument == 2) {
             recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesF, mListener, 2));
+            }
+            if (getArgument == 3) {
+                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesS, mListener, 3));
+            }
+            if (getArgument == 4) {
+                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesM, mListener, 4));
             }
         }
         return view;

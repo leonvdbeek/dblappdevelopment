@@ -44,9 +44,12 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         if (list == 1) {
             holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()) + " km");
         }
-        if (list == 2) {
+        if (list > 1) {
             try {
-                if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) <= 0) {
+                if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) < 0){
+                    holder.mContentView.setText("past");
+                }
+                else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 0) {
                     holder.mContentView.setText("today");
                 } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 1) {
                     holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " day");

@@ -142,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                             startActivity(i);
                         }
 
+                        //My Parties
+                        if(menuItem.getItemId() == R.id.my_parties) {
+                            Intent i = new Intent("android.intent.action.MyPartiesActivity");
+                            startActivity(i);
+                        }
+
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
@@ -156,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         //Login functionality
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
-            Intent i = new Intent("android.intent.action.Login");
-            startActivityForResult(i, 1);
+            //Intent i = new Intent("android.intent.action.Login");
+           // startActivityForResult(i, 1);
         } else {
             //Update header to show GUSERID, for the case the user was already logged in
             String GID = account.getDisplayName();
@@ -222,8 +228,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent i = new Intent("android.intent.action.Login");
-                startActivityForResult(i, 1);
+                //Intent i = new Intent("android.intent.action.Login");
+               // startActivityForResult(i, 1);
             }
         });
     }
@@ -237,8 +243,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         //Check if the user is still logged in, if not redirect to login page
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
-            Intent i = new Intent("android.intent.action.Login");
-            startActivityForResult(i, 1);
+           // Intent i = new Intent("android.intent.action.Login");
+            //startActivityForResult(i, 1);
         } else {
         //Update header to show GUSERID, for the case the user was already logged in
         String GID = account.getDisplayName();

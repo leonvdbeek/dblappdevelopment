@@ -106,7 +106,7 @@ public class Party implements java.io.Serializable{
 
         Date secondDate = sdf.parse(getPartyViewStartDate());
 
-        long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
+        long diffInMillies = secondDate.getTime() - firstDate.getTime();
         long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
         return String.valueOf(diff);

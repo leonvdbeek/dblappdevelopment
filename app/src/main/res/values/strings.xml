@@ -57,5 +57,6 @@
          from https://console.developers.google.com/ -->
     <string name="server_client_id">134015253226-jef4u0u55asf9te5h7csmha1rpr2c39r.apps.googleusercontent.com</string>
     <string name="title_activity_saved_parties">Saved Parties</string>
+    <string name="title_activity_my_parties">My Parties</string>
 </resources>
 
