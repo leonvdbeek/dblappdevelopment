@@ -11,6 +11,7 @@ import group10.partyfinder.PartyListFragment.OnListFragmentInteractionListener;
 
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,49 +39,52 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getName());
+        if (getItemCount() == 1) {
+            holder.mContentView.setText("no parties");
+        } else {
+            holder.mItem = mValues.get(position);
+            holder.mIdView.setText(mValues.get(position).getName());
 
-        if (list == 1) {
-            holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()) + " km");
-        }
-        if (list > 1) {
-            try {
-                if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) < 0){
-                    holder.mContentView.setText("past");
-                }
-                else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 0) {
-                    holder.mContentView.setText("today");
-                } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 1) {
-                    holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " day");
-                } else {
-                    holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (list == 1) {
+                holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()) + " km");
             }
-        }
+            if (list > 1) {
+                try {
+                    if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) < 0) {
+                        holder.mContentView.setText("past");
+                    } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 0) {
+                        holder.mContentView.setText("today");
+                    } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 1) {
+                        holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " day");
+                    } else {
+                        holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mListener) {
+                        // Notify the active callbacks interface (the activity, if the
+                        // fragment is attached to one) that an item has been selected.
+                        mListener.onListFragmentInteraction(holder.mItem);
+                    }
+                    Intent i = new Intent("android.intent.action.PartyView");
+                    i.putExtra("ID", holder.mItem.getId());
+                    //i.putExtra("ID", 2);
+                    v.getContext().startActivity(i);
                 }
-                Intent i = new Intent("android.intent.action.PartyView");
-                i.putExtra("ID", holder.mItem.getId());
-                //i.putExtra("ID", 2);
-                v.getContext().startActivity(i);
-            }
-        });
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         if (mValues == null) {
-            return 0;
+            return 1;
         }
         return mValues.size();
     }
