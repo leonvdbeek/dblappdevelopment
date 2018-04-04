@@ -106,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                             startActivity(i);
                         }
 
+                        //Saved Parties
+                        if(menuItem.getItemId() == R.id.saved_parties) {
+                            Intent i = new Intent("android.intent.action.SavedPartiesActivity");
+                            startActivity(i);
+                        }
+
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 

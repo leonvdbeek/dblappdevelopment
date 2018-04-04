@@ -66,6 +66,29 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SavedPartiesActivity"
+            android:label="@string/title_activity_saved_parties"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="group10.partyfinder.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.SavedPartiesActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!--<activity
+            android:name=".SavedPartiesActivity"
+            android:label="@string/title_activity_saved_parties"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="group10.partyfinder.MainActivity" />
+        </activity>-->
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
