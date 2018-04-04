@@ -122,8 +122,15 @@ public class DBSnapshot {
 
     public void addHostedParty(Party party){
         this.allParties.add(party);
-        //this.myParties.add(party2);
-        //this.savedParties.add(party3);
     }
 
+    public void editHostedParty(Party party){
+        Party old = getParty(party.getId());
+        this.allParties.remove(old);
+        this.allParties.add(party);
+        this.myParties.remove(old);
+        this.myParties.add(party);
+        this.savedParties.remove(old);
+        this.savedParties.add(party);
+    }
 }

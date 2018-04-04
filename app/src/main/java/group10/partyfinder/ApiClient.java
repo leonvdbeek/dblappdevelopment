@@ -19,9 +19,11 @@ public interface ApiClient {
     //url is lenin.pythonanywhere.com/parties
 
 
+    //get a list of all parties in the DB
     @GET("/parties/")
     Call<ArrayList<Party>> getParties();
 
+    //get a list of parties organized by the user
     @GET("/organized/{user}")
     Call<ArrayList<Party>> usersMyParties(@Path("user") String user);
 
@@ -60,6 +62,8 @@ public interface ApiClient {
     @DELETE("/unsave/{userId}/{partyId}")
     Call<Saved> deleteSavedParty(@Path("userId") String userId, @Path("partyId") String partyId);
 
+
+    //call to add a user to the user DB
     @POST("/userid/")
     Call<User> postUser(@Body User user);
 

@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        //todo login logic starts here
-        //this initializes the preference object
-        SharedPreferences prefs = this.getSharedPreferences(
-                "com.example.app", Context.MODE_PRIVATE);
+        //todo login logic starts her
+//this initializes the preference object
+        //SharedPreferences prefs = this.getSharedPreferences(
+        //        "com.example.app", Context.MODE_PRIVATE);
 
 
         //if (prefs.getInt("userId", 0) == 0){
@@ -127,7 +127,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                 Log.d("my tag", "    amount of my parties in DB: " + DB.getMyParties().size());
                 Log.d("my tag", " amount of saved parties in DB: " + DB.getSavedParties().size());
 
-                //this is printing from the local database, it is purely for testing
+
+                 //this is printing from the local database, it is purely for testing
                 //Party party = new Party();
                 //party.setId(9);
                 //editParty(party);
@@ -352,6 +353,36 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
         // Create alert dialog
         AlertDialog alertDialogRemove = ADbuilderR.create();
-        alertDialogRemove.show();}
+        alertDialogRemove.show();
+    }
+
+
+    //add the user to the DB if it doesn't exsist yet
+    public void postUser(User def) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //Log.d("my tag", "delete Post userid: " + DB.getUserId()
+        //        + " and partyid: " + Integer.toString(id_party));
+        //call
+        Call<User> call = client2.postUser(def);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response){
+                Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
+                DB.setUserId(def.getId());
+            }
+
+            @Override
+            public void onFailure (Call<User> call, Throwable t){
+
+                Log.d("my tag", "delete Post has failed: ");
+            }
+        });
+    }
 }
 

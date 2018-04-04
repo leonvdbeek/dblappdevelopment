@@ -211,7 +211,7 @@ public class CreateParty extends AppCompatActivity {
                 Party party = response.body();
                 Log.d("my tag", "Put party id: " + party.getId());
 
-                DB.addHostedParty(party);
+                DB.editHostedParty(party);
             }
 
             @Override
