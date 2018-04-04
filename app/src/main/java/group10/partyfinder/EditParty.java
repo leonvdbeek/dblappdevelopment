@@ -166,6 +166,7 @@ public class EditParty extends AppCompatActivity {
 
     // Method to post the edited party to the server
     private void editParty(Party party){
+        party.printParty();
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -186,8 +187,8 @@ public class EditParty extends AppCompatActivity {
                 Log.d("my tag", "Put response code: " + response.code());
                 Party party = response.body();
                 Log.d("my tag", "Put party id: " + party.getId());
-
-                DB.addHostedParty(party);
+                party.printParty();
+                DB.editHostedParty(party);
                 Snackbar.make(view, "Server response: OK!", Snackbar.LENGTH_LONG).show();
             }
 
