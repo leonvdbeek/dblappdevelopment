@@ -166,7 +166,10 @@ public class PartyView extends AppCompatActivity {
 
     // On click method for edit button
     public void clickOnEdit(View v) {
-        Snackbar.make(view, "This button should open the edit activity.", Snackbar.LENGTH_LONG).show();
+        Intent i = new Intent("android.intent.action.EditParty");
+        i.putExtra("ID", partyID);
+        this.startActivity(i);
+        //Snackbar.make(view, "This button should open the edit activity.", Snackbar.LENGTH_LONG).show();
     }
 
     // On click method for delete button
