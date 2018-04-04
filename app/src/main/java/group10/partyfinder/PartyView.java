@@ -112,6 +112,10 @@ public class PartyView extends AppCompatActivity {
 
     }
 
+    public void onresume(){
+
+    }
+
 
     // On click method for save button
     public void clickOnSave(View v) {
@@ -215,7 +219,6 @@ public class PartyView extends AppCompatActivity {
         ADdelete.show();
     }
 
-    //TODO create saveParty function
     // Save the party to the saved list
     public void saveParty(int id_party) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -248,10 +251,9 @@ public class PartyView extends AppCompatActivity {
         });
     }
 
-    //TODO create removeParty function
+
     // Remove the party from the saved list
     public void removeParty(int id_party) {
-// Method to post a party to the server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://lenin.pythonanywhere.com")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -283,7 +285,7 @@ public class PartyView extends AppCompatActivity {
         });
     }
 
-    // Delete the party
+    // Delete the party entirely from the DB
     public void deleteParty() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
