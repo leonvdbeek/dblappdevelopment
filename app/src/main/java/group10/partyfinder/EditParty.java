@@ -2,7 +2,6 @@ package group10.partyfinder;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.Snackbar;
@@ -13,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,23 +32,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  */
 
-public class CreateParty extends AppCompatActivity {
+public class EditParty extends AppCompatActivity {
 
-    // Get the instance of our database
+    // Get the database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
-    private View view;
+    private int partyID;
     private Party partyObject;
+    private Party savePartyObject;
+
+    private View view;
     private EditText ETname;
     private EditText ETdescription;
     private EditText ETstartDate;
     private EditText ETstartTime;
-    private String startTime;
+    private String[] startTime;
     private EditText ETendDate;
     private EditText ETendTime;
-    private String endTime;
+    private String[] endTime;
     private EditText ETtheme;
     private EditText ETaddress;
+    private String saveStartTime;
+    private String saveEndTime;
 
     double longitude;
     double latitude;
@@ -58,7 +63,7 @@ public class CreateParty extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_party);
+        setContentView(R.layout.activity_edit_party);
 
         // Create toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,10 +73,15 @@ public class CreateParty extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set title toolbar
-        setTitle("Create party");
+        setTitle("Edit party");
 
         // Make variable for snackbar
         view = findViewById(R.id.mainLayout);
+
+        // Get party object
+        partyID = getIntent().getIntExtra("ID", 0);
+        partyObject = DB.getParty(partyID);
+
 
         ETname = findViewById(R.id.ETname);
         ETdescription = findViewById(R.id.ETdescription);
@@ -82,12 +92,25 @@ public class CreateParty extends AppCompatActivity {
         ETtheme = findViewById(R.id.ETtheme);
         ETaddress = findViewById(R.id.ETaddress);
 
+        // Set values in editText
+        ETname.setText(partyObject.getName(), TextView.BufferType.EDITABLE);
+        ETaddress.setText(partyObject.getAddress(), TextView.BufferType.EDITABLE);
+        ETtheme.setText(partyObject.getTheme(), TextView.BufferType.EDITABLE);
+        ETdescription.setText(partyObject.getInfo(), TextView.BufferType.EDITABLE);
+
+        startTime = partyObject.getPartyViewDate().split(" ");
+        ETstartDate.setText(startTime[0], TextView.BufferType.EDITABLE);
+        ETstartTime.setText(startTime[1], TextView.BufferType.EDITABLE);
+
+        endTime= partyObject.getPartyViewEndDate().split(" ");
+        ETendDate.setText(endTime[0], TextView.BufferType.EDITABLE);
+        ETendTime.setText(endTime[1], TextView.BufferType.EDITABLE);
     }
 
-    public void createParty(View v) {
-        startTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
-        endTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
-        //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
+    public void startEditParty(View v) {
+        saveStartTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
+        saveEndTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
+        //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -109,25 +132,25 @@ public class CreateParty extends AppCompatActivity {
             ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                           ADFalseAdress.cancel();
+                            ADFalseAdress.cancel();
                         }
                     });
             ADFalseAdress.show();
 
         } else {
-            // Create party
+            // Edit party
             Address address = addresses.get(0);
 
             longitude = address.getLongitude();
             latitude = address.getLatitude();
             //Snackbar.make(view, "Long: " + String.valueOf(longitude) + " and Lat: " + String.valueOf(latitude), Snackbar.LENGTH_LONG).show();
 
-            partyObject = new Party(
+            savePartyObject = new Party(
                     0,
                     ETname.getText().toString(),
                     ETdescription.getText().toString(),
-                    startTime,
-                    endTime,
+                    saveStartTime,
+                    saveEndTime,
                     ETtheme.getText().toString(),
                     "114987278191137298218",
                     ETaddress.getText().toString(),
@@ -136,56 +159,9 @@ public class CreateParty extends AppCompatActivity {
             );
 
             partyObject.printParty();
-            postParty(partyObject);
-            Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
+            editParty(partyObject);
+            Snackbar.make(view, "The party has been edited!", Snackbar.LENGTH_LONG).show();
         }
-    }
-
-
-
-    // Called when go back arrow (in the left top) is pressed.
-    // Go back to previous activity.
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
-
-    // Method to post a party to the server
-    private void postParty(Party party){
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://lenin.pythonanywhere.com")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        ApiClient client2 = retrofit.create(ApiClient.class);
-
-        //call for all parties
-        Call<Party> call = client2.hostParty(party);
-        Log.d("my tag", "Post request body: " + party.getId());
-        call.enqueue(new Callback<Party>() {
-            @Override
-            public void onResponse(Call<Party> call, Response<Party> response){
-                Log.d("my tag", "Post response code: " + response.code());
-                Party party = response.body();
-                Log.d("my tag", "Posted party id: " + party.getId());
-                Log.d("my tag", "Contents" + DB.getAllParties().size()
-                        + DB.getMyParties().size()
-                        + DB.getSavedParties().size());
-
-                DB.addHostedParty(party);
-                openPartyViewActivity(party.getId());
-            }
-
-            @Override
-            public void onFailure (Call<Party> call, Throwable t){
-
-            }
-        });
     }
 
     // Method to post the edited party to the server
@@ -211,7 +187,8 @@ public class CreateParty extends AppCompatActivity {
                 Party party = response.body();
                 Log.d("my tag", "Put party id: " + party.getId());
 
-                DB.editHostedParty(party);
+                DB.addHostedParty(party);
+                Snackbar.make(view, "Server response: OK!", Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -221,10 +198,11 @@ public class CreateParty extends AppCompatActivity {
         });
     }
 
-    // A method to open a specified PartyView activity
-    public void openPartyViewActivity(int n) {
-        Intent i = new Intent("android.intent.action.PartyView");
-        i.putExtra("ID", n);
-        this.startActivity(i);
+    // Called when go back arrow (in the left top) is pressed.
+    // Go back to previous activity.
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
