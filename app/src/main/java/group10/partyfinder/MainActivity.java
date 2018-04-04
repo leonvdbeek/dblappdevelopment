@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
+    boolean todaySet = false;
+    boolean futureSet = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -159,9 +162,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             }
         });
 
-        //call the updateSnapshot method to "sync" the local snapshot with the server
-        updateSnapshot();
-
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        //call the updateSnapshot method to "sync" the local snapshot with the server
+        updateSnapshot();
 
     }
 
@@ -231,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
                 DB.setAllParties(response.body());
-                setupViewPager(mViewPager);
+
             }
 
             @Override
@@ -298,6 +301,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
                 DB.setTodayParties(response.body());
+                todaySet = true;
+
             }
 
             @Override
@@ -312,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
                 DB.setFutureParties(response.body());
+                futureSet = true;
+
             }
 
             @Override
@@ -319,6 +326,17 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                 showDbLoadError();
             }
         });
+        for (int i = 0; i < 4; i ++){
+            try {
+               // Log.d("my tag", "DB.allParties() is not available yet");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                //Log.d("my tag", "waiting failed apearantly ? :c");
+            }
+        }
+        setupViewPager(mViewPager);
+
+
     }
 
     //Todo add comment

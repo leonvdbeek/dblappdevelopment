@@ -86,16 +86,28 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        int getArgument = getArguments().getInt("map");//Get pass data with its key value
+
+
         googleMap.setOnMarkerClickListener(this);
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
         LatLng eindhoven = new LatLng(51.447573, 5.487507);
 
         //Todo customize which list to show all parties of instead of allparties
-        for (Party party : DB.getAllParties()){
-            LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
-            Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
-            marker.setTag(party.getId());
+        if (getArgument == 1) {
+            for (Party party : DB.getTodayParties()){
+                LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
+                Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+                marker.setTag(party.getId());
+            }
+        }
+        if (getArgument == 2) {
+            for (Party party : DB.getFutureParties()){
+                LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
+                Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+                marker.setTag(party.getId());
+            }
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(eindhoven));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));

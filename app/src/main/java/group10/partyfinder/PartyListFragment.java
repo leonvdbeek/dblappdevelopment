@@ -30,11 +30,15 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener mListenerT;
+    private OnListFragmentInteractionListener mListenerF;
 
     //get the instance of our database
-   // private DBSnapshot DB = DBSnapshot.getInstance();
-    private ArrayList<Party> parties;
+    //private DBSnapshot DB = DBSnapshot.getInstance();
+    private ArrayList<Party> partiesT;
+    private ArrayList<Party> partiesF;
+    int getArgument;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,10 +69,20 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
         //parties.add(p1);
         //parties.add(p2);
 
-        //Todo find a way to reset the list content after the DB is loaded
-        parties = new ArrayList<>(DBSnapshot.getInstance().getAllParties());
 
-        Collections.sort(parties, (a, b) -> a.getDistance() < b.getDistance() ? -1 : a.getDistance() == b.getDistance() ? 0 : 1);
+        getArgument = getArguments().getInt("list");//Get pass data with its key value
+
+        if (getArgument == 1) {
+            partiesT = new ArrayList<>(DBSnapshot.getInstance().getTodayParties());
+            Collections.sort(partiesT, (a, b) -> a.getDistance() < b.getDistance() ? -1 : a.getDistance() == b.getDistance() ? 0 : 1);
+        }
+        if (getArgument == 2) {
+            partiesF = new ArrayList<>(DBSnapshot.getInstance().getFutureParties());
+            Collections.sort(partiesF, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+        }
+
+        //Todo find a way to reset the list content after the DB is loaded
+
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -89,7 +103,12 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(parties, mListener));
+            if (getArgument == 1) {
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesT, mListenerT));
+            }
+            if (getArgument == 2) {
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesF, mListenerF));
+            }
         }
         return view;
     }
@@ -99,7 +118,12 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            if (getArgument == 1) {
+            mListenerT = (OnListFragmentInteractionListener) context;
+            }
+            if (getArgument == 2) {
+            mListenerF = (OnListFragmentInteractionListener) context;
+            }
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -109,7 +133,12 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        if (getArgument == 1) {
+            mListenerT = null;
+        }
+        if (getArgument == 2) {
+            mListenerF = null;
+        }
     }
 
     /**

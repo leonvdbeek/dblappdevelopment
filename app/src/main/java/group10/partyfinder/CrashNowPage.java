@@ -48,14 +48,20 @@ public class CrashNowPage extends Fragment {
 
     // Embeds the child fragment dynamically
     private void insertNestedFragmentMap() {
+        Bundle data = new Bundle();//create bundle instance
+        data.putInt("map", 1);
         Fragment childFragment = new MapsActivity();
+        childFragment.setArguments(data);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.map_fragment_container, childFragment).commit();
     }
 
     // Embeds the child fragment dynamically
     private void insertNestedFragmentList() {
+        Bundle data = new Bundle();//create bundle instance
+        data.putInt("list", 1);
         Fragment childFragment = new PartyListFragment();
+        childFragment.setArguments(data);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.list_fragment_container, childFragment).commit();
     }
