@@ -90,6 +90,10 @@ public class Party implements java.io.Serializable{
         return dateFormat.format(end);
     }
 
+    public long getPartyTimeMs(){
+        return this.start.getTime();
+    }
+
     public String getTheme() {
         return theme;
     }

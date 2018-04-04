@@ -38,6 +38,7 @@ public class DBSnapshot {
         }
     }
 
+
     public ArrayList<Party> getAllParties() {
         if (allParties == null){
             return getPlaceHolder();
