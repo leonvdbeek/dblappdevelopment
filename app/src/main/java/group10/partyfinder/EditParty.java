@@ -146,20 +146,20 @@ public class EditParty extends AppCompatActivity {
             //Snackbar.make(view, "Long: " + String.valueOf(longitude) + " and Lat: " + String.valueOf(latitude), Snackbar.LENGTH_LONG).show();
 
             savePartyObject = new Party(
-                    0,
+                    partyObject.getId(),
                     ETname.getText().toString(),
                     ETdescription.getText().toString(),
                     saveStartTime,
                     saveEndTime,
                     ETtheme.getText().toString(),
-                    "114987278191137298218",
+                    DB.getUserId(),
                     ETaddress.getText().toString(),
                     String.valueOf(longitude),
                     String.valueOf(latitude)
             );
 
-            partyObject.printParty();
-            editParty(partyObject);
+            savePartyObject.printParty();
+            editParty(savePartyObject);
             Snackbar.make(view, "The party has been edited!", Snackbar.LENGTH_LONG).show();
         }
     }

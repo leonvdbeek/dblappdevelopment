@@ -129,7 +129,7 @@ public class CreateParty extends AppCompatActivity {
                     startTime,
                     endTime,
                     ETtheme.getText().toString(),
-                    "114987278191137298218",
+                    DB.getUserId(),
                     ETaddress.getText().toString(),
                     String.valueOf(longitude),
                     String.valueOf(latitude)

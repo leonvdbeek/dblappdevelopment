@@ -117,13 +117,14 @@ public class PartyView extends AppCompatActivity {
         }
 
     }
-    
+
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
+        super.onResume();
+
+        DB = DBSnapshot.getInstance();
 
         // Get party object
-        partyID = getIntent().getIntExtra("ID", 0);
         partyObject = DB.getParty(partyID);
 
         // Set title with the name of the party
