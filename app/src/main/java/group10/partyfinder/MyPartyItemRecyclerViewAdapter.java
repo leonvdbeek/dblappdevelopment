@@ -46,7 +46,11 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
         }
         if (list == 2) {
             try {
-                holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
+                if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) > 0) {
+                    holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
+                } else {
+                    holder.mContentView.setText("today");
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
