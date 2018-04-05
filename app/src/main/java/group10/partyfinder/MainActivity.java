@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         } else {
             //Update header to show GUSERID, for the case the user was already logged in
             String GID = account.getDisplayName();
-            DB.setUserId(GID);
+            DB.setUserId(account.getId());
             header.setText("Signed in as: "+GID);
         }
 
@@ -459,7 +459,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             @Override
             public void onResponse(Call<User> call, Response<User> response){
                 Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
-                DB.setUserId(def.getId());
             }
 
             @Override

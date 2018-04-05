@@ -212,7 +212,6 @@ public class Login extends AppCompatActivity implements
             @Override
             public void onResponse(Call<User> call, Response<User> response){
                 Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
-                DB.setUserId(def.getId());
             }
 
             @Override
