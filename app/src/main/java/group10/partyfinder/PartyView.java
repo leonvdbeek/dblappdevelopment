@@ -91,8 +91,7 @@ public class PartyView extends AppCompatActivity {
         Bsave = findViewById(R.id.Bsave);
         Bremove = findViewById(R.id.Bremove);
 
-        //TODO add: if(isOwner() == true) then don't show the save and remove button
-        if(isSaved() == true) {
+        if(isSaved()) {
             // Show remove button
             Bsave.setVisibility(View.GONE);
             Bremove.setVisibility(View.VISIBLE);
@@ -299,7 +298,6 @@ public class PartyView extends AppCompatActivity {
                 Party party = DB.getParty(id_party);
                 if (saved.contains(party)){
                     saved.remove(party);
-                    DB.setSavedParties(saved);
                 }
             }
 
@@ -343,18 +341,13 @@ public class PartyView extends AppCompatActivity {
 
     // Check if the user has saved the party
     public boolean isSaved() {
-        if (DB.getSavedParties().contains(partyObject)){
-            return true;
-        }
-        return false;
+        return (DB.getSavedParties().contains(partyObject));
     }
 
     // Check if the user is the owner of the party
     public boolean isOwner() {
-        //if (DB.getUserId() == partyObject.getCreator()) {
-            return true;
-        //}
-        //return false;
+        Log.d("my tag", "DB user id: "+DB.getUserId()+"party creator: "+partyObject.getCreator());
+        return (DB.getUserId().contentEquals(partyObject.getCreator()));
     }
 
     // Called when go back arrow (in the left top) is pressed.
