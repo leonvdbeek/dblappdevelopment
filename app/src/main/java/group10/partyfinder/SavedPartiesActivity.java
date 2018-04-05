@@ -41,4 +41,10 @@ public class SavedPartiesActivity extends AppCompatActivity implements PartyList
     public void onListFragmentInteraction(Party item) {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //ToDo make the list refresh it's contents
+    }
 }
