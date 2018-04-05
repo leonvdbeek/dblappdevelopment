@@ -69,32 +69,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        //todo login logic starts here
 
-//this initializes the preference object
-        //SharedPreferences prefs = this.getSharedPreferences(
-        //        "com.example.app", Context.MODE_PRIVATE);
-
-
-        //if (prefs.getInt("userId", 0) == 0){
-            //call to login
-            //after login call this in the login activity
-            //and replace {@code id} with the userId retrieved from google
-            //SharedPreferences prefs = this.getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
-            //prefs.edit().putInt("userId", {@code id});
-            //prefs.edit().apply();
-        //} else {
-        //    Integer userId = prefs.getInt("userId", 0);
-        //    DB.setUserId(Integer.toString(userId));
-        //}
-
-//this is the logic for logging out
-        //logout(){
-        //    SharedPreferences prefs = this.getSharedPreferences("com.example.app", Context.MODE_PRIVATE);
-        //    prefs.edit().putInt("userId", 0);
-        //    prefs.edit().apply();
-        //}
-        //todo login logic ends here
 
 
         super.onCreate(savedInstanceState);
@@ -167,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         } else {
             //Update header to show GUSERID, for the case the user was already logged in
             String GID = account.getDisplayName();
+            DB.setUserId(GID);
             header.setText("Signed in as: "+GID);
         }
 

@@ -18,6 +18,12 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Activity to retrieve of the Google user's ID, email address, and basic
  * profile.
@@ -27,6 +33,8 @@ public class Login extends AppCompatActivity implements
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+
+    DBSnapshot DB = DBSnapshot.getInstance();
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
@@ -73,6 +81,14 @@ public class Login extends AppCompatActivity implements
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null){
+            DB.setUserId(account.getId());
+
+            User user = new User(DB.getUserId());
+            postUser(user);
+            Log.d("my tag", "the retrieved user ID = " + account.getId());
+
+        }
         updateUI(account);
         // [END on_start_sign_in]
     }
@@ -96,6 +112,11 @@ public class Login extends AppCompatActivity implements
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            DB.setUserId(account.getId());
+            User user = new User(DB.getUserId());
+            postUser(user);
+            Log.d("my tag", "the retrieved user ID = " + account.getId());
 
             // Signed in successfully, show authenticated UI.
             updateUI(account);
@@ -172,5 +193,33 @@ public class Login extends AppCompatActivity implements
                 signOut();
                 break;
         }
+    }
+
+    //add the user to the DB if it doesn't exsist yet
+    public void postUser(User def) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://lenin.pythonanywhere.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiClient client2 = retrofit.create(ApiClient.class);
+
+        //Log.d("my tag", "delete Post userid: " + DB.getUserId()
+        //        + " and partyid: " + Integer.toString(id_party));
+        //call
+        Call<User> call = client2.postUser(def);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response){
+                Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
+                DB.setUserId(def.getId());
+            }
+
+            @Override
+            public void onFailure (Call<User> call, Throwable t){
+
+                Log.d("my tag", "delete Post has failed: ");
+            }
+        });
     }
 }
