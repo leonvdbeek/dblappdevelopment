@@ -406,13 +406,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     }
 
-    // A method to open the hostParty activity
-    public void openCreatePartyActivity(View v) {
-        Intent i = new Intent("android.intent.action.CreateParty");
-        //i.putExtra("ID", 2);
-        this.startActivity(i);
-    }
-
     //method will open a error dialog to show
     public void showDbLoadError(){
         AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
