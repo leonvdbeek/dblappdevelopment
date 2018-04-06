@@ -234,7 +234,7 @@ public class PartyView extends AppCompatActivity {
     public void startDeleteParty() {
         deleteParty();
 
-        AlertDialog ADdelete = new AlertDialog.Builder(context).create();
+/*        AlertDialog ADdelete = new AlertDialog.Builder(context).create();
         ADdelete.setTitle("Party deleted");
         ADdelete.setMessage("The party is deleted.");
         ADdelete.setCancelable(false);
@@ -244,7 +244,7 @@ public class PartyView extends AppCompatActivity {
                         finish();
                     }
                 });
-        ADdelete.show();
+        ADdelete.show();*/
     }
 
     // Save the party to the saved list
@@ -337,11 +337,15 @@ public class PartyView extends AppCompatActivity {
             public void onResponse(Call<Party> call, Response<Party> response){
                 Log.d("my tag", "Post response code: " + response.code());
                 DB.deleteHostedParty(DB.getParty(partyID));
+                Snackbar.make(view, "The party is deleted.", Snackbar.LENGTH_LONG).show();
+                finish();
             }
 
             @Override
             public void onFailure (Call<Party> call, Throwable t){
                 Log.d("my tag", "party delete request failed");
+                Snackbar.make(view, "Oops, an error has occurred! The party is NOT deleted!", Snackbar.LENGTH_LONG).show();
+
             }
         });
     }
