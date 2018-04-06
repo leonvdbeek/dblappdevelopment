@@ -388,16 +388,20 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             }
         });
 
-        while (!DB.isDBReady()){
-            try {
-                Log.d("my tag", "DB.allParties() is not available yet");
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Log.d("my tag", "waiting failed apearantly ? :c");
+        //waits until the local DB is loaded before oading the map and lists
+        new Thread(new Runnable() {
+            public void run() {
+                while (!DB.isDBReady()) {
+                    try {
+                        Log.d("my tag", "DB.allParties() is not available yet");
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Log.d("my tag", "waiting failed apearantly ? :c");
+                    }
+                }
+                setupViewPager(mViewPager);
             }
-        }
-        setupViewPager(mViewPager);
-
+        }).start();
     }
 
     //Todo add comment
@@ -434,32 +438,5 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         alertDialogRemove.show();
     }
 
-
-    //add the user to the DB if it doesn't exsist yet
-    public void postUser(User def) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://lenin.pythonanywhere.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiClient client2 = retrofit.create(ApiClient.class);
-
-        //Log.d("my tag", "delete Post userid: " + DB.getUserId()
-        //        + " and partyid: " + Integer.toString(id_party));
-        //call
-        Call<User> call = client2.postUser(def);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response){
-                Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
-            }
-
-            @Override
-            public void onFailure (Call<User> call, Throwable t){
-
-                Log.d("my tag", "delete Post has failed: ");
-            }
-        });
-    }
 }
 
