@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -148,8 +149,9 @@ public class EditParty extends AppCompatActivity {
             // Edit party
             Address address = addresses.get(0);
 
-            longitude = address.getLongitude();
-            latitude = address.getLatitude();
+            DecimalFormat df = new DecimalFormat("##.#######");
+            longitude = Double.parseDouble(df.format(address.getLongitude()));
+            latitude = Double.parseDouble(df.format(address.getLatitude()));
             //Snackbar.make(view, "Long: " + String.valueOf(longitude) + " and Lat: " + String.valueOf(latitude), Snackbar.LENGTH_LONG).show();
 
             savePartyObject = new Party(
