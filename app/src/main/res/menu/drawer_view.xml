@@ -14,10 +14,6 @@
             android:icon="@drawable/ic_my_parties"
             android:title="My Parties" />
         <item
-            android:id="@+id/createParty"
-            android:icon="@drawable/ic_my_parties"
-            android:title="Open CreateParties" />
-        <item
             android:id="@+id/Login"
             android:icon="@drawable/ic_my_parties"
             android:title="Sign out" />

@@ -169,21 +169,19 @@ public class CreateParty extends AppCompatActivity {
         Log.d("my tag", "Post request body: " + party.getId());
         call.enqueue(new Callback<Party>() {
             @Override
-            public void onResponse(Call<Party> call, Response<Party> response){
-                Log.d("my tag", "Post response code: " + response.code());
-                Party party = response.body();
-                Log.d("my tag", "Posted party id: " + party.getId());
-                Log.d("my tag", "Contents" + DB.getAllParties().size()
-                        + DB.getMyParties().size()
-                        + DB.getSavedParties().size());
+            public void onResponse(Call<Party> call, Response<Party> response) {
+                if (response.body() != null) {
+                    Log.d("my tag", "Post response code: " + response.code());
 
-                DB.addHostedParty(party);
-                openPartyViewActivity(party.getId());
+                    DB.addHostedParty(response.body());
+                    openPartyViewActivity(response.body().getId());
+                }
+                Log.d("my tag", "Posting party resulted empty: " + response.code());
             }
 
             @Override
             public void onFailure (Call<Party> call, Throwable t){
-
+                Log.d("my tag", "Posting party to DB has failed ");
             }
         });
     }

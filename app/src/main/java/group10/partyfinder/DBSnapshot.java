@@ -126,13 +126,45 @@ public class DBSnapshot {
         this.allParties.add(party);
     }
 
+    public void deleteHostedParty(Party party){
+        if(this.allParties.contains(party)){
+            this.allParties.remove(party);
+        }
+        if(this.savedParties.contains(party)){
+            this.savedParties.remove(party);
+        }
+        if(this.myParties.contains(party)){
+            this.myParties.remove(party);
+        }
+        if(this.todayParties.contains(party)){
+            this.todayParties.remove(party);
+        }
+        if(this.futureParties.contains(party)){
+            this.futureParties.remove(party);
+        }
+    }
+
     public void editHostedParty(Party party){
         Party old = getParty(party.getId());
         this.allParties.remove(old);
         this.allParties.add(party);
         this.myParties.remove(old);
         this.myParties.add(party);
-        this.savedParties.remove(old);
+        if(this.savedParties.contains(old)) {
+            this.savedParties.remove(old);
+        }
         this.savedParties.add(party);
+    }
+
+    public void addToSaveList(Party party) {
+        if (!this.savedParties.contains(party)){
+            this.savedParties.add(party);
+        }
+    }
+
+    public void removeFromSaveList(Party party) {
+        if (this.savedParties.contains(party)){
+            this.savedParties.remove(party);
+        }
     }
 }

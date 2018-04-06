@@ -167,7 +167,6 @@ public class EditParty extends AppCompatActivity {
 
             savePartyObject.printParty();
             editParty(savePartyObject);
-            Snackbar.make(view, "The party has been edited!", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -189,23 +188,29 @@ public class EditParty extends AppCompatActivity {
         Log.d("my tag", "Put request body: " + party.getId());
         call.enqueue(new Callback<Party>() {
             @Override
-            public void onResponse(Call<Party> call, Response<Party> response){
+            public void onResponse(Call<Party> call, Response<Party> response) {
                 if (response.body() != null) {
                     Log.d("my tag", "Put response code: " + response.code());
                     Party party = response.body();
                     Log.d("my tag", "Put party id: " + party.getId());
                     party.printParty();
                     DB.editHostedParty(party);
-                    Snackbar.make(view, "Server response: OK!", Snackbar.LENGTH_LONG).show();
+                    if (response.code() == 200 || response.code() == 204) {
+                        Snackbar.make(view, "The party has been edited!", Snackbar.LENGTH_LONG).show();
+
+                    } else {
+                        Log.d("my tag editParty()", "Put response code: " + response.code());
+                        Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
-                    Log.d("my tag", "Put response code: " + response.code());
-                    Snackbar.make(view, "Something failed, please retry later", Snackbar.LENGTH_LONG).show();
+                    Log.d("my tag editParty()", "Put returned empty. response code: " + response.code());
+                    Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure (Call<Party> call, Throwable t){
                 Log.d("my tag", "Put party request has failed");
+                Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
             }
         });
     }

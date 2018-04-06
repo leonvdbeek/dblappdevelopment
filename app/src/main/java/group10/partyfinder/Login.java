@@ -211,13 +211,14 @@ public class Login extends AppCompatActivity implements
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response){
-                Log.d("my tag", "posted user Id to DB: with responce code " + response.code());
+                Log.d("my tag", "posted user Id to server: with responce code " + response.code());
+
             }
 
             @Override
             public void onFailure (Call<User> call, Throwable t){
 
-                Log.d("my tag", "delete Post has failed: ");
+                Log.d("my tag", "posting user has failed :(");
             }
         });
     }

@@ -100,12 +100,6 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
 
-                        // CreateParty menu button
-                        if(menuItem.getItemId() == R.id.createParty) {
-                            Intent i = new Intent("android.intent.action.CreateParty");
-                            startActivity(i);
-                        }
-
                         //Login activity menu item
                         if(menuItem.getItemId() == R.id.Login) {
                             signOut();
@@ -146,42 +140,13 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             header.setText("Signed in as: "+GID);
         }
 
-
-
         //Todo remove the testing fab after server communication testing is complete
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Log.d("my tag", " amount of today parties in DB: " + DB.getTodayParties().size());
-                Log.d("my tag", "amount of future parties in DB: " + DB.getFutureParties().size());
-                Log.d("my tag", "    amount of my parties in DB: " + DB.getMyParties().size());
-                Log.d("my tag", " amount of saved parties in DB: " + DB.getSavedParties().size());
 
-
-                 //this is printing from the local database, it is purely for testing
-                //Party party = new Party();
-                //party.setId(9);
-                //editParty(party);
-                //postParty(party);
-
-                //openPartyViewActivity(counter);
-                //counter++;
-
-                //ArrayList<Party> myParties = DB.getMyParties();
-                //if (myParties == null) {
-                //    Snackbar.make(view, "no parties available yet, wait for update", Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //} else {
-                //    for (Party party : myParties) {
-                //        party.printParty();
-                //        counter++;
-                //    }
-                //    Snackbar.make(view, "You have created " + counter + " party.", Snackbar.LENGTH_LONG)
-                //            .setAction("Action", null).show();
-                //    counter = 0;
-                //}
             }
         });
 
@@ -412,6 +377,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     //method will open a error dialog to show
     public void showDbLoadError(){
+        Log.d("my tag", "connecting to the server failed");
         AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
 
         // Set up dialog

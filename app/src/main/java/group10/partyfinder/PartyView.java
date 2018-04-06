@@ -228,7 +228,6 @@ public class PartyView extends AppCompatActivity {
 
     // Start the actions to delete a party
     public void startDeleteParty() {
-        //Snackbar.make(view, "Party is deleted!", Snackbar.LENGTH_LONG).show();
         deleteParty();
 
         AlertDialog ADdelete = new AlertDialog.Builder(context).create();
@@ -261,12 +260,12 @@ public class PartyView extends AppCompatActivity {
             @Override
             public void onResponse(Call<Saved> call, Response<Saved> response){
                 Log.d("my tag", "save Post response code: " + response.code());
-                ArrayList<Party> saved = DB.getSavedParties();
-                Party party = DB.getParty(id_party);
-                if (!saved.contains(party)){
-                    saved.add(party);
-                    DB.setSavedParties(saved);
+                if(response.body() != null) {
+                    DB.addToSaveList(DB.getParty(response.body().getId_party()));
+                } else {
+                    Log.d("my tag", "save returned empty response code: " + response.code());
                 }
+
             }
 
             @Override
@@ -293,17 +292,19 @@ public class PartyView extends AppCompatActivity {
         call.enqueue(new Callback<Saved>() {
             @Override
             public void onResponse(Call<Saved> call, Response<Saved> response){
-                Log.d("my tag", "delete Post response code: " + response.code());
-                ArrayList<Party> saved = DB.getSavedParties();
-                Party party = DB.getParty(id_party);
-                if (saved.contains(party)){
-                    saved.remove(party);
+                if(response.body() != null) {
+                    Log.d("my tag", "remove Post response code: " + response.code());
+                    if(response.body() != null){
+                        DB.removeFromSaveList(DB.getParty(response.body().getId_party()));
+                    }
+                } else {
+                    Log.d("my tag", "remove Post resulted empty. respCode: " + response.code());
+                    Snackbar.make(view, "remove failed, please retry later", Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure (Call<Saved> call, Throwable t){
-
                 Log.d("my tag", "delete Post has failed: ");
             }
         });
@@ -329,7 +330,7 @@ public class PartyView extends AppCompatActivity {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
                 Log.d("my tag", "Post response code: " + response.code());
-
+                DB.deleteHostedParty(DB.getParty(partyID));
             }
 
             @Override
@@ -346,7 +347,6 @@ public class PartyView extends AppCompatActivity {
 
     // Check if the user is the owner of the party
     public boolean isOwner() {
-        Log.d("my tag", "DB user id: "+DB.getUserId()+"party creator: "+partyObject.getCreator());
         return (DB.getUserId().contentEquals(partyObject.getCreator()));
     }
 
