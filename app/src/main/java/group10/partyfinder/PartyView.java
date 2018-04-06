@@ -292,10 +292,12 @@ public class PartyView extends AppCompatActivity {
         call.enqueue(new Callback<Saved>() {
             @Override
             public void onResponse(Call<Saved> call, Response<Saved> response){
-                if(response.body() != null) {
+                if(response.code() == 204 || response.code() == 200) {
                     Log.d("my tag", "remove Post response code: " + response.code());
                     if(response.body() != null){
                         DB.removeFromSaveList(DB.getParty(response.body().getId_party()));
+                    } else {
+                        DB.removeFromSaveList(DB.getParty(id_party));
                     }
                 } else {
                     Log.d("my tag", "remove Post resulted empty. respCode: " + response.code());
