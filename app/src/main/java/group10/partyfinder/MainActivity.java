@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
             header.setText("Signed in as: "+GID);
         }
 
-        //Todo remove the testing fab after server communication testing is complete
+        //Todo remove if safe
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         }
     }
 
+    //todo delete this if safe
     //code that will run when and option from the drop down menu is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
