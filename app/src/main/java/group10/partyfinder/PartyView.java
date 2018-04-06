@@ -91,15 +91,7 @@ public class PartyView extends AppCompatActivity {
         Bsave = findViewById(R.id.Bsave);
         Bremove = findViewById(R.id.Bremove);
 
-        if(isSaved()) {
-            // Show remove button
-            Bsave.setVisibility(View.GONE);
-            Bremove.setVisibility(View.VISIBLE);
-        } else {
-            // Show save button
-            Bsave.setVisibility(View.VISIBLE);
-            Bremove.setVisibility(View.GONE);
-        }
+
 
         // Show or hide edit and delete button
         Bedit = findViewById(R.id.Bedit);
@@ -109,12 +101,24 @@ public class PartyView extends AppCompatActivity {
             // Show edit and delete button
             Bedit.setVisibility(View.VISIBLE);
             Bdelete.setVisibility(View.VISIBLE);
+
+            Bsave.setVisibility(View.GONE);
+            Bremove.setVisibility(View.GONE);
         } else {
             // Hide edit and delete button
             Bedit.setVisibility(View.GONE);
             Bdelete.setVisibility(View.GONE);
-        }
 
+            if(isSaved()) {
+                // Show remove button
+                Bsave.setVisibility(View.GONE);
+                Bremove.setVisibility(View.VISIBLE);
+            } else {
+                // Show save button
+                Bsave.setVisibility(View.VISIBLE);
+                Bremove.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

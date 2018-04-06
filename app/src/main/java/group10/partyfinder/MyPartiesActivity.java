@@ -38,7 +38,7 @@ public class MyPartiesActivity extends AppCompatActivity implements PartyListFra
         data.putInt("list", 4);
         PartyListFragment fragment = new PartyListFragment();
         fragment.setArguments(data);
-        fragmentTransaction.add(R.id.list_fragment_container, fragment);
+        fragmentTransaction.replace(R.id.list_fragment_container, fragment);
         fragmentTransaction.commit();
     }
 
@@ -51,5 +51,15 @@ public class MyPartiesActivity extends AppCompatActivity implements PartyListFra
     public void onResume() {
         super.onResume();
         //ToDo make the list refresh it's contents
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        Bundle data = new Bundle();//create bundle instance
+        data.putInt("list", 4);
+        PartyListFragment fragment = new PartyListFragment();
+        fragment.setArguments(data);
+        fragmentTransaction.replace(R.id.list_fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 }
