@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                     public void run() {
                         ArrayList<Party> parties = new ArrayList<Party>();
                         Log.d("my tag", "saved responce body " + response.body() + " and code: " + response.code());
-
+                        DB.setReady(true);
                         while (!DB.isallReady()){
                             try {
                                 Log.d("my tag", "DB.allParties() is not available yet");
@@ -312,6 +312,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                         DB.setReady(true);
                     }
                 }).start();
+
+                DB.setReady(true);
             }
 
             @Override
@@ -354,10 +356,11 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
 
         //waits until the local DB is loaded before oading the map and lists
-        while(!DB.isDBReady()){
+        //while(!DB.isDBReady()){
+        for(int i=0; i <= 4; i++){
             try {
                 Log.d("my tag", "DB is not available yet");
-                Thread.sleep(50);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 Log.d("my tag", "waiting failed apearantly ? :c");
             }
