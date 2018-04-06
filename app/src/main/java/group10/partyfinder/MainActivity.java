@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                         ArrayList<Party> parties = new ArrayList<Party>();
                         Log.d("my tag", "saved responce body " + response.body() + " and code: " + response.code());
 
-                        while (!DB.isDBReady()){
+                        while (!DB.isallReady()){
                             try {
                                 Log.d("my tag", "DB.allParties() is not available yet");
                                 Thread.sleep(50);
@@ -309,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                             parties.add(DB.getParty(save.getId_party()));
                         }
                         DB.setSavedParties(parties);
+                        DB.setReady(true);
                     }
                 }).start();
             }
@@ -353,16 +354,15 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
 
         //waits until the local DB is loaded before oading the map and lists
-        for (int i = 0; i < 4; i ++){
-
-                try {
-                    // Log.d("my tag", "DB.allParties() is not available yet");
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Log.d("my tag", "waiting failed apearantly ? :c");
-                }
+        while(!DB.isDBReady()){
+            try {
+                Log.d("my tag", "DB is not available yet");
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.d("my tag", "waiting failed apearantly ? :c");
             }
-            setupViewPager(mViewPager);
+        }
+        setupViewPager(mViewPager);
     }
 
 
