@@ -29,6 +29,7 @@ public class DBSnapshot {
     private ArrayList<Party> savedParties;
     private ArrayList<Party> todayParties;
     private ArrayList<Party> futureParties;
+    private boolean ready;
 
     public String getUserId() {
         if (userId == null){
@@ -47,9 +48,12 @@ public class DBSnapshot {
         }
     }
 
+    public Boolean isallReady(){
+        return (this.allParties != null);
+    }
 
     public Boolean isDBReady(){
-        return (this.allParties != null);
+        return this.ready;
     }
 
     public ArrayList<Party> getMyParties() {
@@ -166,5 +170,9 @@ public class DBSnapshot {
         if (this.savedParties.contains(party)){
             this.savedParties.remove(party);
         }
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 }
