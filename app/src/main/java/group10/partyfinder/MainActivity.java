@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         tabLayout.setupWithViewPager(mViewPager);
 
         //call the updateSnapshot method to "sync" the local snapshot with the server
-        updateSnapshot();
+        //updateSnapshot();
 
     }
 
@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                Log.d("my tag", "all parties responce body " + response.body() + " and code: " + response.code());
                 DB.setAllParties(response.body());
 
             }
@@ -323,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
             public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+                Log.d("my tag", "today parties responce body " + response.body() + " and code: " + response.code());
                 DB.setTodayParties(response.body());
                 todaySet = true;
 
@@ -351,20 +353,18 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         });
 
         //waits until the local DB is loaded before oading the map and lists
-        new Thread(new Runnable() {
-            public void run() {
-                while (!DB.isDBReady()) {
-                    try {
-                        Log.d("my tag", "DB.allParties() is not available yet");
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        Log.d("my tag", "waiting failed apearantly ? :c");
-                    }
+        for (int i = 0; i < 4; i ++){
+
+                try {
+                    // Log.d("my tag", "DB.allParties() is not available yet");
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Log.d("my tag", "waiting failed apearantly ? :c");
                 }
-                setupViewPager(mViewPager);
             }
-        }).start();
+            setupViewPager(mViewPager);
     }
+
 
     //Todo add comment
     @Override

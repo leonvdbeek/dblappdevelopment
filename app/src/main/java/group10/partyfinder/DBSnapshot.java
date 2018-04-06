@@ -49,7 +49,7 @@ public class DBSnapshot {
 
 
     public Boolean isDBReady(){
-        return (!((this.allParties == null)&&(this.todayParties == null)&&(this.futureParties == null)));
+        return (this.allParties != null);
     }
 
     public ArrayList<Party> getMyParties() {
