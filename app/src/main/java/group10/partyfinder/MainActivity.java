@@ -387,16 +387,16 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
                 showDbLoadError();
             }
         });
-        for (int i = 0; i < 4; i ++){
+
+        while (!DB.isDBReady()){
             try {
-               // Log.d("my tag", "DB.allParties() is not available yet");
-                Thread.sleep(100);
+                Log.d("my tag", "DB.allParties() is not available yet");
+                Thread.sleep(50);
             } catch (InterruptedException e) {
-                //Log.d("my tag", "waiting failed apearantly ? :c");
+                Log.d("my tag", "waiting failed apearantly ? :c");
             }
         }
         setupViewPager(mViewPager);
-
 
     }
 
