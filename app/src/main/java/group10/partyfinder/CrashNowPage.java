@@ -22,7 +22,8 @@ public class CrashNowPage extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.crash_now_page,container,false);
         /*btnTEST = (Button) view.findViewById(R.id.btnTEST);
 

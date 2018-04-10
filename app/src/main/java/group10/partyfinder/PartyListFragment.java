@@ -66,19 +66,23 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
 
         if (getArgument == 1) {
             partiesT = new ArrayList<>(DBSnapshot.getInstance().getTodayParties());
-            Collections.sort(partiesT, (a, b) -> a.getDistance() < b.getDistance() ? -1 : a.getDistance() == b.getDistance() ? 0 : 1);
+            Collections.sort(partiesT, (a, b) -> a.getDistance() < b.getDistance()
+                    ? -1 : a.getDistance() == b.getDistance() ? 0 : 1);
         }
         if (getArgument == 2) {
             partiesF = new ArrayList<>(DBSnapshot.getInstance().getFutureParties());
-            Collections.sort(partiesF, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+            Collections.sort(partiesF, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs()
+                    ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
         }
         if (getArgument == 3) {
             partiesS = new ArrayList<>(DBSnapshot.getInstance().getSavedParties());
-            Collections.sort(partiesS, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+            Collections.sort(partiesS, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs()
+                    ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
         }
         if (getArgument == 4) {
             partiesM = new ArrayList<>(DBSnapshot.getInstance().getMyParties());
-            Collections.sort(partiesM, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs() ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
+            Collections.sort(partiesM, (a, b) -> a.getPartyTimeMs() < b.getPartyTimeMs()
+                    ? -1 : a.getPartyTimeMs() == b.getPartyTimeMs() ? 0 : 1);
         }
 
         //Todo find a way to reset the list content after the DB is loaded
@@ -92,7 +96,8 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_partyitem_list, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_partyitem_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -101,19 +106,24 @@ public class PartyListFragment extends android.support.v4.app.Fragment {
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(
+                        context, mColumnCount));
             }
             if (getArgument == 1) {
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesT, mListener, 1));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(
+                    partiesT, mListener, 1));
             }
             if (getArgument == 2) {
-            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesF, mListener, 2));
+            recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(
+                    partiesF, mListener, 2));
             }
             if (getArgument == 3) {
-                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesS, mListener, 3));
+                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(
+                        partiesS, mListener, 3));
             }
             if (getArgument == 4) {
-                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(partiesM, mListener, 4));
+                recyclerView.setAdapter(new MyPartyItemRecyclerViewAdapter(
+                        partiesM, mListener, 4));
             }
         }
         return view;

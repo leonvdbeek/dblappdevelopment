@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +63,9 @@ public class CreateParty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_party);
 
+        //first check connection
+        internetConnectionCheck();
+
         // Create toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,8 +91,13 @@ public class CreateParty extends AppCompatActivity {
     }
 
     public void createParty(View v) {
-        startTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
-        endTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
+        //first check connection
+        internetConnectionCheck();
+
+        startTime = ETstartDate.getText().toString()
+                + "T" + ETstartTime.getText().toString() + ":00+00:00";
+        endTime = ETendDate.getText().toString()
+                + "T" + ETendTime.getText().toString() + ":00+00:00";
         //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address
@@ -105,7 +115,8 @@ public class CreateParty extends AppCompatActivity {
 
             AlertDialog ADFalseAdress = new AlertDialog.Builder(context).create();
             ADFalseAdress.setTitle("Address not recognized");
-            ADFalseAdress.setMessage("The address is not recognized. Change the address and try again.");
+            ADFalseAdress.setMessage("The address is not recognized." +
+                    " Change the address and try again.");
             ADFalseAdress.setCancelable(false);
             ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
@@ -184,6 +195,7 @@ public class CreateParty extends AppCompatActivity {
             @Override
             public void onFailure (Call<Party> call, Throwable t){
                 Log.d("my tag", "Posting party to DB has failed ");
+                internetConnectionCheck();
             }
         });
     }
@@ -195,5 +207,33 @@ public class CreateParty extends AppCompatActivity {
         Intent i = new Intent("android.intent.action.PartyView");
         i.putExtra("ID", n);
         this.startActivity(i);
+    }
+
+    //method will check for internet connection and will not leave until it finds one
+    public void internetConnectionCheck(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            return;
+        }
+
+        Log.d("my tag", "connecting to the server failed");
+        AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
+
+        // Set up dialog
+        ADbuilderR.setTitle("No connection");
+        ADbuilderR.setMessage("Could not connect to server." +
+                " Check your internet connection and press 'Try again'.");
+        ADbuilderR.setCancelable(false);
+        ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                internetConnectionCheck();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogRemove = ADbuilderR.create();
+        alertDialogRemove.show();
     }
 }

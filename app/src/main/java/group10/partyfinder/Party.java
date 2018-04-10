@@ -41,7 +41,8 @@ public class Party implements java.io.Serializable{
         this.lattitude = "0";
     }
 
-    public Party(int id, String name, String info, String start, String end, String theme, String creator, String address, String longitude, String lattitude) {
+    public Party(int id, String name, String info, String start, String end, String theme,
+                 String creator, String address, String longitude, String lattitude) {
         this.id = id;
         this.name = name;
         this.info = info;
@@ -101,7 +102,8 @@ public class Party implements java.io.Serializable{
     public String getPartyDayDiff() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
-        String today = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+        String today = new SimpleDateFormat("dd/MM/yyyy").format(
+                Calendar.getInstance().getTime());
         Date firstDate = sdf.parse(today);
 
         Date secondDate = sdf.parse(getPartyViewStartDate());
@@ -216,10 +218,9 @@ public class Party implements java.io.Serializable{
         double lat2 = Double.parseDouble(this.lattitude);
         double lon2 = Double.parseDouble(this.longitude);
 
-        //return Math.round((Math.sqrt(Math.pow((userLat - Double.parseDouble(this.lattitude)) ,2) + Math.pow((userLon - Double.parseDouble(this.longitude)) ,2))) * 10.0) / 10.0;
-
         double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;

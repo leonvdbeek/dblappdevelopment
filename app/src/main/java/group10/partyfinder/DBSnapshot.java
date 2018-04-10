@@ -149,15 +149,31 @@ public class DBSnapshot {
     }
 
     public void editHostedParty(Party party){
-        Party old = getParty(party.getId());
-        this.allParties.remove(old);
-        this.allParties.add(party);
-        this.myParties.remove(old);
-        this.myParties.add(party);
-        if(this.savedParties.contains(old)) {
-            this.savedParties.remove(old);
+        //local list to store parties that are to be removed
+        Party toRemove = null;
+        //edit the party in allParties
+        for (Party oldParty : allParties){
+            if (oldParty.getId() == party.getId()){
+                toRemove = oldParty;
+            }
         }
-        this.savedParties.add(party);
+        if (toRemove != null) {
+            this.allParties.remove(toRemove);
+        }
+        toRemove = null;
+        this.allParties.add(party);
+
+        //edit the party in myParties
+        for (Party oldParty : myParties){
+            if (oldParty.getId() == party.getId()){
+                toRemove = oldParty;
+            }
+        }
+        if (toRemove != null) {
+            myParties.remove(toRemove);
+        }
+        toRemove = null;
+        myParties.add(party);
     }
 
     public void addToSaveList(Party party) {

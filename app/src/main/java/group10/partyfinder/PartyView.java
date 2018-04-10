@@ -3,6 +3,8 @@ package group10.partyfinder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -53,6 +55,7 @@ public class PartyView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        internetConnectionCheck();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_view);
 
@@ -145,7 +148,7 @@ public class PartyView extends AppCompatActivity {
 
     // On click method for save button
     public void clickOnSave(View v) {
-        Snackbar.make(view, "Party is saved!", Snackbar.LENGTH_LONG).show();
+        internetConnectionCheck();
 
         saveParty(partyID);
 
@@ -161,7 +164,8 @@ public class PartyView extends AppCompatActivity {
 
         // Set up dialog
         ADbuilderR.setTitle("Remove party");
-        ADbuilderR.setMessage("Do you really want to remove the party from your saved parties list?");
+        ADbuilderR.setMessage("Do you really want to" +
+                " remove the party from your saved parties list?");
         ADbuilderR.setCancelable(true);
         ADbuilderR.setPositiveButton("Remove",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -185,8 +189,7 @@ public class PartyView extends AppCompatActivity {
 
     // Start the actions to remove a party from the saved list
     public void startRemoveParty() {
-        Snackbar.make(view, "Party is removed!", Snackbar.LENGTH_LONG).show();
-
+        internetConnectionCheck();
         removeParty(partyID);
 
         // Show remove button
@@ -199,11 +202,12 @@ public class PartyView extends AppCompatActivity {
         Intent i = new Intent("android.intent.action.EditParty");
         i.putExtra("ID", partyID);
         this.startActivity(i);
-        //Snackbar.make(view, "This button should open the edit activity.", Snackbar.LENGTH_LONG).show();
+
     }
 
     // On click method for delete button
     public void clickOnDelete(View v) {
+        internetConnectionCheck();
         AlertDialog.Builder ADbuilderD = new AlertDialog.Builder(context);
 
         // Set up dialog
@@ -264,17 +268,23 @@ public class PartyView extends AppCompatActivity {
             @Override
             public void onResponse(Call<Saved> call, Response<Saved> response){
                 Log.d("my tag", "save Post response code: " + response.code());
-                if(response.body() != null) {
+                if(response.code() == 201) {
+                    Snackbar.make(view, "Party is added to your saved parties list!",
+                            Snackbar.LENGTH_LONG).show();
                     DB.addToSaveList(DB.getParty(response.body().getId_party()));
                 } else {
-                    Log.d("my tag", "save returned empty response code: " + response.code());
+                    Log.d("my tag",
+                            "save returned empty response code: " + response.code());
+                    Snackbar.make(view, "Saving the party has failed, please restart the app.",
+                            Snackbar.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
             public void onFailure (Call<Saved> call, Throwable t){
-                Log.d("my tag", "Post save has failed: ");
+                Log.d("my tag", "Post save has failed");
+                internetConnectionCheck();
             }
         });
     }
@@ -289,29 +299,28 @@ public class PartyView extends AppCompatActivity {
 
         ApiClient client2 = retrofit.create(ApiClient.class);
 
-        Log.d("my tag", "delete Post userid: " + DB.getUserId()
-                + " and partyid: " + Integer.toString(id_party));
         //call
         Call<Saved> call = client2.deleteSavedParty(DB.getUserId(), Integer.toString(id_party));
         call.enqueue(new Callback<Saved>() {
             @Override
             public void onResponse(Call<Saved> call, Response<Saved> response){
-                if(response.code() == 204 || response.code() == 200) {
+                if(response.code() == 204) {
                     Log.d("my tag", "remove Post response code: " + response.code());
-                    if(response.body() != null){
-                        DB.removeFromSaveList(DB.getParty(response.body().getId_party()));
-                    } else {
-                        DB.removeFromSaveList(DB.getParty(id_party));
-                    }
+                    DB.removeFromSaveList(DB.getParty(id_party));
+                    Snackbar.make(view, "Party is removed from your saved parties list.",
+                            Snackbar.LENGTH_LONG).show();
                 } else {
-                    Log.d("my tag", "remove Post resulted empty. respCode: " + response.code());
-                    Snackbar.make(view, "remove failed, please retry later", Snackbar.LENGTH_LONG).show();
+                    Log.d("my tag",
+                            "remove Post resulted empty. respCode: " + response.code());
+                    Snackbar.make(view, "remove failed, please restart the app",
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure (Call<Saved> call, Throwable t){
-                Log.d("my tag", "delete Post has failed: ");
+                Log.d("my tag", "delete Post has failed");
+                internetConnectionCheck();
             }
         });
     }
@@ -336,16 +345,23 @@ public class PartyView extends AppCompatActivity {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response){
                 Log.d("my tag", "Post response code: " + response.code());
-                DB.deleteHostedParty(DB.getParty(partyID));
-                Snackbar.make(view, "The party is deleted.", Snackbar.LENGTH_LONG).show();
+                if(response.code() == 204){
+                    DB.deleteHostedParty(DB.getParty(partyID));
+                    Snackbar.make(view, "The party is deleted.", Snackbar.LENGTH_LONG).show();
+                } else if(response.code() == 404){
+                    Log.d("my tag", "response was 404, party could not be found");
+                    Snackbar.make(view,
+                            "The party does not exist, please restart the app to refresh.",
+                            Snackbar.LENGTH_LONG).show();
+                }
+
                 finish();
             }
 
             @Override
             public void onFailure (Call<Party> call, Throwable t){
                 Log.d("my tag", "party delete request failed");
-                Snackbar.make(view, "Oops, an error has occurred! The party is NOT deleted!", Snackbar.LENGTH_LONG).show();
-
+                internetConnectionCheck();
             }
         });
     }
@@ -366,5 +382,34 @@ public class PartyView extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+
+    //method will check for internet connection and will not leave until it finds one
+    public void internetConnectionCheck(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            return;
+        }
+
+        Log.d("my tag", "connecting to the server failed");
+        AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
+
+        // Set up dialog
+        ADbuilderR.setTitle("Update failed");
+        ADbuilderR.setMessage("Could not connect to server." +
+                " Check your internet connection and press 'Try again'.");
+        ADbuilderR.setCancelable(false);
+        ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                internetConnectionCheck();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogRemove = ADbuilderR.create();
+        alertDialogRemove.show();
     }
 }

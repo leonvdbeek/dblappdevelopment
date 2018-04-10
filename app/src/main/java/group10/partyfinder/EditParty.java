@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -68,6 +70,9 @@ public class EditParty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_party);
 
+        //first check connectivity
+        internetConnectionCheck();
+
         // Create toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -104,20 +109,27 @@ public class EditParty extends AppCompatActivity {
         startTime = partyObject.getPartyViewDate().split(" ");
         // Split start date
         ETSD = startTime[0].split("-");
-        ETstartDate.setText(ETSD[2] + "-" + ETSD[1] + "-" + ETSD[0], TextView.BufferType.EDITABLE);
+        ETstartDate.setText(ETSD[2] + "-" + ETSD[1] + "-" + ETSD[0],
+                TextView.BufferType.EDITABLE);
         ETstartTime.setText(startTime[1], TextView.BufferType.EDITABLE);
 
         endTime= partyObject.getPartyViewEndDate().split(" ");
         // Split end date
         ETED = endTime[0].split("-");
-        ETendDate.setText(ETED[2] + "-" + ETED[1] + "-" + ETED[0], TextView.BufferType.EDITABLE);
+        ETendDate.setText(ETED[2] + "-" + ETED[1] + "-" + ETED[0],
+                TextView.BufferType.EDITABLE);
         ETendTime.setText(endTime[1], TextView.BufferType.EDITABLE);
     }
 
     public void startEditParty(View v) {
 
-        saveStartTime = ETstartDate.getText().toString() + "T" + ETstartTime.getText().toString() + ":00+00:00";
-        saveEndTime = ETendDate.getText().toString() + "T" + ETendTime.getText().toString() + ":00+00:00";
+        //first check connectivity
+        internetConnectionCheck();
+
+        saveStartTime = ETstartDate.getText().toString()
+                + "T" + ETstartTime.getText().toString() + ":00+00:00";
+        saveEndTime = ETendDate.getText().toString()
+                + "T" + ETendTime.getText().toString() + ":00+00:00";
         //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address
@@ -135,7 +147,8 @@ public class EditParty extends AppCompatActivity {
 
             AlertDialog ADFalseAdress = new AlertDialog.Builder(context).create();
             ADFalseAdress.setTitle("Address not recognized");
-            ADFalseAdress.setMessage("The address is not recognized. Change the address and try again.");
+            ADFalseAdress.setMessage("The address is not recognized." +
+                    " Change the address and try again.");
             ADFalseAdress.setCancelable(false);
             ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
@@ -152,7 +165,7 @@ public class EditParty extends AppCompatActivity {
             DecimalFormat df = new DecimalFormat("##.#######");
             longitude = Double.parseDouble(df.format(address.getLongitude()));
             latitude = Double.parseDouble(df.format(address.getLatitude()));
-            //Snackbar.make(view, "Long: " + String.valueOf(longitude) + " and Lat: " + String.valueOf(latitude), Snackbar.LENGTH_LONG).show();
+
 
             savePartyObject = new Party(
                     partyObject.getId(),
@@ -193,26 +206,34 @@ public class EditParty extends AppCompatActivity {
             public void onResponse(Call<Party> call, Response<Party> response) {
                 if (response.body() != null) {
                     Log.d("my tag", "Put response code: " + response.code());
-                    Party party = response.body();
-                    Log.d("my tag", "Put party id: " + party.getId());
+                    Party partyNew = response.body();
+                    Log.d("my tag", "Put party id: "
+                            + party.getId()+" => " + partyNew.getId());
                     party.printParty();
-                    DB.editHostedParty(party);
+                    DB.editHostedParty(partyNew);
                     if (response.code() == 200 || response.code() == 204) {
-                        Snackbar.make(view, "The party has been edited!", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(view, "The party has been edited!",
+                                Snackbar.LENGTH_LONG).show();
 
                     } else {
-                        Log.d("my tag editParty()", "Put response code: " + response.code());
-                        Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
+                        Log.d("my tag editParty()", "Put response code: "
+                                + response.code());
+                        Snackbar.make(view, "Editing failed, please retry later",
+                                Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d("my tag editParty()", "Put returned empty. response code: " + response.code());
-                    Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
+                    Log.d("my tag editParty()", "Put returned empty. response code: "
+                            + response.code());
+                    Snackbar.make(view, "Editing failed, please retry later",
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onFailure (Call<Party> call, Throwable t){
                 Log.d("my tag", "Put party request has failed");
-                Snackbar.make(view, "Editing failed, please retry later", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, "Editing failed, please retry later",
+                        Snackbar.LENGTH_LONG).show();
+                internetConnectionCheck();
             }
         });
     }
@@ -223,5 +244,33 @@ public class EditParty extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    //method will check for internet connection and will not leave until it finds one
+    public void internetConnectionCheck(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            return;
+        }
+
+        Log.d("my tag", "connecting to the server failed");
+        AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
+
+        // Set up dialog
+        ADbuilderR.setTitle("No connection");
+        ADbuilderR.setMessage("Could not connect to server." +
+                " Check your internet connection and press 'Try again'.");
+        ADbuilderR.setCancelable(false);
+        ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                internetConnectionCheck();
+            }
+        });
+
+        // Create alert dialog
+        AlertDialog alertDialogRemove = ADbuilderR.create();
+        alertDialogRemove.show();
     }
 }

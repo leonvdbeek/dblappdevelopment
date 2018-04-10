@@ -24,7 +24,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends Fragment
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     //private SensorManager sensorManager;
     private GoogleMap mMap;
@@ -32,7 +33,8 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
     LocationManager mLocationManager;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_maps,container,false);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -41,19 +43,6 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         mapFragment.getMapAsync(this);
 
 
-        // THIS CHUNK OF CODE GIVES ERROR         u need to getActivity() but still some problemts left
-        // u cant call system service from this fragment or something, maybe call it in MainActivity ?
-        /* mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        } else {
-            mLocationManager.requestLocationUpdates("gps" , 3000,
-                    100, mLocationListener);
-        }*/
         return view;
     }
 
@@ -98,14 +87,16 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         if (getArgument == 1) {
             for (Party party : DB.getTodayParties()){
                 LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
-                Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+                Marker marker = mMap.addMarker(
+                        new MarkerOptions().position(coor).title(party.getName()));
                 marker.setTag(party.getId());
             }
         }
         if (getArgument == 2) {
             for (Party party : DB.getFutureParties()){
                 LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
-                Marker marker = mMap.addMarker(new MarkerOptions().position(coor).title(party.getName()));
+                Marker marker = mMap.addMarker(
+                        new MarkerOptions().position(coor).title(party.getName()));
                 marker.setTag(party.getId());
             }
         }

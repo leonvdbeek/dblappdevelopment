@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -39,7 +41,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements PartyListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements PartyListFragment.OnListFragmentInteractionListener {
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -67,8 +70,12 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //check for an available internet connection
+        internetConnectionCheck();
+
         //creating google sigin, so we can logout from the mainactivity
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -103,13 +110,15 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
                         //Saved Parties
                         if(menuItem.getItemId() == R.id.saved_parties) {
-                            Intent i = new Intent("android.intent.action.SavedPartiesActivity");
+                            Intent i = new Intent(
+                                    "android.intent.action.SavedPartiesActivity");
                             startActivity(i);
                         }
 
                         //My Parties
                         if(menuItem.getItemId() == R.id.my_parties) {
-                            Intent i = new Intent("android.intent.action.MyPartiesActivity");
+                            Intent i = new Intent(
+                                    "android.intent.action.MyPartiesActivity");
                             startActivity(i);
                         }
 
@@ -162,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
     //Signout function to sign out from the mainactivity
     private void signOut() {
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(
+                this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent i = new Intent("android.intent.action.Login");
@@ -175,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     @Override
     protected void onResume() {
         super.onResume();
+        internetConnectionCheck();
         updateSnapshot();
 
         //Check if the user is still logged in, if not redirect to login page
@@ -212,7 +223,8 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //moving to mapview no longer works as it has been rebuild into an raction instead of an activity
+        //moving to mapview no longer works as it has been rebuild into
+        // a fraction instead of an activity
         if (id == R.id.action_map) {
             Intent intent = new Intent(MainActivity.this,
                     MapsActivity.class);
@@ -255,15 +267,17 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call = client.getParties();
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
-            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
-                Log.d("my tag", "all parties responce body " + response.body() + " and code: " + response.code());
+            public void onResponse(Call<ArrayList<Party>> call,
+                                   Response<ArrayList<Party>> response) {
+                Log.d("my tag", "all parties responce body "
+                        + response.body() + " and code: " + response.code());
                 DB.setAllParties(response.body());
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-                showDbLoadError();
+                internetConnectionCheck();
             }
         });
 
@@ -271,15 +285,17 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call = client.usersMyParties(DB.getUserId());
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
-            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
-                Log.d("my tag", "my parties responce body " + response.body() + " and code: " + response.code());
+            public void onResponse(Call<ArrayList<Party>> call,
+                                   Response<ArrayList<Party>> response) {
+                Log.d("my tag", "my parties responce body "
+                        + response.body() + " and code: " + response.code());
                 DB.setMyParties(response.body());
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-                showDbLoadError();
+
             }
         });
 
@@ -289,12 +305,14 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call2 = client.usersSavedParties(DB.getUserId());
         call2.enqueue(new Callback<ArrayList<Saved>>() {
             @Override
-            public void onResponse(Call<ArrayList<Saved>> call, Response<ArrayList<Saved>> response) {
+            public void onResponse(Call<ArrayList<Saved>> call,
+                                   Response<ArrayList<Saved>> response) {
 
                 new Thread(new Runnable() {
                     public void run() {
                         ArrayList<Party> parties = new ArrayList<Party>();
-                        Log.d("my tag", "saved responce body " + response.body() + " and code: " + response.code());
+                        Log.d("my tag", "saved responce body "
+                                + response.body() + " and code: " + response.code());
                         DB.setReady(true);
                         while (!DB.isallReady()){
                             try {
@@ -318,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Saved>> call, Throwable t) {
-                showDbLoadError();
+
             }
         });
 
@@ -326,8 +344,10 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call = client.todayParties();
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
-            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
-                Log.d("my tag", "today parties responce body " + response.body() + " and code: " + response.code());
+            public void onResponse(Call<ArrayList<Party>> call,
+                                   Response<ArrayList<Party>> response) {
+                Log.d("my tag", "today parties responce body "
+                        + response.body() + " and code: " + response.code());
                 DB.setTodayParties(response.body());
                 todaySet = true;
 
@@ -335,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-                showDbLoadError();
+
             }
         });
 
@@ -343,15 +363,14 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
         call = client.futureParties();
         call.enqueue(new Callback<ArrayList<Party>>() {
             @Override
-            public void onResponse(Call<ArrayList<Party>> call, Response<ArrayList<Party>> response) {
+            public void onResponse(Call<ArrayList<Party>> call,
+                                   Response<ArrayList<Party>> response) {
                 DB.setFutureParties(response.body());
                 futureSet = true;
-
             }
-
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-                showDbLoadError();
+
             }
         });
 
@@ -372,30 +391,28 @@ public class MainActivity extends AppCompatActivity implements PartyListFragment
     //Todo add comment
     @Override
     public void onListFragmentInteraction(Party item) {
-
     }
 
-    //method will open a error dialog to show
-    public void showDbLoadError(){
+    //method will check for internet connection and will not leave until it finds one
+    public void internetConnectionCheck(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(activeNetworkInfo != null && activeNetworkInfo.isConnected()){
+            return;
+        }
+
         Log.d("my tag", "connecting to the server failed");
         AlertDialog.Builder ADbuilderR = new AlertDialog.Builder(this);
 
         // Set up dialog
-        ADbuilderR.setTitle("Update failed");
-        ADbuilderR.setMessage("Could not connect to server. Check your internet connection and then retry.");
-        ADbuilderR.setCancelable(true);
+        ADbuilderR.setTitle("No connection");
+        ADbuilderR.setMessage("Could not connect to server." +
+                " Check your internet connection and press 'Try again'.");
+        ADbuilderR.setCancelable(false);
         ADbuilderR.setPositiveButton("Try again",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Accept button (right)
-                // Retry updating the snapshot
-                updateSnapshot();
-            }
-        });
-        ADbuilderR.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Decline button (left)
-                // Cancel action
-                dialog.cancel();
+                internetConnectionCheck();
             }
         });
 

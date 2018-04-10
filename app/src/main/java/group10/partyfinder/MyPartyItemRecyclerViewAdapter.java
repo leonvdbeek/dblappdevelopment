@@ -18,14 +18,16 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Party} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  */
-public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyPartyItemRecyclerViewAdapter.ViewHolder> {
+public class MyPartyItemRecyclerViewAdapter
+        extends RecyclerView.Adapter<MyPartyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<Party> mValues;
     private final OnListFragmentInteractionListener mListener;
     private int list;
     private boolean empty = false;
 
-    public MyPartyItemRecyclerViewAdapter(List<Party> items, OnListFragmentInteractionListener listener, int list) {
+    public MyPartyItemRecyclerViewAdapter(
+            List<Party> items, OnListFragmentInteractionListener listener, int list) {
         mValues = items;
         mListener = listener;
         this.list = list;
@@ -47,7 +49,8 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
             holder.mIdView.setText(mValues.get(position).getName());
 
             if (list == 1) {
-                holder.mContentView.setText(String.valueOf(mValues.get(position).getDistance()) + " km");
+                holder.mContentView.setText(
+                        String.valueOf(mValues.get(position).getDistance()) + " km");
             }
             if (list > 1) {
                 try {
@@ -56,9 +59,13 @@ public class MyPartyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyParty
                     } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 0) {
                         holder.mContentView.setText("today");
                     } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 1) {
-                        holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " day");
+                        holder.mContentView.setText(
+                                "in " + String.valueOf(mValues.get(position).getPartyDayDiff())
+                                        + " day");
                     } else {
-                        holder.mContentView.setText("in " + String.valueOf(mValues.get(position).getPartyDayDiff()) + " days");
+                        holder.mContentView.setText(
+                                "in " + String.valueOf(mValues.get(position).getPartyDayDiff())
+                                        + " days");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

@@ -11,7 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
-public class SavedPartiesActivity extends AppCompatActivity implements PartyListFragment.OnListFragmentInteractionListener{
+public class SavedPartiesActivity extends AppCompatActivity
+        implements PartyListFragment.OnListFragmentInteractionListener{
 
 
     @Override
@@ -31,7 +32,7 @@ public class SavedPartiesActivity extends AppCompatActivity implements PartyList
         data.putInt("list", 3);
         PartyListFragment fragment = new PartyListFragment();
         fragment.setArguments(data);
-        fragmentTransaction.replace(R.id.list_fragment_container, fragment);
+        fragmentTransaction.add(R.id.list_fragment_container, fragment);
         fragmentTransaction.commit();
 
     }
@@ -45,9 +46,11 @@ public class SavedPartiesActivity extends AppCompatActivity implements PartyList
     @Override
     public void onResume() {
         super.onResume();
+
         //ToDo make the list refresh it's contents
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         Bundle data = new Bundle();//create bundle instance
         data.putInt("list", 3);
         PartyListFragment fragment = new PartyListFragment();
