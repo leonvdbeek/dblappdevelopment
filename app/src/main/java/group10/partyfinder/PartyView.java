@@ -149,12 +149,7 @@ public class PartyView extends AppCompatActivity {
     // On click method for save button
     public void clickOnSave(View v) {
         internetConnectionCheck();
-
         saveParty(partyID);
-
-        // Show remove button
-        Bsave.setVisibility(View.GONE);
-        Bremove.setVisibility(View.VISIBLE);
     }
 
     // On click method for remove button
@@ -192,9 +187,9 @@ public class PartyView extends AppCompatActivity {
         internetConnectionCheck();
         removeParty(partyID);
 
-        // Show remove button
-        Bremove.setVisibility(View.GONE);
-        Bsave.setVisibility(View.VISIBLE);
+//        // Show remove button
+//        Bremove.setVisibility(View.GONE);
+//        Bsave.setVisibility(View.VISIBLE);
     }
 
     // On click method for edit button
@@ -269,9 +264,14 @@ public class PartyView extends AppCompatActivity {
             public void onResponse(Call<Saved> call, Response<Saved> response){
                 Log.d("my tag", "save Post response code: " + response.code());
                 if(response.code() == 201) {
+                    DB.addToSaveList(DB.getParty(response.body().getId_party()));
+
+                    // Show remove button
+                    Bsave.setVisibility(View.GONE);
+                    Bremove.setVisibility(View.VISIBLE);
+
                     Snackbar.make(view, "Party is added to your saved parties list!",
                             Snackbar.LENGTH_LONG).show();
-                    DB.addToSaveList(DB.getParty(response.body().getId_party()));
                 } else {
                     Log.d("my tag",
                             "save returned empty response code: " + response.code());
@@ -307,12 +307,17 @@ public class PartyView extends AppCompatActivity {
                 if(response.code() == 204) {
                     Log.d("my tag", "remove Post response code: " + response.code());
                     DB.removeFromSaveList(DB.getParty(id_party));
+
+                    // Show save button
+                    Bremove.setVisibility(View.GONE);
+                    Bsave.setVisibility(View.VISIBLE);
+
                     Snackbar.make(view, "Party is removed from your saved parties list.",
                             Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.d("my tag",
                             "remove Post resulted empty. respCode: " + response.code());
-                    Snackbar.make(view, "remove failed, please restart the app",
+                    Snackbar.make(view, "Remove the party has failed, please restart the app",
                             Snackbar.LENGTH_LONG).show();
                 }
             }

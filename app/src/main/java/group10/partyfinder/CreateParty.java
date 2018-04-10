@@ -53,8 +53,8 @@ public class CreateParty extends AppCompatActivity {
     private EditText ETtheme;
     private EditText ETaddress;
 
-    double longitude;
-    double latitude;
+    String longitude;
+    String latitude;
 
     private Context context = this;
 
@@ -130,10 +130,10 @@ public class CreateParty extends AppCompatActivity {
             // Create party
             Address address = addresses.get(0);
 
-            DecimalFormat df = new DecimalFormat("##.#######");
-            longitude = Double.parseDouble(df.format(address.getLongitude()));
-            latitude = Double.parseDouble(df.format(address.getLatitude()));
+            DecimalFormat df = new DecimalFormat("###.#######");
 
+            longitude = df.format(address.getLongitude()).replaceAll(",",".");
+            latitude = df.format(address.getLatitude()).replaceAll(",",".");
 
             partyObject = new Party(
                     0,
@@ -144,13 +144,12 @@ public class CreateParty extends AppCompatActivity {
                     ETtheme.getText().toString(),
                     DB.getUserId(),
                     ETaddress.getText().toString(),
-                    String.valueOf(longitude),
-                    String.valueOf(latitude)
+                    longitude,
+                    latitude
             );
 
             partyObject.printParty();
             postParty(partyObject);
-            Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -187,6 +186,7 @@ public class CreateParty extends AppCompatActivity {
                     Log.d("my tag", "Post response code: " + response.code());
 
                     DB.addHostedParty(response.body());
+                    Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
                     openPartyViewActivity(response.body().getId());
                 }
                 Log.d("my tag", "Posting party resulted empty: " + response.code());
