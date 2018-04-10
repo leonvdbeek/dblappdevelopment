@@ -127,9 +127,9 @@ public class EditParty extends AppCompatActivity {
         internetConnectionCheck();
 
         saveStartTime = ETstartDate.getText().toString()
-                + "T" + ETstartTime.getText().toString() + ":00+00:00";
+                + "T" + ETstartTime.getText().toString() + ":00+02:00";
         saveEndTime = ETendDate.getText().toString()
-                + "T" + ETendTime.getText().toString() + ":00+00:00";
+                + "T" + ETendTime.getText().toString() + ":00+02:00";
         //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address

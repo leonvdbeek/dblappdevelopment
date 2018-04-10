@@ -95,9 +95,9 @@ public class CreateParty extends AppCompatActivity {
         internetConnectionCheck();
 
         startTime = ETstartDate.getText().toString()
-                + "T" + ETstartTime.getText().toString() + ":00+00:00";
+                + "T" + ETstartTime.getText().toString() + ":00+02:00";
         endTime = ETendDate.getText().toString()
-                + "T" + ETendTime.getText().toString() + ":00+00:00";
+                + "T" + ETendTime.getText().toString() + ":00+02:00";
         //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address
