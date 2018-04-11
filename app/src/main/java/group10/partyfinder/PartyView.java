@@ -152,9 +152,6 @@ public class PartyView extends AppCompatActivity {
 
         saveParty(partyID);
 
-        // Show remove button
-        Bsave.setVisibility(View.GONE);
-        Bremove.setVisibility(View.VISIBLE);
     }
 
     // On click method for remove button
@@ -192,9 +189,6 @@ public class PartyView extends AppCompatActivity {
         internetConnectionCheck();
         removeParty(partyID);
 
-        // Show remove button
-        Bremove.setVisibility(View.GONE);
-        Bsave.setVisibility(View.VISIBLE);
     }
 
     // On click method for edit button
@@ -218,7 +212,7 @@ public class PartyView extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // Accept button (right)
                 // Remove the party from the saved list
-                startDeleteParty();
+                deleteParty();
             }
         });
         ADbuilderD.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -234,22 +228,6 @@ public class PartyView extends AppCompatActivity {
         alertDialogDelete.show();
     }
 
-    // Start the actions to delete a party
-    public void startDeleteParty() {
-        deleteParty();
-
-/*        AlertDialog ADdelete = new AlertDialog.Builder(context).create();
-        ADdelete.setTitle("Party deleted");
-        ADdelete.setMessage("The party is deleted.");
-        ADdelete.setCancelable(false);
-        ADdelete.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-        ADdelete.show();*/
-    }
 
     // Save the party to the saved list
     public void saveParty(int id_party) {
@@ -272,6 +250,10 @@ public class PartyView extends AppCompatActivity {
                     Snackbar.make(view, "Party is added to your saved parties list!",
                             Snackbar.LENGTH_LONG).show();
                     DB.addToSaveList(DB.getParty(response.body().getId_party()));
+
+                    // Show remove button
+                    Bsave.setVisibility(View.GONE);
+                    Bremove.setVisibility(View.VISIBLE);
                 } else {
                     Log.d("my tag",
                             "save returned empty response code: " + response.code());
@@ -309,6 +291,10 @@ public class PartyView extends AppCompatActivity {
                     DB.removeFromSaveList(DB.getParty(id_party));
                     Snackbar.make(view, "Party is removed from your saved parties list.",
                             Snackbar.LENGTH_LONG).show();
+
+                    // Show remove button
+                    Bremove.setVisibility(View.GONE);
+                    Bsave.setVisibility(View.VISIBLE);
                 } else {
                     Log.d("my tag",
                             "remove Post resulted empty. respCode: " + response.code());
