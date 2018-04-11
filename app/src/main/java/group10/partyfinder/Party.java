@@ -147,6 +147,12 @@ public class Party implements java.io.Serializable{
 
         return dateFormat.format(start);
     }
+
+    public String getPartyStartTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
+        return dateFormat.format(start);
+    }
     public void setId(int id) {
         this.id = id;
     }

@@ -57,15 +57,15 @@ public class MyPartyItemRecyclerViewAdapter
                     if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) < 0) {
                         holder.mContentView.setText("past");
                     } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 0) {
-                        holder.mContentView.setText("today");
+                        holder.mContentView.setText("today at " + String.valueOf(mValues.get(position).getPartyStartTime()));
                     } else if (Integer.parseInt(mValues.get(position).getPartyDayDiff()) == 1) {
                         holder.mContentView.setText(
                                 "in " + String.valueOf(mValues.get(position).getPartyDayDiff())
-                                        + " day");
+                                        + " day at " + String.valueOf(mValues.get(position).getPartyStartTime()));
                     } else {
                         holder.mContentView.setText(
                                 "in " + String.valueOf(mValues.get(position).getPartyDayDiff())
-                                        + " days");
+                                        + " days at " + String.valueOf(mValues.get(position).getPartyStartTime()));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
