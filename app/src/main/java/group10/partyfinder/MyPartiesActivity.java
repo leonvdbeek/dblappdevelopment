@@ -52,7 +52,6 @@ public class MyPartiesActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        //ToDo make the list refresh it's contents
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

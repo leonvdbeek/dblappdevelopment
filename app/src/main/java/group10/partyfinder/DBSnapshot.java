@@ -1,6 +1,10 @@
 package group10.partyfinder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Roy on 19/03/2018.
@@ -128,6 +132,23 @@ public class DBSnapshot {
 
     public void addHostedParty(Party party){
         this.allParties.add(party);
+        this.myParties.add(party);
+
+        //compare the date of the created party
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(party.getStartAsDate());
+        cal2.setTime(new Date());
+        if (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) {
+            if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)){
+                this.todayParties.add(party);
+            }
+            if (cal1.get(Calendar.DAY_OF_YEAR) >= cal2.get(Calendar.DAY_OF_YEAR)){
+                this.futureParties.add(party);
+            }
+        } else if (cal1.get(Calendar.YEAR) > cal2.get(Calendar.YEAR)) {
+            this.futureParties.add(party);
+        }
     }
 
     public void deleteHostedParty(Party party){
@@ -149,31 +170,26 @@ public class DBSnapshot {
     }
 
     public void editHostedParty(Party party){
-        //local list to store parties that are to be removed
-        Party toRemove = null;
-        //edit the party in allParties
-        for (Party oldParty : allParties){
-            if (oldParty.getId() == party.getId()){
-                toRemove = oldParty;
-            }
-        }
-        if (toRemove != null) {
-            this.allParties.remove(toRemove);
-        }
-        toRemove = null;
-        this.allParties.add(party);
+        //create a set of all list that need to be altered
+        Set<ArrayList<Party>> groups = new HashSet<>();
+        groups.add(myParties);
+        groups.add(todayParties);
+        groups.add(futureParties);
+        groups.add(allParties);
 
-        //edit the party in myParties
-        for (Party oldParty : myParties){
-            if (oldParty.getId() == party.getId()){
-                toRemove = oldParty;
+        for(ArrayList<Party> group : groups){
+            Party toRemove = null;
+            //find the party in the current group
+            for (Party oldParty : group){
+                if (oldParty.getId() == party.getId()){
+                    toRemove = oldParty;
+                }
+            }
+            if (toRemove != null) {
+                group.remove(toRemove);
+                group.add(party);
             }
         }
-        if (toRemove != null) {
-            myParties.remove(toRemove);
-        }
-        toRemove = null;
-        myParties.add(party);
     }
 
     public void addToSaveList(Party party) {

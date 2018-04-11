@@ -47,6 +47,12 @@ public class CrashNowPage extends Fragment {
         insertNestedFragmentList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        insertNestedFragmentList();
+    }
+
     // Embeds the child fragment dynamically
     private void insertNestedFragmentMap() {
         Bundle data = new Bundle();//create bundle instance

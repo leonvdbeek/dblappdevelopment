@@ -88,6 +88,10 @@ public class Party implements java.io.Serializable{
         return dateFormat.format(start);
     }
 
+    public Date getStartAsDate() {
+        return start;
+    }
+
     public String getPartyViewEndDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy' 'HH:mm");
 
