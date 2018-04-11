@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    tools:context="group10.partyfinder.HostParty">
+    tools:context="group10.partyfinder.CreateParty">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -77,8 +77,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
                     android:ems="10"
-                    android:hint="yyyy-mm-dd"
+                    android:focusable="false"
+                    android:hint="dd-mm-yyyy"
                     android:inputType="date"
                     android:textSize="20sp" />
 
@@ -87,6 +89,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="false"
                     android:ems="10"
                     android:hint="hh:mm"
                     android:inputType="time"
@@ -114,8 +118,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="false"
                     android:ems="10"
-                    android:hint="yyyy-mm-dd"
+                    android:hint="dd-mm-yyyy"
                     android:inputType="date"
                     android:textSize="20sp" />
 
@@ -124,6 +130,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="false"
                     android:ems="10"
                     android:hint="hh:mm"
                     android:inputType="time"
