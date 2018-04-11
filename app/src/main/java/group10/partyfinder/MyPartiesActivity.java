@@ -25,7 +25,7 @@ public class MyPartiesActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent("android.intent.action.CreateParty");
-                startActivity(i);
+                startActivityForResult(i, 123);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,5 +61,17 @@ public class MyPartiesActivity extends AppCompatActivity
         fragment.setArguments(data);
         fragmentTransaction.replace(R.id.list_fragment_container, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123) {
+            int id = data.getIntExtra("ID", 0);
+
+            Intent i = new Intent("android.intent.action.PartyView");
+            i.putExtra("ID", id);
+            this.startActivity(i);
+        }
     }
 }
