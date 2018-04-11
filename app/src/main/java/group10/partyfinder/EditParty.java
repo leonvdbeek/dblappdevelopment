@@ -60,8 +60,8 @@ public class EditParty extends AppCompatActivity {
     private String[] ETSD;
     private String[] ETED;
 
-    double longitude;
-    double latitude;
+    String longitude;
+    String latitude;
 
     private Context context = this;
 
@@ -127,9 +127,9 @@ public class EditParty extends AppCompatActivity {
         internetConnectionCheck();
 
         saveStartTime = ETstartDate.getText().toString()
-                + "T" + ETstartTime.getText().toString() + ":00+00:00";
+                + "T" + ETstartTime.getText().toString() + ":00+02:00";
         saveEndTime = ETendDate.getText().toString()
-                + "T" + ETendTime.getText().toString() + ":00+00:00";
+                + "T" + ETendTime.getText().toString() + ":00+02:00";
         //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
 
         // Get longitude and latitude from address
@@ -162,9 +162,10 @@ public class EditParty extends AppCompatActivity {
             // Edit party
             Address address = addresses.get(0);
 
-            DecimalFormat df = new DecimalFormat("##.#######");
-            longitude = Double.parseDouble(df.format(address.getLongitude()));
-            latitude = Double.parseDouble(df.format(address.getLatitude()));
+            DecimalFormat df = new DecimalFormat("###.#######");
+
+            longitude = df.format(address.getLongitude()).replaceAll(",",".");
+            latitude = df.format(address.getLatitude()).replaceAll(",",".");
 
 
             savePartyObject = new Party(
@@ -176,8 +177,8 @@ public class EditParty extends AppCompatActivity {
                     ETtheme.getText().toString(),
                     DB.getUserId(),
                     ETaddress.getText().toString(),
-                    String.valueOf(longitude),
-                    String.valueOf(latitude)
+                    longitude,
+                    latitude
             );
 
             savePartyObject.printParty();
