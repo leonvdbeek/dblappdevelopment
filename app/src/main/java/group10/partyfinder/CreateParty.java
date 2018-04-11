@@ -308,7 +308,13 @@ public class CreateParty extends AppCompatActivity {
 
                     DB.addHostedParty(response.body());
                     Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
-                    openPartyViewActivity(response.body().getId());
+
+                    Intent intent = getIntent();
+                    intent.putExtra("ID", response.body().getId());
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                    //openPartyViewActivity(response.body().getId());
                 }
                 Log.d("my tag", "Posting party resulted empty: " + response.code());
             }
