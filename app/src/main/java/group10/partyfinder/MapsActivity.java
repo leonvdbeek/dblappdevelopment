@@ -9,11 +9,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +51,15 @@ public class MapsActivity extends Fragment
         if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION )
                 != PackageManager.PERMISSION_GRANTED ) {
 
-            /**ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
-                    LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );*/
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////
+            
+
         }
         Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
 
@@ -139,7 +148,9 @@ public class MapsActivity extends Fragment
 
     @Override
     public void onLocationChanged(Location location) {
-
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+                location.getLongitude())));
+        Log.d("my tag", "location is changed to"+location.getLatitude()+location.getLongitude());
     }
 
     @Override
