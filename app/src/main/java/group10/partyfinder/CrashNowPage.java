@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * Created by LyoubomirKatzarov on 3/19/2018.
  */
@@ -19,6 +23,26 @@ public class CrashNowPage extends Fragment {
     private static final String TAG = "Crash Now";
 
     private Button btnTEST;
+
+    private boolean subscribe;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!subscribe) {
+            EventBus.getDefault().register(this);
+            subscribe = true;
+        }
+    }
+
+    // UI updates must run on MainThread
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(Event event) {
+        if (event.event == 1) {
+            EventBus.getDefault().postSticky(new Event(2));
+            insertNestedFragmentList();
+        }
+    }
 
     @Nullable
     @Override
@@ -33,7 +57,7 @@ public class CrashNowPage extends Fragment {
                 Toast.makeText(getActivity(), "TESTING BUTTON CLICK 1",Toast.LENGTH_SHORT).show();
             }
         });*/
-
+        insertNestedFragmentMap();
         return view;
     }
 
@@ -43,14 +67,15 @@ public class CrashNowPage extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        insertNestedFragmentMap();
-        insertNestedFragmentList();
+        //insertNestedFragmentMap();
+        //insertNestedFragmentList();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        insertNestedFragmentList();
+        //insertNestedFragmentList();
     }
 
     // Embeds the child fragment dynamically

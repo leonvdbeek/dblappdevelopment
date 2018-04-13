@@ -43,5 +43,4 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     }
 
 
-
 }

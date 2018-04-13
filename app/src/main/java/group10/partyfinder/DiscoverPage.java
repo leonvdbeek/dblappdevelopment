@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * Created by LyoubomirKatzarov on 3/19/2018.
  */
@@ -18,11 +22,33 @@ public class DiscoverPage extends Fragment {
 
     private static final String TAG = "Discover";
 
+    private boolean subscribe;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!subscribe) {
+            EventBus.getDefault().register(this);
+            subscribe = true;
+        }
+    }
+
+    // UI updates must run on MainThread
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(Event event) {
+        if (event.event == 1) {
+            EventBus.getDefault().postSticky(new Event(2));
+            insertNestedFragmentList();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discover_page,container,false);
+
+       // insertNestedFragmentMap();
 
         return view;
     }
@@ -32,7 +58,7 @@ public class DiscoverPage extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        insertNestedFragmentMap();
+
         insertNestedFragmentList();
     }
 

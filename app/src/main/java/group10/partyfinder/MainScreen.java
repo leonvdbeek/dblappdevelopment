@@ -63,7 +63,7 @@ public class MainScreen extends AppCompatActivity
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private boolean subscribe;
+    /*private boolean subscribe;
 
     @Override
     public void onStart() {
@@ -78,7 +78,7 @@ public class MainScreen extends AppCompatActivity
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
         setupViewPager(mViewPager);
-    }
+    }*/
 
 
     @Override
@@ -167,7 +167,7 @@ public class MainScreen extends AppCompatActivity
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        //setupViewPager(mViewPager);
+        setupViewPager(mViewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -248,7 +248,6 @@ public class MainScreen extends AppCompatActivity
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssz")
                 .create();
-
         //create retrofit client with correct website
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(BaseUrl)
@@ -332,8 +331,6 @@ public class MainScreen extends AppCompatActivity
             }
 
 
-
-            
             @Override
             public void onFailure(Call<ArrayList<Saved>> call, Throwable t) {
                 //assume failure to be handled by the allParties request
