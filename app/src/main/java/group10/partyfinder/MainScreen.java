@@ -63,6 +63,7 @@ public class MainScreen extends AppCompatActivity
 
     private GoogleSignInClient mGoogleSignInClient;
 
+    private boolean subscribe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +158,8 @@ public class MainScreen extends AppCompatActivity
 
         //call the updateSnapshot method to "sync" the local snapshot with the server
         //updateSnapshot();
+
+
 
     }
 
@@ -368,10 +371,14 @@ public class MainScreen extends AppCompatActivity
 
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        if (!subscribe) {
+            EventBus.getDefault().register(this);
+            subscribe = true;
+        }
     }
 
 
