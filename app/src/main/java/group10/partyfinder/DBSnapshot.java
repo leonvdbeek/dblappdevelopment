@@ -13,8 +13,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DBSnapshot {
     private static final DBSnapshot Instance = new DBSnapshot();
 
-
-    final AtomicBoolean ready = new AtomicBoolean(false);
+    final AtomicBoolean allPartiesSet = new AtomicBoolean(false);
+    final AtomicBoolean myPartiesSet = new AtomicBoolean(false);
+    final AtomicBoolean savedPartiesSet = new AtomicBoolean(false);
+    final AtomicBoolean todayPartiesSet = new AtomicBoolean(false);
+    final AtomicBoolean futurePartiesSet = new AtomicBoolean(false);
 
 
     public static DBSnapshot getInstance() {
@@ -54,9 +57,39 @@ public class DBSnapshot {
         }
     }
 
-    public boolean isReady() {
-        return ready.get();
+    public boolean isAllReady() {
+        if (allPartiesSet.get() && myPartiesSet.get() && savedPartiesSet.get() && todayPartiesSet.get() && futurePartiesSet.get()){
+            allPartiesSet.set(false);
+            myPartiesSet.set(false);
+            savedPartiesSet.set(false);
+            todayPartiesSet.set(false);
+            futurePartiesSet.set(false);
+            return true;
+        } else {
+            return false;
+        }
     }
+
+    public void setAllPartiesSet() {
+        this.allPartiesSet.set(true);
+    }
+
+    public void setMyPartiesSet() {
+        this.myPartiesSet.set(true);
+    }
+
+    public void setSavedPartiesSet() {
+        this.savedPartiesSet.set(true);
+    }
+
+    public void settodayAllPartiesSet() {
+        this.todayPartiesSet.set(true);
+    }
+
+    public void setFuturePartiesSet() {
+        this.futurePartiesSet.set(true);
+    }
+
 
     public ArrayList<Party> getAllParties() {
         if (allParties == null){
@@ -291,7 +324,5 @@ public class DBSnapshot {
         }
     }
 
-    public void setReady(boolean ready) {
-        this.ready.set(ready);
-    }
+
 }

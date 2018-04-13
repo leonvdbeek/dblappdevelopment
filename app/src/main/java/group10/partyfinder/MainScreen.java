@@ -63,6 +63,24 @@ public class MainScreen extends AppCompatActivity
 
     private GoogleSignInClient mGoogleSignInClient;
 
+    private boolean subscribe;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!subscribe) {
+            EventBus.getDefault().register(this);
+            subscribe = true;
+        }
+    }
+
+    // UI updates must run on MainThread
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(Event event) {
+        setupViewPager(mViewPager);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -250,6 +268,7 @@ public class MainScreen extends AppCompatActivity
                 Log.d("my tag", "all parties responce body "
                         + response.body() + " and code: " + response.code());
                 DB.setAllParties(response.body());
+                DB.setAllPartiesSet();
             }
 
             @Override
@@ -269,6 +288,7 @@ public class MainScreen extends AppCompatActivity
                 Log.d("my tag", "my parties responce body "
                         + response.body() + " and code: " + response.code());
                 DB.setMyParties(response.body());
+                DB.setMyPartiesSet();
             }
 
             @Override
@@ -295,7 +315,7 @@ public class MainScreen extends AppCompatActivity
                         while (!DB.isallReady()){
                             try {
                                 Log.d("my tag", "DB.allParties() is not available yet");
-                                Thread.sleep(50);
+                                Thread.sleep(10);
                             } catch (InterruptedException e) {
                                 Log.d("my tag", "waiting failed apearantly ? :c");
                             }
@@ -306,7 +326,7 @@ public class MainScreen extends AppCompatActivity
                         }
                         DB.setSavedParties(parties);
                         //set the local DB as ready
-                        DB.setReady(true);
+                        DB.setSavedPartiesSet();
                     }
                 }).start();
             }
@@ -326,7 +346,7 @@ public class MainScreen extends AppCompatActivity
                 Log.d("my tag", "today parties responce body "
                         + response.body() + " and code: " + response.code());
                 DB.setTodayParties(response.body());
-                todaySet = true;
+                DB.settodayAllPartiesSet();
 
             }
 
@@ -343,7 +363,7 @@ public class MainScreen extends AppCompatActivity
             public void onResponse(Call<ArrayList<Party>> call,
                                    Response<ArrayList<Party>> response) {
                 DB.setFutureParties(response.body());
-                futureSet = true;
+                DB.setFuturePartiesSet();
             }
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
@@ -355,37 +375,22 @@ public class MainScreen extends AppCompatActivity
         new Thread(new Runnable() {
             public void run() {
                 //waits until the local DB is loaded before loading the map and lists
-                while(!DB.isReady()){
+                while(!DB.isAllReady()){
                     try {
-                        Log.d("my tag", "DB is not available yet");
-                        Thread.sleep(50);
+                        Log.d("my tag", "DB is not available yet SECOND LOOP");
+                        Thread.sleep(10);
                     } catch (InterruptedException e) {
                         Log.d("my tag", "waiting failed apearantly ? :c");
                     }
                 }
+
                 EventBus.getDefault().postSticky(new Event(1));
             }
         }).start();
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
 
-    // UI updates must run on MainThread
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(Event event) {
-        setupViewPager(mViewPager);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
 
 
     //method required by the party list fragments
