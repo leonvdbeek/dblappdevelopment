@@ -30,10 +30,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +58,7 @@ public class MainScreen extends AppCompatActivity
     private TextView header;
 
     private GoogleSignInClient mGoogleSignInClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,9 +152,7 @@ public class MainScreen extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         //call the updateSnapshot method to "sync" the local snapshot with the server
-        updateSnapshot();
-
-
+        //updateSnapshot();
 
     }
 
@@ -294,7 +289,7 @@ public class MainScreen extends AppCompatActivity
                         //wait until allparties is loaded before storing saved parties
                         while (!DB.isallReady()){
                             try {
-                                Log.d("my tag", "DB.allParties() is not available yet");
+                                Log.d("my tag wait", "DB.allParties() is not available yet");
                                 Thread.sleep(50);
                             } catch (InterruptedException e) {
                                 Log.d("my tag", "waiting failed apearantly ? :c");
@@ -351,40 +346,17 @@ public class MainScreen extends AppCompatActivity
             }
         });
 
-
-        new Thread(new Runnable() {
-            public void run() {
-                //waits until the local DB is loaded before loading the map and lists
-                while(!DB.isReady()){
-                    try {
-                        Log.d("my tag", "DB is not available yet");
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        Log.d("my tag", "waiting failed apearantly ? :c");
-                    }
-                }
-                EventBus.getDefault().postSticky(new Event(1));
+        //waits until the local DB is loaded before oading the map and lists
+        //while(!DB.isDBReady()){
+        for(int i=0; i <= 4; i++){
+            try {
+                Log.d("my tag", "DB is not available yet");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Log.d("my tag", "waiting failed apearantly ? :c");
             }
-        }).start();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    // UI updates must run on MainThread
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(Event event) {
+        }
         setupViewPager(mViewPager);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
     }
 
 
