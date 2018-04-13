@@ -289,7 +289,7 @@ public class MainScreen extends AppCompatActivity
                         //wait until allparties is loaded before storing saved parties
                         while (!DB.isallReady()){
                             try {
-                                Log.d("my tag", "DB.allParties() is not available yet");
+                                Log.d("my tag wait", "DB.allParties() is not available yet");
                                 Thread.sleep(50);
                             } catch (InterruptedException e) {
                                 Log.d("my tag", "waiting failed apearantly ? :c");
@@ -348,7 +348,7 @@ public class MainScreen extends AppCompatActivity
 
         //waits until the local DB is loaded before oading the map and lists
         //while(!DB.isDBReady()){
-        for(int i=0; i <= 10; i++){
+        for(int i=0; i <= 4; i++){
             try {
                 Log.d("my tag", "DB is not available yet");
                 Thread.sleep(100);
