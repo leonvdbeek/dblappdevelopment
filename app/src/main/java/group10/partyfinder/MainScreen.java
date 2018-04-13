@@ -162,6 +162,15 @@ public class MainScreen extends AppCompatActivity
 
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!subscribe) {
+            EventBus.getDefault().register(this);
+            subscribe = true;
+        }
+    }
+
 
     //Signout function to sign out from the mainactivity
     private void signOut() {
@@ -370,17 +379,6 @@ public class MainScreen extends AppCompatActivity
         }).start();
 
     }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!subscribe) {
-            EventBus.getDefault().register(this);
-            subscribe = true;
-        }
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
