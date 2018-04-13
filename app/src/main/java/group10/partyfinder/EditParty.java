@@ -337,6 +337,7 @@ public class EditParty extends AppCompatActivity {
                     if (response.code() == 200 || response.code() == 204) {
                         Snackbar.make(view, "The party has been edited!",
                                 Snackbar.LENGTH_LONG).show();
+                        finish();
 
                     } else {
                         Log.d("my tag editParty()", "Put response code: "

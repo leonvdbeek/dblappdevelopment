@@ -145,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingTop="20sp">
 
             <LinearLayout
@@ -175,12 +175,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/Bedit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:onClick="clickOnEdit"
                     android:text="Edit party" />
 
@@ -188,6 +189,7 @@
                     android:id="@+id/Bdelete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:onClick="clickOnDelete"
                     android:text="Delete party" />
             </LinearLayout>
