@@ -63,8 +63,6 @@ public class MainScreen extends AppCompatActivity
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    private boolean subscribe;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,15 +160,6 @@ public class MainScreen extends AppCompatActivity
 
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!subscribe) {
-            EventBus.getDefault().register(this);
-            subscribe = true;
-        }
-    }
-
 
     //Signout function to sign out from the mainactivity
     private void signOut() {
@@ -374,15 +363,28 @@ public class MainScreen extends AppCompatActivity
                         Log.d("my tag", "waiting failed apearantly ? :c");
                     }
                 }
-                EventBus.getDefault().post(new Event(1));
+                EventBus.getDefault().postSticky(new Event(1));
             }
         }).start();
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    // UI updates must run on MainThread
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
         setupViewPager(mViewPager);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
 
