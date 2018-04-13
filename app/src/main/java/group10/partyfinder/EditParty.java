@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -245,66 +246,90 @@ public class EditParty extends AppCompatActivity {
         //first check connectivity
         internetConnectionCheck();
 
-        startDate = ETstartDate.getText().toString().split("-");
-        endDate = ETendDate.getText().toString().split("-");
+        if(TextUtils.isEmpty(ETname.getText().toString()) ||
+                TextUtils.isEmpty(ETstartDate.getText().toString()) ||
+                TextUtils.isEmpty(ETstartTime.getText().toString()) ||
+                TextUtils.isEmpty(ETendDate.getText().toString()) ||
+                TextUtils.isEmpty(ETendTime.getText().toString()) ||
+                TextUtils.isEmpty(ETaddress.getText().toString()) ||
+                TextUtils.isEmpty(ETtheme.getText().toString()) ||
+                TextUtils.isEmpty(ETdescription.getText().toString())) {
 
-        saveStartTime = startDate[2] + "-" + startDate[1] + "-" + startDate[0]
-                + "T" + ETstartTime.getText().toString() + ":00+02:00";
-        saveEndTime = endDate[2] + "-" + endDate[1] + "-" + endDate[0]
-                + "T" + ETendTime.getText().toString() + ":00+02:00";
-        //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
-
-        // Get longitude and latitude from address
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocationName(ETaddress.getText().toString(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        // If address is empty
-        if (addresses.isEmpty()) {
-
-            AlertDialog ADFalseAdress = new AlertDialog.Builder(context).create();
-            ADFalseAdress.setTitle("Address not recognized");
-            ADFalseAdress.setMessage("The address is not recognized." +
-                    " Change the address and try again.");
-            ADFalseAdress.setCancelable(false);
-            ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            AlertDialog ADETEmpty = new AlertDialog.Builder(context).create();
+            ADETEmpty.setTitle("Fill in all fields");
+            ADETEmpty.setMessage("There are empty fields. Please fill in all fields.");
+            ADETEmpty.setCancelable(false);
+            ADETEmpty.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            ADFalseAdress.cancel();
+                            ADETEmpty.cancel();
                         }
                     });
-            ADFalseAdress.show();
+            ADETEmpty.show();
 
         } else {
-            // Edit party
-            Address address = addresses.get(0);
 
-            DecimalFormat df = new DecimalFormat("###.#######");
+            startDate = ETstartDate.getText().toString().split("-");
+            endDate = ETendDate.getText().toString().split("-");
 
-            longitude = df.format(address.getLongitude()).replaceAll(",",".");
-            latitude = df.format(address.getLatitude()).replaceAll(",",".");
+            saveStartTime = startDate[2] + "-" + startDate[1] + "-" + startDate[0]
+                    + "T" + ETstartTime.getText().toString() + ":00+02:00";
+            saveEndTime = endDate[2] + "-" + endDate[1] + "-" + endDate[0]
+                    + "T" + ETendTime.getText().toString() + ":00+02:00";
+            //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
+
+            // Get longitude and latitude from address
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocationName(ETaddress.getText().toString(), 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-            savePartyObject = new Party(
-                    partyObject.getId(),
-                    ETname.getText().toString(),
-                    ETdescription.getText().toString(),
-                    saveStartTime,
-                    saveEndTime,
-                    ETtheme.getText().toString(),
-                    DB.getUserId(),
-                    ETaddress.getText().toString(),
-                    longitude,
-                    latitude
-            );
+            // If address is empty
+            if (addresses.isEmpty()) {
 
-            savePartyObject.printParty();
-            editParty(savePartyObject);
+                AlertDialog ADFalseAdress = new AlertDialog.Builder(context).create();
+                ADFalseAdress.setTitle("Address not recognized");
+                ADFalseAdress.setMessage("The address is not recognized." +
+                        " Change the address and try again.");
+                ADFalseAdress.setCancelable(false);
+                ADFalseAdress.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ADFalseAdress.cancel();
+                            }
+                        });
+                ADFalseAdress.show();
+
+            } else {
+                // Edit party
+                Address address = addresses.get(0);
+
+                DecimalFormat df = new DecimalFormat("###.#######");
+
+                longitude = df.format(address.getLongitude()).replaceAll(",", ".");
+                latitude = df.format(address.getLatitude()).replaceAll(",", ".");
+
+
+                savePartyObject = new Party(
+                        partyObject.getId(),
+                        ETname.getText().toString(),
+                        ETdescription.getText().toString(),
+                        saveStartTime,
+                        saveEndTime,
+                        ETtheme.getText().toString(),
+                        DB.getUserId(),
+                        ETaddress.getText().toString(),
+                        longitude,
+                        latitude
+                );
+
+                savePartyObject.printParty();
+                editParty(savePartyObject);
+            }
         }
     }
 
