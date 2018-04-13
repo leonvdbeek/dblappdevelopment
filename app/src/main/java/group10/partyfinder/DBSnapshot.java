@@ -233,7 +233,6 @@ public class DBSnapshot {
             }
             if (toRemove != null) {
                 group.remove(toRemove);
-                group.add(party);
             }
         }
     }
@@ -260,6 +259,7 @@ public class DBSnapshot {
             for (Party oldParty : group){
                 if (oldParty.getId() == targetId){
                     toRemove = oldParty;
+                    continue;
                 }
             }
             if (toRemove != null) {

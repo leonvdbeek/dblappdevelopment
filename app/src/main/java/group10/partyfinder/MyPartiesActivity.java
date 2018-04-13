@@ -39,7 +39,7 @@ public class MyPartiesActivity extends AppCompatActivity
         data.putInt("list", 4);
         PartyListFragment fragment = new PartyListFragment();
         fragment.setArguments(data);
-        fragmentTransaction.add(R.id.list_fragment_container, fragment);
+        fragmentTransaction.replace(R.id.list_fragment_container, fragment);
         fragmentTransaction.commit();
     }
 
@@ -67,11 +67,14 @@ public class MyPartiesActivity extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 123) {
-            int id = data.getIntExtra("ID", 0);
+            try {
+                int id = data.getIntExtra("ID", 0);
+                Intent i = new Intent("android.intent.action.PartyView");
+                i.putExtra("ID", id);
+                this.startActivity(i);
+            } catch (NullPointerException e) {
+            }
 
-            Intent i = new Intent("android.intent.action.PartyView");
-            i.putExtra("ID", id);
-            this.startActivity(i);
         }
     }
 }

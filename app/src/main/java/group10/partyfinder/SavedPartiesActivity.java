@@ -32,7 +32,7 @@ public class SavedPartiesActivity extends AppCompatActivity
         data.putInt("list", 3);
         PartyListFragment fragment = new PartyListFragment();
         fragment.setArguments(data);
-        fragmentTransaction.add(R.id.list_fragment_container, fragment);
+        fragmentTransaction.replace(R.id.list_fragment_container, fragment);
         fragmentTransaction.commit();
 
     }
