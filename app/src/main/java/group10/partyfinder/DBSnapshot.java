@@ -13,19 +13,25 @@ import java.util.Set;
 public class DBSnapshot {
     private static final DBSnapshot Instance = new DBSnapshot();
 
+
+
+    private boolean ready;
+
     public static DBSnapshot getInstance() {
         return Instance;
     }
 
     private ArrayList<Party> placeHolder;
 
+    /**
+     * on initialization a placeholder party is created
+     */
     private DBSnapshot() {
         placeHolder = new ArrayList<Party>();
         Party p = new Party();
         placeHolder.add(p);
     }
 
-    //Todo remove the hardcode userId
     private String defaultId = "114987278191137298218";
     private String userId;
     private ArrayList<Party> allParties;
@@ -33,16 +39,24 @@ public class DBSnapshot {
     private ArrayList<Party> savedParties;
     private ArrayList<Party> todayParties;
     private ArrayList<Party> futureParties;
-    private boolean ready;
 
+    /**
+     *  a simple getter for the userId
+     *
+     * @return a string containting the current google user ID,
+     *  if none is set a default is returned
+     */
     public String getUserId() {
-        if (userId == null){
-            return defaultId;
-        } else {
+        if (userId != null){
             return userId;
+        } else {
+            return defaultId;
         }
     }
 
+    public boolean isReady() {
+        return ready;
+    }
 
     public ArrayList<Party> getAllParties() {
         if (allParties == null){
@@ -52,14 +66,22 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     *  a simple check to see if allparties is filled
+     *
+     * @return if allParties is not null
+     */
     public Boolean isallReady(){
         return (this.allParties != null);
     }
 
-    public Boolean isDBReady(){
-        return this.ready;
-    }
 
+    /**
+     * simple getter method for my parties but returns a placeholder if myparties
+     *       doesn exist
+     *
+     * @return an arrayList filled with the current logged in users made parties
+     */
     public ArrayList<Party> getMyParties() {
         if (allParties == null){
             return getPlaceHolder();
@@ -68,6 +90,12 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     * simple getter method for saved parties but returns a placeholder if savedparties
+     *       doesn exist
+     *
+     * @return a arrayList of the current logged in users saved parties
+     */
     public ArrayList<Party> getSavedParties() {
         if (allParties == null){
             return getPlaceHolder();
@@ -76,6 +104,12 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     * simple getter method for todays parties but returns a placeholder if todayparties
+     *       doesn exist
+     *
+     * @return a arrayList of all partie happening today
+     */
     public ArrayList<Party> getTodayParties() {
         if (allParties == null){
             return getPlaceHolder();
@@ -84,6 +118,12 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     * simple getter method for future parties but returns a placeholder if futureparties
+     *       doesn exist
+     *
+     * @return a arrayList containing all future parties
+     */
     public ArrayList<Party> getFutureParties() {
         if (allParties == null){
             return getPlaceHolder();
@@ -116,6 +156,12 @@ public class DBSnapshot {
         this.futureParties = futureParties;
     }
 
+    /**
+     * a method to find a party based on its id
+     *
+     * @param id
+     * @return {Party p : p.id == id}
+     */
     public Party getParty(int id){
         for (Party party : allParties){
             if (party.getId() == id){
@@ -126,10 +172,18 @@ public class DBSnapshot {
     }
 
     private ArrayList<Party> getPlaceHolder() {
-
         return placeHolder;
     }
 
+    /**
+     * method to add a newly created prty to the local DB
+     *
+     * @param party
+     * @post allParties.contains(party)
+     *       myParties.contains(party)
+     *       if party is today todayparties.contains(party) && futureparties.contains(party)
+     *       if paty is in future futureparties.contains(party)
+     */
     public void addHostedParty(Party party){
         this.allParties.add(party);
         this.myParties.add(party);
@@ -151,24 +205,45 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     * a method to delete a party from the local DB
+     *
+     * @param party
+     * @remove forall Party p : p.is == party.id
+     */
     public void deleteHostedParty(Party party){
-        if(this.allParties.contains(party)){
-            this.allParties.remove(party);
-        }
-        if(this.savedParties.contains(party)){
-            this.savedParties.remove(party);
-        }
-        if(this.myParties.contains(party)){
-            this.myParties.remove(party);
-        }
-        if(this.todayParties.contains(party)){
-            this.todayParties.remove(party);
-        }
-        if(this.futureParties.contains(party)){
-            this.futureParties.remove(party);
+        //create a set of all list that need to be altered
+        Set<ArrayList<Party>> groups = new HashSet<>();
+        groups.add(myParties);
+        groups.add(savedParties);
+        groups.add(todayParties);
+        groups.add(futureParties);
+        groups.add(allParties);
+
+        int targetId = party.getId();
+
+        for(ArrayList<Party> group : groups){
+            Party toRemove = null;
+            //find the party in the current group
+            for (Party oldParty : group){
+                if (oldParty.getId() == targetId){
+                    toRemove = oldParty;
+                    continue;
+                }
+            }
+            if (toRemove != null) {
+                group.remove(toRemove);
+                group.add(party);
+            }
         }
     }
 
+    /**
+     * a method to alter all existing parties with the same id as party to party
+     *
+     * @param party
+     * @post @forall Party p : p.id == party.id : = party
+     */
     public void editHostedParty(Party party){
         //create a set of all list that need to be altered
         Set<ArrayList<Party>> groups = new HashSet<>();
@@ -177,11 +252,13 @@ public class DBSnapshot {
         groups.add(futureParties);
         groups.add(allParties);
 
+        int targetId = party.getId();
+
         for(ArrayList<Party> group : groups){
             Party toRemove = null;
             //find the party in the current group
             for (Party oldParty : group){
-                if (oldParty.getId() == party.getId()){
+                if (oldParty.getId() == targetId){
                     toRemove = oldParty;
                 }
             }
@@ -192,12 +269,22 @@ public class DBSnapshot {
         }
     }
 
+    /**
+     *
+     * @param party
+     * @post savedParties.contains(party)
+     */
     public void addToSaveList(Party party) {
         if (!this.savedParties.contains(party)){
             this.savedParties.add(party);
         }
     }
 
+    /**
+     *
+     * @param party
+     * @remove party from saved parties if savedparties contains party
+     */
     public void removeFromSaveList(Party party) {
         if (this.savedParties.contains(party)){
             this.savedParties.remove(party);

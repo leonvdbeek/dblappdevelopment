@@ -43,6 +43,7 @@ public class MainScreen extends AppCompatActivity
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
     private DrawerLayout mDrawerLayout;
+    private String BaseUrl = "http://lenin.pythonanywhere.com";
 
     //get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
@@ -182,14 +183,12 @@ public class MainScreen extends AppCompatActivity
             //startActivityForResult(i, 1);
             finish();
         } else {
-        //Update header to show GUSERID, for the case the user was already logged in
-        String GID = account.getDisplayName();
-        header.setText("Signed in as: "+GID);
-    }
+            //Update header to show GUSERID, for the case the user was already logged in
+            String GID = account.getDisplayName();
+            header.setText("Signed in as: "+GID);
+        }
     }
 
-
-    //todo delete this if safe
     //code that will run when and option from the drop down menu is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -202,7 +201,7 @@ public class MainScreen extends AppCompatActivity
                     MapsActivity.class);
             startActivity(intent); // startActivity allow you to move
         }
-        // menu 
+        // menu
         if (item.getItemId() == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
@@ -221,15 +220,16 @@ public class MainScreen extends AppCompatActivity
 
     //updates the DBSnapshot overwriting all current data with fresh data from the server
     private void updateSnapshot(){
+        //set the dateformat of the gson builder to the datformat used by django
         Log.d("my tag", "Updating local DB");
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssz")
                 .create();
 
+        //create retrofit client with correct website
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://lenin.pythonanywhere.com")
+                .baseUrl(BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson));
-
         Retrofit retrofit = builder.build();
 
         ApiClient client = retrofit.create(ApiClient.class);
@@ -241,14 +241,15 @@ public class MainScreen extends AppCompatActivity
             @Override
             public void onResponse(Call<ArrayList<Party>> call,
                                    Response<ArrayList<Party>> response) {
+                //log succes and store response to all parties
                 Log.d("my tag", "all parties responce body "
                         + response.body() + " and code: " + response.code());
                 DB.setAllParties(response.body());
-
             }
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
+                //check internet connection if request fails
                 internetConnectionCheck();
             }
         });
@@ -259,15 +260,15 @@ public class MainScreen extends AppCompatActivity
             @Override
             public void onResponse(Call<ArrayList<Party>> call,
                                    Response<ArrayList<Party>> response) {
+                //log succes and store response to myparties
                 Log.d("my tag", "my parties responce body "
                         + response.body() + " and code: " + response.code());
                 DB.setMyParties(response.body());
-
             }
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                //assume failure to be handled by the allParties request
             }
         });
 
@@ -279,13 +280,13 @@ public class MainScreen extends AppCompatActivity
             @Override
             public void onResponse(Call<ArrayList<Saved>> call,
                                    Response<ArrayList<Saved>> response) {
-
+                //on succesfull request log responce code
                 new Thread(new Runnable() {
                     public void run() {
                         ArrayList<Party> parties = new ArrayList<Party>();
                         Log.d("my tag", "saved responce body "
                                 + response.body() + " and code: " + response.code());
-                        DB.setReady(true);
+                        //wait until allparties is loaded before storing saved parties
                         while (!DB.isallReady()){
                             try {
                                 Log.d("my tag", "DB.allParties() is not available yet");
@@ -294,21 +295,20 @@ public class MainScreen extends AppCompatActivity
                                 Log.d("my tag", "waiting failed apearantly ? :c");
                             }
                         }
-
+                        //add every party in allparties with an id in the response to savedparties
                         for (Saved save : response.body()){
                             parties.add(DB.getParty(save.getId_party()));
                         }
                         DB.setSavedParties(parties);
+                        //set the local DB as ready
                         DB.setReady(true);
                     }
                 }).start();
-
-                DB.setReady(true);
             }
 
             @Override
             public void onFailure(Call<ArrayList<Saved>> call, Throwable t) {
-
+                //assume failure to be handled by the allParties request
             }
         });
 
@@ -327,7 +327,7 @@ public class MainScreen extends AppCompatActivity
 
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                //assume failure to be handled by the allParties request
             }
         });
 
@@ -342,13 +342,13 @@ public class MainScreen extends AppCompatActivity
             }
             @Override
             public void onFailure(Call<ArrayList<Party>> call, Throwable t) {
-
+                //assume failure to be handled by the allParties request
             }
         });
 
         //waits until the local DB is loaded before oading the map and lists
         //while(!DB.isDBReady()){
-        for(int i=0; i <= 4; i++){
+        for(int i=0; i <= 10; i++){
             try {
                 Log.d("my tag", "DB is not available yet");
                 Thread.sleep(100);
@@ -360,7 +360,7 @@ public class MainScreen extends AppCompatActivity
     }
 
 
-    //Todo add comment
+    //method required by the party list fragments
     @Override
     public void onListFragmentInteraction(Party item) {
     }

@@ -215,13 +215,13 @@ public class MainActivity extends AppCompatActivity implements
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response){
+                //log succes
                 Log.d("my tag", "posted user Id to server: with responce code " + response.code());
-
             }
 
             @Override
             public void onFailure (Call<User> call, Throwable t){
-
+                //log failure
                 Log.d("my tag", "posting user has failed :(");
             }
         });
