@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by Roy on 19/03/2018.
@@ -15,9 +13,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DBSnapshot {
     private static final DBSnapshot Instance = new DBSnapshot();
 
-    final AtomicBoolean ready = new AtomicBoolean(false);
 
-    //private boolean ready;
+
+    private boolean ready;
 
     public static DBSnapshot getInstance() {
         return Instance;
@@ -57,11 +55,7 @@ public class DBSnapshot {
     }
 
     public boolean isReady() {
-        return this.ready.get();
-    }
-
-    public void setReady(boolean ready) {
-        this.ready.set(ready);
+        return ready;
     }
 
     public ArrayList<Party> getAllParties() {
@@ -297,5 +291,7 @@ public class DBSnapshot {
         }
     }
 
-
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
 }
