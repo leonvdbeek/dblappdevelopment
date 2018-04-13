@@ -149,11 +149,12 @@ public class MapsActivity extends Fragment
         if ( ContextCompat.checkSelfPermission( getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+            try {mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
                     location.getLongitude())));
+                Log.d("my tag", "location is changed to "+location.getLatitude()
+                        +" "+location.getLongitude());}
+            catch (NullPointerException e) { }
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
-            Log.d("my tag", "location is changed to "+location.getLatitude()
-                    +" "+location.getLongitude());
         } else {
             enableMyLocation();
         }
