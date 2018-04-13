@@ -30,6 +30,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -346,16 +350,33 @@ public class MainScreen extends AppCompatActivity
             }
         });
 
-        //waits until the local DB is loaded before oading the map and lists
-        //while(!DB.isDBReady()){
-        for(int i=0; i <= 10; i++){
-            try {
-                Log.d("my tag", "DB is not available yet");
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Log.d("my tag", "waiting failed apearantly ? :c");
+
+        new Thread(new Runnable() {
+            public void run() {
+                //waits until the local DB is loaded before loading the map and lists
+                while(!DB.isReady()){
+                    try {
+                        Log.d("my tag", "DB is not available yet");
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Log.d("my tag", "waiting failed apearantly ? :c");
+                    }
+                }
+                EventBus.getDefault().post(new Event(1));
             }
-        }
+        }).start();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(Event event) {
         setupViewPager(mViewPager);
     }
 
