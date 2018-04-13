@@ -1,6 +1,7 @@
 package group10.partyfinder;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
@@ -12,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,23 +27,34 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends Fragment
-        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LocationListener {
 
     //private SensorManager sensorManager;
     private GoogleMap mMap;
     private DBSnapshot DB = DBSnapshot.getInstance();
-    LocationManager mLocationManager;
+    private LocationManager locationManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_maps,container,false);
+        View view = inflater.inflate(R.layout.activity_maps, container, false);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION )
+                != PackageManager.PERMISSION_GRANTED ) {
+
+            /**ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+                    LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );*/
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+
+        onLocationChanged(location);
 
         return view;
     }
@@ -124,4 +137,23 @@ public class MapsActivity extends Fragment
         return false;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 }
