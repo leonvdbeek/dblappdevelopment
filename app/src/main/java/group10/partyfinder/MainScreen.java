@@ -157,7 +157,7 @@ public class MainScreen extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         //call the updateSnapshot method to "sync" the local snapshot with the server
-        //updateSnapshot();
+        updateSnapshot();
 
 
 
