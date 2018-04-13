@@ -342,7 +342,7 @@ public class PartyView extends AppCompatActivity {
                 Log.d("my tag", "Post response code: " + response.code());
                 if(response.code() == 204){
                     DB.deleteHostedParty(DB.getParty(partyID));
-                    Snackbar.make(view, "The party is deleted.", Snackbar.LENGTH_LONG).show();
+                    finish();
                 } else if(response.code() == 404){
                     Log.d("my tag", "response was 404, party could not be found");
                     Snackbar.make(view,
@@ -350,7 +350,6 @@ public class PartyView extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 }
 
-                finish();
             }
 
             @Override

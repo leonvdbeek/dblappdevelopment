@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,6 @@ public class MapsActivity extends Fragment
         // Add a marker in Sydney and move the camera
         LatLng eindhoven = new LatLng(51.447573, 5.487507);
 
-        //Todo customize which list to show all parties of instead of allparties
         if (getArgument == 1) {
             for (Party party : DB.getTodayParties()){
                 LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
@@ -92,25 +92,37 @@ public class MapsActivity extends Fragment
         mMap.moveCamera(CameraUpdateFactory.newLatLng(eindhoven));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity()
+                .getSystemService(Context.LOCATION_SERVICE);
 
-        if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION )
-                != PackageManager.PERMISSION_GRANTED ) {
+        if ( ContextCompat.checkSelfPermission( getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED ) {
 
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////
+            Location location = locationManager
+                    .getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            mMap.setMyLocationEnabled(true);
+            onLocationChanged(location);
 
-
+        } else {
+            enableMyLocation();
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+    }
 
-        onLocationChanged(location);
-
+    /**
+     * Enables the My Location layer if the fine location permission has been granted.
+     */
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission((AppCompatActivity) getActivity(), 1,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+        }
     }
 
     /** Called when the user clicks a marker. */
@@ -134,9 +146,18 @@ public class MapsActivity extends Fragment
 
     @Override
     public void onLocationChanged(Location location) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
-                location.getLongitude())));
-        Log.d("my tag", "location is changed to"+location.getLatitude()+location.getLongitude());
+        if ( ContextCompat.checkSelfPermission( getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED ) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+                    location.getLongitude())));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
+            Log.d("my tag", "location is changed to "+location.getLatitude()
+                    +" "+location.getLongitude());
+        } else {
+            enableMyLocation();
+        }
+
     }
 
     @Override
