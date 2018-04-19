@@ -77,4 +77,12 @@ public class MyPartiesActivity extends AppCompatActivity
 
         }
     }
+
+    // Called when go back arrow (in the left top) is pressed.
+    // Go back to previous activity.
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 }
