@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.Activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,14 +34,17 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import group10.partyfinder.ApiClient;
 import group10.partyfinder.DataStructure.DBSnapshot;
 import group10.partyfinder.DataStructure.Party;
 import group10.partyfinder.DataStructure.Saved;
+import group10.partyfinder.Event;
 import group10.partyfinder.Fragments.Components.MapsFragment;
 import group10.partyfinder.Fragments.Components.PartyListFragment;
 import group10.partyfinder.Fragments.Tabs.CrashNowPage;
 import group10.partyfinder.Fragments.Tabs.DiscoverPage;
 import group10.partyfinder.Fragments.Tabs.SectionsPageAdapter;
+import group10.partyfinder.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -128,7 +131,7 @@ public class MainScreen extends AppCompatActivity
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
 
-                        //MainActivity activity menu item
+                        //Login activity menu item
                         if(menuItem.getItemId() == R.id.Login) {
                             signOut();
                         }
@@ -158,7 +161,7 @@ public class MainScreen extends AppCompatActivity
                 });
 
 
-        //MainActivity functionality
+        //Login functionality
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             finish();

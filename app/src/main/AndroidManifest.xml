@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.Login"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainScreen"
+            android:name=".Activities.MainScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MainScreen" />
@@ -70,11 +70,11 @@
         <activity
             android:name=".Activities.SavedPartiesActivity"
             android:label="@string/title_activity_saved_parties"
-            android:parentActivityName=".MainScreen"
+            android:parentActivityName=".Activities.MainScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="group10.partyfinder.MainScreen" />
+                android:value="group10.partyfinder.Activities.MainScreen" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SavedPartiesActivity" />
@@ -85,11 +85,11 @@
         <activity
             android:name=".Activities.MyPartiesActivity"
             android:label="@string/title_activity_my_parties"
-            android:parentActivityName=".MainScreen"
+            android:parentActivityName=".Activities.MainScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="group10.partyfinder.MainScreen" />
+                android:value="group10.partyfinder.Activities.MainScreen" />
             <intent-filter>
                 <action android:name="android.intent.action.MyPartiesActivity" />
 
@@ -104,7 +104,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="group10.partyfinder.MainScreen/>
+                android:value="group10.partyfinder.Activities.MainScreen/>
         </activity>
         -->
 

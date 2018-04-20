@@ -29,11 +29,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * This MainActivity loads the Login functionality using Google Sign-in of the app.
+ * This Login loads the Login functionality using Google Sign-in of the app.
  * If a user had already signed in before, the app redirects you to the MainScreen
  * activity automatically.
  */
-public class MainActivity extends AppCompatActivity implements
+public class Login extends AppCompatActivity implements
         View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
