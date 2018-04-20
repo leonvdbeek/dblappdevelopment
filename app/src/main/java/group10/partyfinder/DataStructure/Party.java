@@ -1,8 +1,6 @@
-package group10.partyfinder;
+package group10.partyfinder.DataStructure;
 
 import android.util.Log;
-
-import com.google.api.client.util.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

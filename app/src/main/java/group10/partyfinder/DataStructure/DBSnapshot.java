@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.DataStructure;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by Roy on 19/03/2018.
  */

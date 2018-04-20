@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.Fragments.Tabs;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

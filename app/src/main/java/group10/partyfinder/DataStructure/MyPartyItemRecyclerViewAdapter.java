@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.DataStructure;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import group10.partyfinder.PartyListFragment.OnListFragmentInteractionListener;
+import group10.partyfinder.Fragments.Components.PartyListFragment.OnListFragmentInteractionListener;
+import group10.partyfinder.R;
 
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 /**

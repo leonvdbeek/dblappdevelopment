@@ -1,9 +1,10 @@
-package group10.partyfinder;
+package group10.partyfinder.Activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -18,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.gson.Gson;
@@ -31,6 +31,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import group10.partyfinder.ApiClient;
+import group10.partyfinder.DataStructure.DBSnapshot;
+import group10.partyfinder.DataStructure.Party;
+import group10.partyfinder.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,31 +46,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  */
 
-public class EditParty extends AppCompatActivity {
+public class CreateParty extends AppCompatActivity {
 
-    // Get the database
+    // Get the instance of our database
     private DBSnapshot DB = DBSnapshot.getInstance();
 
-    private int partyID;
-    private Party partyObject;
-    private Party savePartyObject;
-
     private View view;
+    private Party partyObject;
     private EditText ETname;
     private EditText ETdescription;
     private EditText ETstartDate;
     private EditText ETstartTime;
-    private String[] startTime;
+    private String startTime;
     private EditText ETendDate;
     private EditText ETendTime;
-    private String[] endTime;
+    private String endTime;
     private EditText ETtheme;
     private EditText ETaddress;
-    private String saveStartTime;
-    private String saveEndTime;
-    private String[] ETSD;
-    private String[] startDate;
-    private String[] endDate;
+    private String [] startDate;
+    private String [] endDate;
 
     String longitude;
     String latitude;
@@ -79,9 +77,9 @@ public class EditParty extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_party);
+        setContentView(R.layout.activity_create_party);
 
-        //first check connectivity
+        //first check connection
         internetConnectionCheck();
 
         // Create toolbar
@@ -92,15 +90,10 @@ public class EditParty extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set title toolbar
-        setTitle("Edit party");
+        setTitle("Create party");
 
         // Make variable for snackbar
         view = findViewById(R.id.mainLayout);
-
-        // Get party object
-        partyID = getIntent().getIntExtra("ID", 0);
-        partyObject = DB.getParty(partyID);
-
 
         ETname = findViewById(R.id.ETname);
         ETdescription = findViewById(R.id.ETdescription);
@@ -111,33 +104,6 @@ public class EditParty extends AppCompatActivity {
         ETtheme = findViewById(R.id.ETtheme);
         ETaddress = findViewById(R.id.ETaddress);
 
-        // Set values in editText
-        ETname.setText(partyObject.getName(), TextView.BufferType.EDITABLE);
-        ETaddress.setText(partyObject.getAddress(), TextView.BufferType.EDITABLE);
-        ETtheme.setText(partyObject.getTheme(), TextView.BufferType.EDITABLE);
-        ETdescription.setText(partyObject.getInfo(), TextView.BufferType.EDITABLE);
-
-        startTime = partyObject.getPartyViewDate().split(" ");
-
-        // Split start date for date picker
-        ETSD = startTime[0].split("-");
-
-        myCalendar.set(Calendar.YEAR, Integer.parseInt(ETSD[2]));
-        // -1 to get the correct month
-        myCalendar.set(Calendar.MONTH, Integer.parseInt(ETSD[1])-1);
-        myCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(ETSD[0]));
-
-        // Set start time for time picker
-        mcurrentTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime[1].split(":")[0]));
-        mcurrentTime.set(Calendar.MINUTE, Integer.parseInt(startTime[1].split(":")[1]));
-
-        ETstartDate.setText(startTime[0]);
-        ETstartTime.setText(startTime[1]);
-
-        endTime= partyObject.getPartyViewEndDate().split(" ");
-
-        ETendDate.setText(endTime[0]);
-        ETendTime.setText(endTime[1]);
 
         // Datepicker for start date
         DatePickerDialog.OnDateSetListener sDate = new DatePickerDialog.OnDateSetListener() {
@@ -158,7 +124,7 @@ public class EditParty extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EditParty.this,
+                new DatePickerDialog(CreateParty.this,
                         sDate,
                         myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH),
@@ -185,7 +151,7 @@ public class EditParty extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(EditParty.this,
+                new DatePickerDialog(CreateParty.this,
                         eDate,
                         myCalendar.get(Calendar.YEAR),
                         myCalendar.get(Calendar.MONTH),
@@ -193,6 +159,7 @@ public class EditParty extends AppCompatActivity {
             }
         });
 
+        // Timepicker for start time
         ETstartTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -200,7 +167,7 @@ public class EditParty extends AppCompatActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(EditParty.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(CreateParty.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
@@ -224,7 +191,7 @@ public class EditParty extends AppCompatActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(EditParty.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(CreateParty.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
@@ -239,21 +206,23 @@ public class EditParty extends AppCompatActivity {
 
             }
         });
+
     }
 
-    public void startEditParty(View v) {
 
-        //first check connectivity
+
+    public void createParty(View v) {
+        //first check connection
         internetConnectionCheck();
 
         if(TextUtils.isEmpty(ETname.getText().toString()) ||
-                TextUtils.isEmpty(ETstartDate.getText().toString()) ||
-                TextUtils.isEmpty(ETstartTime.getText().toString()) ||
-                TextUtils.isEmpty(ETendDate.getText().toString()) ||
-                TextUtils.isEmpty(ETendTime.getText().toString()) ||
-                TextUtils.isEmpty(ETaddress.getText().toString()) ||
-                TextUtils.isEmpty(ETtheme.getText().toString()) ||
-                TextUtils.isEmpty(ETdescription.getText().toString())) {
+        TextUtils.isEmpty(ETstartDate.getText().toString()) ||
+        TextUtils.isEmpty(ETstartTime.getText().toString()) ||
+        TextUtils.isEmpty(ETendDate.getText().toString()) ||
+        TextUtils.isEmpty(ETendTime.getText().toString()) ||
+        TextUtils.isEmpty(ETaddress.getText().toString()) ||
+        TextUtils.isEmpty(ETtheme.getText().toString()) ||
+        TextUtils.isEmpty(ETdescription.getText().toString())) {
 
             AlertDialog ADETEmpty = new AlertDialog.Builder(context).create();
             ADETEmpty.setTitle("Fill in all fields");
@@ -272,11 +241,11 @@ public class EditParty extends AppCompatActivity {
             startDate = ETstartDate.getText().toString().split("-");
             endDate = ETendDate.getText().toString().split("-");
 
-            saveStartTime = startDate[2] + "-" + startDate[1] + "-" + startDate[0]
+            startTime = startDate[2] + "-" + startDate[1] + "-" + startDate[0]
                     + "T" + ETstartTime.getText().toString() + ":00+02:00";
-            saveEndTime = endDate[2] + "-" + endDate[1] + "-" + endDate[0]
+            endTime = endDate[2] + "-" + endDate[1] + "-" + endDate[0]
                     + "T" + ETendTime.getText().toString() + ":00+02:00";
-            //Snackbar.make(view, saveStartTime, Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(view, startTime, Snackbar.LENGTH_LONG).show();
 
             // Get longitude and latitude from address
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -305,7 +274,7 @@ public class EditParty extends AppCompatActivity {
                 ADFalseAdress.show();
 
             } else {
-                // Edit party
+                // Create party
                 Address address = addresses.get(0);
 
                 DecimalFormat df = new DecimalFormat("###.#######");
@@ -313,13 +282,12 @@ public class EditParty extends AppCompatActivity {
                 longitude = df.format(address.getLongitude()).replaceAll(",", ".");
                 latitude = df.format(address.getLatitude()).replaceAll(",", ".");
 
-
-                savePartyObject = new Party(
-                        partyObject.getId(),
+                partyObject = new Party(
+                        0,
                         ETname.getText().toString(),
                         ETdescription.getText().toString(),
-                        saveStartTime,
-                        saveEndTime,
+                        startTime,
+                        endTime,
                         ETtheme.getText().toString(),
                         DB.getUserId(),
                         ETaddress.getText().toString(),
@@ -327,14 +295,24 @@ public class EditParty extends AppCompatActivity {
                         latitude
                 );
 
-                savePartyObject.printParty();
-                editParty(savePartyObject);
+                partyObject.printParty();
+                postParty(partyObject);
             }
         }
     }
 
-    // Method to post the edited party to the server
-    private void editParty(Party party){
+
+
+    // Called when go back arrow (in the left top) is pressed.
+    // Go back to previous activity.
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    // Method to post a party to the server
+    private void postParty(Party party){
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
@@ -347,52 +325,42 @@ public class EditParty extends AppCompatActivity {
         ApiClient client2 = retrofit.create(ApiClient.class);
 
         //call for all parties
-        Call<Party> call = client2.editParty(Integer.toString(party.getId()), party);
-        Log.d("my tag", "Put request body: " + party.getId());
+        Call<Party> call = client2.hostParty(party);
+        Log.d("my tag", "Post request body: " + party.getId());
         call.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
                 if (response.body() != null) {
-                    Log.d("my tag", "Put response code: " + response.code());
-                    Party partyNew = response.body();
-                    Log.d("my tag", "Put party id: "
-                            + party.getId()+" => " + partyNew.getId());
-                    party.printParty();
-                    DB.editHostedParty(partyNew);
-                    if (response.code() == 200 || response.code() == 204) {
-                        Snackbar.make(view, "The party has been edited!",
-                                Snackbar.LENGTH_LONG).show();
-                        finish();
+                    Log.d("my tag", "Post response code: " + response.code());
 
-                    } else {
-                        Log.d("my tag editParty()", "Put response code: "
-                                + response.code());
-                        Snackbar.make(view, "Editing failed, please retry later",
-                                Snackbar.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d("my tag editParty()", "Put returned empty. response code: "
-                            + response.code());
-                    Snackbar.make(view, "Editing failed, please retry later",
-                            Snackbar.LENGTH_LONG).show();
+                    DB.addHostedParty(response.body());
+                    Snackbar.make(view, "The party is created!", Snackbar.LENGTH_LONG).show();
+
+                    Intent intent = getIntent();
+                    intent.putExtra("ID", response.body().getId());
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+                    //openPartyViewActivity(response.body().getId());
                 }
+                Log.d("my tag", "Posting party resulted empty: " + response.code());
             }
+
             @Override
             public void onFailure (Call<Party> call, Throwable t){
-                Log.d("my tag", "Put party request has failed");
-                Snackbar.make(view, "Editing failed, please retry later",
-                        Snackbar.LENGTH_LONG).show();
+                Log.d("my tag", "Posting party to DB has failed ");
                 internetConnectionCheck();
             }
         });
     }
 
-    // Called when go back arrow (in the left top) is pressed.
-    // Go back to previous activity.
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+
+
+    // A method to open a specified PartyView activity
+    public void openPartyViewActivity(int n) {
+        Intent i = new Intent("android.intent.action.PartyView");
+        i.putExtra("ID", n);
+        this.startActivity(i);
     }
 
     //method will check for internet connection and will not leave until it finds one

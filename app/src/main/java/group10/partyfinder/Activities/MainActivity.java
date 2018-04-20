@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import group10.partyfinder.ApiClient;
+import group10.partyfinder.DataStructure.DBSnapshot;
+import group10.partyfinder.R;
+import group10.partyfinder.DataStructure.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

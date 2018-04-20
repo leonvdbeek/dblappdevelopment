@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PartyView"
+            android:name=".Activities.PartyView"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.PartyView" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateParty"
+            android:name=".Activities.CreateParty"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.CreateParty" />
@@ -59,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditParty"
+            android:name=".Activities.EditParty"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.EditParty" />
@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SavedPartiesActivity"
+            android:name=".Activities.SavedPartiesActivity"
             android:label="@string/title_activity_saved_parties"
             android:parentActivityName=".MainScreen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -83,7 +83,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MyPartiesActivity"
+            android:name=".Activities.MyPartiesActivity"
             android:label="@string/title_activity_my_parties"
             android:parentActivityName=".MainScreen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -122,7 +122,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Fragments.Components.MapsFragment"
             android:label="@string/title_activity_maps" />
 
     </application>

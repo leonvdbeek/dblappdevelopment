@@ -31,10 +31,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+
+import group10.partyfinder.DataStructure.DBSnapshot;
+import group10.partyfinder.DataStructure.Party;
+import group10.partyfinder.DataStructure.Saved;
+import group10.partyfinder.Fragments.Components.MapsFragment;
+import group10.partyfinder.Fragments.Components.PartyListFragment;
+import group10.partyfinder.Fragments.Tabs.CrashNowPage;
+import group10.partyfinder.Fragments.Tabs.DiscoverPage;
+import group10.partyfinder.Fragments.Tabs.SectionsPageAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -221,7 +228,7 @@ public class MainScreen extends AppCompatActivity
         // a fraction instead of an activity
         if (id == R.id.action_map) {
             Intent intent = new Intent(MainScreen.this,
-                    MapsActivity.class);
+                    MapsFragment.class);
             startActivity(intent); // startActivity allow you to move
         }
         // menu

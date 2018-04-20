@@ -1,11 +1,10 @@
-package group10.partyfinder;
+package group10.partyfinder.Activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +18,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-
+import group10.partyfinder.ApiClient;
+import group10.partyfinder.DataStructure.DBSnapshot;
+import group10.partyfinder.DataStructure.Party;
+import group10.partyfinder.R;
+import group10.partyfinder.DataStructure.Saved;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

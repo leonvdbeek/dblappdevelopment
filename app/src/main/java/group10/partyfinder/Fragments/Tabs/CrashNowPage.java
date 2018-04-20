@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.Fragments.Tabs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import group10.partyfinder.Event;
+import group10.partyfinder.Fragments.Components.MapsFragment;
+import group10.partyfinder.Fragments.Components.PartyListFragment;
+import group10.partyfinder.R;
 
 /**
  * Created by LyoubomirKatzarov on 3/19/2018.
@@ -82,7 +86,7 @@ public class CrashNowPage extends Fragment {
     private void insertNestedFragmentMap() {
         Bundle data = new Bundle();//create bundle instance
         data.putInt("map", 1);
-        Fragment childFragment = new MapsActivity();
+        Fragment childFragment = new MapsFragment();
         childFragment.setArguments(data);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.map_fragment_container, childFragment).commit();

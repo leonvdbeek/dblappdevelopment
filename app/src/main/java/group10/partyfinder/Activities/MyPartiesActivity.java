@@ -1,14 +1,17 @@
-package group10.partyfinder;
+package group10.partyfinder.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import group10.partyfinder.DataStructure.Party;
+import group10.partyfinder.Fragments.Components.PartyListFragment;
+import group10.partyfinder.R;
 
 public class MyPartiesActivity extends AppCompatActivity
         implements PartyListFragment.OnListFragmentInteractionListener {

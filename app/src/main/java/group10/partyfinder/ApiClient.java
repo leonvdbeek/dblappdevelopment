@@ -2,6 +2,9 @@ package group10.partyfinder;
 
 import java.util.ArrayList;
 
+import group10.partyfinder.DataStructure.Party;
+import group10.partyfinder.DataStructure.Saved;
+import group10.partyfinder.DataStructure.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

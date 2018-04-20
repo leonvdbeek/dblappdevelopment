@@ -1,4 +1,4 @@
-package group10.partyfinder;
+package group10.partyfinder.DataStructure;
 
 public class Saved {
     private String id_user;

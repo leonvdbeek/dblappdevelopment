@@ -9,5 +9,5 @@
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="group10.partyfinder.PartyListFragment"
+    tools:context="group10.partyfinder.Fragments.Components.PartyListFragment"
     tools:listitem="@layout/fragment_partyitem" />
