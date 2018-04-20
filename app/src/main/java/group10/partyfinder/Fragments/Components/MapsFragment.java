@@ -1,6 +1,7 @@
 package group10.partyfinder.Fragments.Components;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -62,6 +63,25 @@ public class MapsFragment extends Fragment
         }
         if (event.event == 3) {
             addMarkers(3);
+        }
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if ( ContextCompat.checkSelfPermission( getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED ) {
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
     }
 
@@ -127,15 +147,22 @@ public class MapsFragment extends Fragment
         mMap.moveCamera(CameraUpdateFactory.newLatLng(eindhoven));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
 
-        locationManager = (LocationManager) getActivity()
-                .getSystemService(Context.LOCATION_SERVICE);
+        //locationManager = (LocationManager) getActivity()
+          //      .getSystemService(Context.LOCATION_SERVICE);
+
+
 
         if ( ContextCompat.checkSelfPermission( getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
 
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+
+            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
             Location location = locationManager
                     .getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+
             mMap.setMyLocationEnabled(true);
             onLocationChanged(location);
 
