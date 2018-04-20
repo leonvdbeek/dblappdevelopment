@@ -2,6 +2,7 @@ package group10.partyfinder.DataStructure;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,13 @@ public class MyPartyItemRecyclerViewAdapter
             holder.mIdView.setText(mValues.get(position).getName());
 
             if (list == 1) {
-                holder.mContentView.setText(
-                        String.valueOf(mValues.get(position).getDistance()) + " km");
+                if (DBSnapshot.getInstance().getLocation() == null){
+                    holder.mContentView.setText(
+                            String.valueOf("no location"));
+                }else {
+                    holder.mContentView.setText(
+                            String.valueOf(mValues.get(position).getDistance()) + " km");
+                }
             }
             if (list > 1) {
                 try {

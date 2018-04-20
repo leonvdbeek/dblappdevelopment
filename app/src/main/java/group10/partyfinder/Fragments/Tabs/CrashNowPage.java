@@ -1,6 +1,8 @@
 package group10.partyfinder.Fragments.Tabs;
 
+import android.location.Location;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -109,5 +111,6 @@ public class CrashNowPage extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.list_fragment_container, childFragment).commit();
     }
+
 
 }

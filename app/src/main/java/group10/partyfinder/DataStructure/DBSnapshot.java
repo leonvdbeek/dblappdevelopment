@@ -1,5 +1,7 @@
 package group10.partyfinder.DataStructure;
 
+import android.location.Location;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,6 +46,8 @@ public class DBSnapshot {
     private ArrayList<Party> todayParties;
     private ArrayList<Party> futureParties;
 
+    private Location location;
+
     /**
      *  a simple getter for the userId
      *
@@ -69,6 +73,14 @@ public class DBSnapshot {
         } else {
             return false;
         }
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Location getLocation() {
+        return this.location;
     }
 
     public void setAllPartiesSet() {

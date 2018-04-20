@@ -190,6 +190,8 @@ public class MapsFragment extends Fragment
                         +" "+location.getLongitude());}
             catch (NullPointerException e) { }
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
+            DBSnapshot.getInstance().setLocation(location);
+            EventBus.getDefault().postSticky(new Event(1));
         } else {
             enableMyLocation();
         }
