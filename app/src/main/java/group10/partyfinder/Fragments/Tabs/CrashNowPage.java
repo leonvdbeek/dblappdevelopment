@@ -61,7 +61,7 @@ public class CrashNowPage extends Fragment {
                 Toast.makeText(getActivity(), "TESTING BUTTON CLICK 1",Toast.LENGTH_SHORT).show();
             }
         });*/
-        insertNestedFragmentMap();
+        //insertNestedFragmentMap();
         return view;
     }
 

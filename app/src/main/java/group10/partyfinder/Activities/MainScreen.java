@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -185,9 +187,20 @@ public class MainScreen extends AppCompatActivity
         //call the updateSnapshot method to "sync" the local snapshot with the server
         updateSnapshot();
 
-
+        insertNestedFragmentMap();
 
     }
+
+
+    private void insertNestedFragmentMap() {
+        Bundle data = new Bundle();//create bundle instance
+        data.putInt("map", 1);
+        Fragment childFragment = new MapsFragment();
+        childFragment.setArguments(data);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.map_fragment_container, childFragment).commit();
+    }
+
 
     //Signout function to sign out from the mainactivity
     private void signOut() {
