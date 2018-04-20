@@ -408,6 +408,7 @@ public class MainScreen extends AppCompatActivity
                 }
 
                 EventBus.getDefault().postSticky(new Event(1));
+                EventBus.getDefault().postSticky(new Event(2));
             }
         }).start();
 

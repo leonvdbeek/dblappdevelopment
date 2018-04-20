@@ -78,6 +78,10 @@ public class MapsFragment extends Fragment
     }
 
     private void addMarkers(){
+
+        //clear old markers
+        mMap.clear();
+
         int getArgument = getArguments().getInt("map");//Get pass data with its key value
 
         if (getArgument == 1) {
