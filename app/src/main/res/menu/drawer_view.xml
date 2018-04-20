@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/home"
-            android:icon="@drawable/ic_home"
-            android:title="Home" />
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/saved_parties"
             android:icon="@drawable/ic_saved_parties"
@@ -19,5 +15,3 @@
             android:title="Sign out" />
     </group>
 </menu>
-
-    <!--android:icon="@drawable/ic_home"-->
