@@ -58,7 +58,10 @@ public class MapsFragment extends Fragment
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
         if (event.event == 2) {
-            addMarkers();
+            addMarkers(2);
+        }
+        if (event.event == 3) {
+            addMarkers(3);
         }
     }
 
@@ -77,14 +80,14 @@ public class MapsFragment extends Fragment
         return view;
     }
 
-    private void addMarkers(){
+    private void addMarkers(int tab){
 
         //clear old markers
         mMap.clear();
 
-        int getArgument = getArguments().getInt("map");//Get pass data with its key value
+       // int getArgument = getArguments().getInt("map");//Get pass data with its key value
 
-        if (getArgument == 1) {
+        if (tab == 2) {
             for (Party party : DB.getTodayParties()){
                 LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
                 Marker marker = mMap.addMarker(
@@ -92,7 +95,7 @@ public class MapsFragment extends Fragment
                 marker.setTag(party.getId());
             }
         }
-        if (getArgument == 2) {
+        if (tab == 3) {
             for (Party party : DB.getFutureParties()){
                 LatLng coor = new LatLng(party.getLattitude(), party.getLongitude());
                 Marker marker = mMap.addMarker(

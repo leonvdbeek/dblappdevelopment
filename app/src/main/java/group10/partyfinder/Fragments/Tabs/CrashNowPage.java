@@ -43,7 +43,7 @@ public class CrashNowPage extends Fragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
         if (event.event == 1) {
-            EventBus.getDefault().postSticky(new Event(2));
+            //EventBus.getDefault().postSticky(new Event(2));
             insertNestedFragmentList();
         }
     }
@@ -76,20 +76,28 @@ public class CrashNowPage extends Fragment {
 
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-        //insertNestedFragmentList();
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
     }
 
-    // Embeds the child fragment dynamically
-    private void insertNestedFragmentMap() {
-        Bundle data = new Bundle();//create bundle instance
-        data.putInt("map", 1);
-        Fragment childFragment = new MapsFragment();
-        childFragment.setArguments(data);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.map_fragment_container, childFragment).commit();
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+        EventBus.getDefault().postSticky(new Event(2));
     }
 
     // Embeds the child fragment dynamically

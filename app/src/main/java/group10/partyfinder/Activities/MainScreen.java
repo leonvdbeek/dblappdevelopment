@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -92,6 +93,7 @@ public class MainScreen extends AppCompatActivity
         setupViewPager(mViewPager);
     }*/
 
+    private boolean initialMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,10 +195,10 @@ public class MainScreen extends AppCompatActivity
 
 
     private void insertNestedFragmentMap() {
-        Bundle data = new Bundle();//create bundle instance
-        data.putInt("map", 1);
+        //Bundle data = new Bundle();//create bundle instance
+        //data.putInt("map", 1);
         Fragment childFragment = new MapsFragment();
-        childFragment.setArguments(data);
+        //childFragment.setArguments(data);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.map_fragment_container, childFragment).commit();
     }
@@ -262,6 +264,28 @@ public class MainScreen extends AppCompatActivity
         adapter.addFragment(new CrashNowPage(), "Crash Now");
         adapter.addFragment(new DiscoverPage(), "Discover");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0){
+                    EventBus.getDefault().postSticky(new Event(2));
+                }
+                if (position == 1){
+                    EventBus.getDefault().postSticky(new Event(3));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+        });
     }
 
     //updates the DBSnapshot overwriting all current data with fresh data from the server
@@ -408,7 +432,10 @@ public class MainScreen extends AppCompatActivity
                 }
 
                 EventBus.getDefault().postSticky(new Event(1));
-                EventBus.getDefault().postSticky(new Event(2));
+                if (!initialMarker) {
+                    initialMarker = true;
+                    EventBus.getDefault().postSticky(new Event(2));
+                }
             }
         }).start();
 

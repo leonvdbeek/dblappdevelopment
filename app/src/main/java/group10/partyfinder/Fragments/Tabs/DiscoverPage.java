@@ -40,7 +40,7 @@ public class DiscoverPage extends Fragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(Event event) {
         if (event.event == 1) {
-            EventBus.getDefault().postSticky(new Event(2));
+            //EventBus.getDefault().postSticky(new Event(3));
             insertNestedFragmentList();
         }
     }
@@ -51,8 +51,6 @@ public class DiscoverPage extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discover_page,container,false);
 
-       // insertNestedFragmentMap();
-
         return view;
     }
 
@@ -62,17 +60,30 @@ public class DiscoverPage extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        insertNestedFragmentList();
+       // insertNestedFragmentList();
     }
 
-    // Embeds the child fragment dynamically
-    private void insertNestedFragmentMap() {
-        Bundle data = new Bundle();//create bundle instance
-        data.putInt("map", 2);
-        Fragment childFragment = new MapsFragment();
-        childFragment.setArguments(data);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.map_fragment_container, childFragment).commit();
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+        EventBus.getDefault().postSticky(new Event(3));
     }
 
     // Embeds the child fragment dynamically
