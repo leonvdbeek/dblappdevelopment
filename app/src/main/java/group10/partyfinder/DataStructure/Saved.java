@@ -1,9 +1,12 @@
 package group10.partyfinder.DataStructure;
 
+/*
+ * a class used by the retrofit to communicate with the api
+ */
+
 public class Saved {
     private String id_user;
     private Integer id_party;
-
 
     public Saved(String id_user, Integer id_party) {
         this.id_user = id_user;

@@ -63,7 +63,8 @@ public class DBSnapshot {
     }
 
     public boolean isAllReady() {
-        if (allPartiesSet.get() && myPartiesSet.get() && savedPartiesSet.get() && todayPartiesSet.get() && futurePartiesSet.get()){
+        if (allPartiesSet.get() && myPartiesSet.get() && savedPartiesSet.get()
+                && todayPartiesSet.get() && futurePartiesSet.get()){
             allPartiesSet.set(false);
             myPartiesSet.set(false);
             savedPartiesSet.set(false);

@@ -18,10 +18,6 @@ import retrofit2.http.Path;
  */
 
 public interface ApiClient {
-
-    //url is lenin.pythonanywhere.com/parties
-
-
     //get a list of all parties in the DB
     @GET("/parties/")
     Call<ArrayList<Party>> getParties();
@@ -69,7 +65,4 @@ public interface ApiClient {
     //call to add a user to the user DB
     @POST("/userid/")
     Call<User> postUser(@Body User user);
-
-    //@POST("https://jsonplaceholder.typicode.com/posts")
-    //Call<Post> testPost(@Body Post post);
 }

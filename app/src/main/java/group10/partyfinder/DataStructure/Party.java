@@ -26,6 +26,7 @@ public class Party implements java.io.Serializable{
     private String longitude;
     private String lattitude;
 
+    //general party constructor
     public Party(){
         this.id = 0;
         this.name = "None";
@@ -39,6 +40,7 @@ public class Party implements java.io.Serializable{
         this.lattitude = "0";
     }
 
+    //specified party constructor
     public Party(int id, String name, String info, String start, String end, String theme,
                  String creator, String address, String longitude, String lattitude) {
         this.id = id;
@@ -53,6 +55,7 @@ public class Party implements java.io.Serializable{
         this.lattitude = lattitude;
     }
 
+    // a method to print all the contents of the party to the log
     public void printParty(){
         Log.d("my tag", "=========================================");
         Log.d("my tag", "  party id: "+id);
@@ -68,6 +71,7 @@ public class Party implements java.io.Serializable{
         Log.d("my tag", "=======================================");
     }
 
+    //all getter methods
     public int getId() {
         return id;
     }
@@ -151,6 +155,8 @@ public class Party implements java.io.Serializable{
 
         return dateFormat.format(start);
     }
+
+    //all setter methods
     public void setId(int id) {
         this.id = id;
     }
@@ -203,21 +209,6 @@ public class Party implements java.io.Serializable{
         this.longitude = longitude;
     }
 
-
-    public Party clone(){
-        Party party = new Party();
-        party.setId(this.id);
-        party.setInfo(this.info);
-        party.setName(this.name);
-        party.setDate(this.start);
-        party.setTheme(this.theme);
-        party.setCreator(this.creator);
-        party.setAddress(this.address);
-        party.setLongitude(this.longitude);
-        party.setLattitude(this.lattitude);
-        return party;
-    }
-
     public double getDistance() {
         if (DBSnapshot.getInstance().getLocation() == null) {
            return 0;
@@ -251,6 +242,7 @@ public class Party implements java.io.Serializable{
         return (rad * 180 / Math.PI);
     }
 
+    //converts a string to an date element
     private Date convertStringToDate(String dateString){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
         Date date = null;
