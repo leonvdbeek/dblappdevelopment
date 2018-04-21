@@ -77,6 +77,7 @@ public class EditParty extends AppCompatActivity {
 
     private Context context = this;
 
+    // Calendars for respectively date and time picker
     Calendar myCalendar = Calendar.getInstance();
     Calendar mcurrentTime = Calendar.getInstance();
 
@@ -105,7 +106,7 @@ public class EditParty extends AppCompatActivity {
         partyID = getIntent().getIntExtra("ID", 0);
         partyObject = DB.getParty(partyID);
 
-
+        // Make references to editText
         ETname = findViewById(R.id.ETname);
         ETdescription = findViewById(R.id.ETdescription);
         ETstartDate = findViewById(R.id.ETstartDate);
@@ -126,6 +127,7 @@ public class EditParty extends AppCompatActivity {
         // Split start date for date picker
         ETSD = startTime[0].split("-");
 
+        // Set start date for date picker
         myCalendar.set(Calendar.YEAR, Integer.parseInt(ETSD[2]));
         // -1 to get the correct month
         myCalendar.set(Calendar.MONTH, Integer.parseInt(ETSD[1])-1);
@@ -197,6 +199,7 @@ public class EditParty extends AppCompatActivity {
             }
         });
 
+        // Timpicker for start time
         ETstartTime.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -250,6 +253,7 @@ public class EditParty extends AppCompatActivity {
         //first check connectivity
         internetConnectionCheck();
 
+        // Check if there are empty fields
         if(TextUtils.isEmpty(ETname.getText().toString()) ||
                 TextUtils.isEmpty(ETstartDate.getText().toString()) ||
                 TextUtils.isEmpty(ETstartTime.getText().toString()) ||
@@ -273,6 +277,7 @@ public class EditParty extends AppCompatActivity {
 
         } else {
 
+            // Create the correct date formats for the database
             startDate = ETstartDate.getText().toString().split("-");
             endDate = ETendDate.getText().toString().split("-");
 

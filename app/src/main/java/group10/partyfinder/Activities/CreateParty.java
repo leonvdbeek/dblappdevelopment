@@ -71,6 +71,7 @@ public class CreateParty extends AppCompatActivity {
 
     private Context context = this;
 
+    // Calendars for respectively date and time picker
     Calendar myCalendar = Calendar.getInstance();
     Calendar mcurrentTime = Calendar.getInstance();
 
@@ -95,6 +96,7 @@ public class CreateParty extends AppCompatActivity {
         // Make variable for snackbar
         view = findViewById(R.id.mainLayout);
 
+        // Make references to editText
         ETname = findViewById(R.id.ETname);
         ETdescription = findViewById(R.id.ETdescription);
         ETstartDate = findViewById(R.id.ETstartDate);
@@ -212,9 +214,10 @@ public class CreateParty extends AppCompatActivity {
 
 
     public void createParty(View v) {
-        //first check connection
+        // First check connection
         internetConnectionCheck();
 
+        // Check if there are empty fields
         if(TextUtils.isEmpty(ETname.getText().toString()) ||
         TextUtils.isEmpty(ETstartDate.getText().toString()) ||
         TextUtils.isEmpty(ETstartTime.getText().toString()) ||
@@ -238,6 +241,7 @@ public class CreateParty extends AppCompatActivity {
 
         } else {
 
+            // Create the correct date formats for the database
             startDate = ETstartDate.getText().toString().split("-");
             endDate = ETendDate.getText().toString().split("-");
 

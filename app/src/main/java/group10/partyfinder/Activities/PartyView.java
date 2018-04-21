@@ -57,7 +57,10 @@ public class PartyView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Check internet connection.
         internetConnectionCheck();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_view);
 
@@ -79,7 +82,7 @@ public class PartyView extends AppCompatActivity {
         partyID = getIntent().getIntExtra("ID", 0);
         partyObject = DB.getParty(partyID);
 
-        // Set title with the name of the party
+        // Set title toolbar with the name of the party
         setTitle(partyObject.getName());
 
         // Set text in text views
@@ -92,18 +95,14 @@ public class PartyView extends AppCompatActivity {
         // Make variable for snackbar
         view = findViewById(R.id.mainLayout);
 
-        // Show save or remove button
+        // Make references to buttons
         Bsave = findViewById(R.id.Bsave);
         Bremove = findViewById(R.id.Bremove);
-
-
-
-        // Show or hide edit and delete button
         Bedit = findViewById(R.id.Bedit);
         Bdelete = findViewById(R.id.Bdelete);
 
         if(isOwner()) {
-            // Show edit and delete button
+            // Show only edit and delete button
             Bedit.setVisibility(View.VISIBLE);
             Bdelete.setVisibility(View.VISIBLE);
 
@@ -130,6 +129,7 @@ public class PartyView extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        // Get a new copy of the database
         DB = DBSnapshot.getInstance();
 
         // Get party object
