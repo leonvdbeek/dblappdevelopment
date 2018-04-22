@@ -55,15 +55,8 @@ public class CrashNowPage extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.crash_now_page,container,false);
-        /*btnTEST = (Button) view.findViewById(R.id.btnTEST);
 
-        btnTEST.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "TESTING BUTTON CLICK 1",Toast.LENGTH_SHORT).show();
-            }
-        });*/
-        //insertNestedFragmentMap();
+
         return view;
     }
 
@@ -73,8 +66,7 @@ public class CrashNowPage extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        //insertNestedFragmentMap();
-        //insertNestedFragmentList();
+
 
     }
 

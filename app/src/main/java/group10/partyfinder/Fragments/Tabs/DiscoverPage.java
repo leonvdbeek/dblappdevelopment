@@ -59,8 +59,7 @@ public class DiscoverPage extends Fragment {
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
-       // insertNestedFragmentList();
+        
     }
 
     @Override

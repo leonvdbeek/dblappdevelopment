@@ -46,8 +46,6 @@ public class MapsFragment extends Fragment
 
     private boolean subscribe;
 
-    private boolean initLocPoll;
-
     private boolean initMap;
 
     @Override
@@ -80,13 +78,7 @@ public class MapsFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-/*
-        if ( ContextCompat.checkSelfPermission( getActivity(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION )
-                == PackageManager.PERMISSION_GRANTED ) {
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }*/
+
     }
 
     @Override
@@ -98,8 +90,6 @@ public class MapsFragment extends Fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
 
         return view;
     }
@@ -153,26 +143,18 @@ public class MapsFragment extends Fragment
         mMap.moveCamera(CameraUpdateFactory.newLatLng(amsterdam));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(6.0f));
 
-       // locationManager = (LocationManager) getActivity()
-         //     .getSystemService(Context.LOCATION_SERVICE);
-
-
 
         if ( ContextCompat.checkSelfPermission( getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
 
 
-          //  if(!initLocPoll) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, this);
-                initLocPoll = true;
-          //  }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, this);
+
 
             Location location = locationManager
                   .getLastKnownLocation(locationManager.GPS_PROVIDER);
 
-            //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-            //mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
 
             mMap.setMyLocationEnabled(true);
             onLocationChanged(location);
