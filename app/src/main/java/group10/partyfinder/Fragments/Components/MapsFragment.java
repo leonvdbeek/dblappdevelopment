@@ -46,6 +46,10 @@ public class MapsFragment extends Fragment
 
     private boolean subscribe;
 
+    private boolean initLocPoll;
+
+    private boolean initMap;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -76,13 +80,13 @@ public class MapsFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-
+/*
         if ( ContextCompat.checkSelfPermission( getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
+        }*/
     }
 
     @Override
@@ -140,15 +144,15 @@ public class MapsFragment extends Fragment
 
         googleMap.setOnMarkerClickListener(this);
         mMap = googleMap;
-        // Add a marker in Sydney and move the camera
-        LatLng eindhoven = new LatLng(51.447573, 5.487507);
+        // Add a marker in Amsterdam as default zoomed out position for NL
+        LatLng amsterdam = new LatLng(52.370216, 4.895168);
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(eindhoven));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(amsterdam));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(6.0f));
 
-        //locationManager = (LocationManager) getActivity()
-          //      .getSystemService(Context.LOCATION_SERVICE);
+       // locationManager = (LocationManager) getActivity()
+         //     .getSystemService(Context.LOCATION_SERVICE);
 
 
 
@@ -156,12 +160,17 @@ public class MapsFragment extends Fragment
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
 
-            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+          //  if(!initLocPoll) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                initLocPoll = true;
+          //  }
 
             Location location = locationManager
-                    .getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+                  .getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+            //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+            //mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
 
             mMap.setMyLocationEnabled(true);
             onLocationChanged(location);
@@ -211,12 +220,20 @@ public class MapsFragment extends Fragment
         if ( ContextCompat.checkSelfPermission( getActivity(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION )
                 == PackageManager.PERMISSION_GRANTED ) {
-            try {mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
-                    location.getLongitude())));
+            try {//mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+                   // location.getLongitude())));
                 Log.d("my tag", "location is changed to "+location.getLatitude()
-                        +" "+location.getLongitude());}
+                        +" "+location.getLongitude());
+                if(location != null && !initMap){
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+                    location.getLongitude())));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
+                    initMap = true;
+                }
+
+            }
             catch (NullPointerException e) { }
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(12.0f));
+
             DBSnapshot.getInstance().setLocation(location);
             EventBus.getDefault().postSticky(new Event(1));
         } else {
@@ -232,11 +249,17 @@ public class MapsFragment extends Fragment
 
     @Override
     public void onProviderEnabled(String s) {
-
+        if ( ContextCompat.checkSelfPermission( getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED ) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
     }
 
     @Override
     public void onProviderDisabled(String s) {
-
+        initMap = false;
+        DBSnapshot.getInstance().setLocation(null);
+        EventBus.getDefault().postSticky(new Event(1));
     }
 }
