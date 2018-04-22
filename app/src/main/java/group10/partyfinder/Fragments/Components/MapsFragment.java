@@ -107,7 +107,7 @@ public class MapsFragment extends Fragment
     private void addMarkers(int tab){
 
         //clear old markers
-        mMap.clear();
+        try {mMap.clear();
 
        // int getArgument = getArguments().getInt("map");//Get pass data with its key value
 
@@ -127,6 +127,8 @@ public class MapsFragment extends Fragment
                 marker.setTag(party.getId());
             }
         }
+        }
+        catch(NullPointerException e) {}
     }
 
     /**
