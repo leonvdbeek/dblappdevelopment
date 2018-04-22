@@ -93,7 +93,8 @@ public class DiscoverPage extends Fragment {
         Fragment childFragment = new PartyListFragment();
         childFragment.setArguments(data);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.list_fragment_container, childFragment).commit();
+        try {transaction.replace(R.id.list_fragment_container, childFragment).commit();}
+        catch (IllegalStateException e) {}
     }
 
 }
